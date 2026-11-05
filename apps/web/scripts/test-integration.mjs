@@ -22,7 +22,9 @@ try {
   if (!/^[a-f0-9]{64}$/.test(container)) throw new Error('ID inesperado.');
   const deadline = Date.now() + 30000; let ready = false;
   while (Date.now() < deadline) {
-    const check = spawnSync('docker', ['exec', container, 'pg_isready', '-U', 'postgres', '-d', 'duraverso_test'], { windowsHide: true, stdio: 'ignore' });
+    // O bootstrap do Docker aceita conexões pelo socket antes de criar o banco.
+    // Uma consulta TCP confirma o servidor definitivo e o banco solicitado.
+    const check = spawnSync('docker', ['exec', '-e', 'PGPASSWORD=test-only', container, 'psql', '-h', '127.0.0.1', '-U', 'postgres', '-d', 'duraverso_test', '-v', 'ON_ERROR_STOP=1', '-Atqc', 'SELECT 1'], { windowsHide: true, stdio: 'ignore', timeout: 5000 });
     if (check.status === 0) { ready = true; break; }
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
