@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+catalog:
+  react: 19.3.1
+  react-dom: 19.3.1
+minimumReleaseAge: 10080
+storeDir: .cache/pnpm-store
+cacheDir: .cache/pnpm-cache
+allowBuilds:
+  esbuild: true # Compilador usado por tsx, Vitest e Drizzle Kit.
+  sharp: true # Processamento de imagens incluído no Next.js.
+  '@tailwindcss/oxide': true # Compilador CSS nativo do Tailwind.
+  unrs-resolver: true # Resolvedor nativo de imports usado pelo ESLint do Next.js.
