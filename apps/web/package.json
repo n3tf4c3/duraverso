@@ -21,6 +21,7 @@
     "@upstash/ratelimit": "2.2.0",
     "@upstash/redis": "1.40.0",
     "@zxing/browser": "0.2.1",
+    "@zxing/library": "0.23.0",
     "dotenv": "17.4.2",
     "drizzle-orm": "0.45.4",
     "lucide-react": "1.64.0",
