@@ -1,12 +1,12 @@
 import { catalogResponseSchema, searchProducts, type Product } from '@duraverso/core';
 import { barcodeEvidence, catalogCheckedAt, modelSources } from './catalog-evidence';
 
-const { brastempManual, consulManual } = modelSources;
+const { brastempManual } = modelSources;
 const candidates: [Product['brand'], string, number, string][] = [
-  ['Brastemp', 'BWK12A', 12, brastempManual], ['Brastemp', 'BWR12B', 12, brastempManual],
+  ['Brastemp', 'BWM13AB', 13, modelSources.BWM13AB], ['Brastemp', 'BWR12B', 12, brastempManual],
   ['Brastemp', 'BWK13A', 13, brastempManual], ['Brastemp', 'BWK14B', 14, brastempManual], ['Brastemp', 'BWF15A', 15, brastempManual],
   ['Brastemp', 'BWK16AB', 16, modelSources.BWK16AB],
-  ['Consul', 'CWB08A', 8, consulManual], ['Consul', 'CWB09A', 9, consulManual], ['Consul', 'CWH11B', 11, consulManual],
+  ['Consul', 'CWM09AB', 9, modelSources.CWM09AB], ['Consul', 'CWM12AB', 12, modelSources.CWM12AB], ['Consul', 'CWH13AB', 13, modelSources.CWH13AB],
   ['Consul', 'CWH12BB', 12, modelSources.CWH12BB],
   ['Consul', 'CWH15AB', 15, modelSources.CWH15AB],
   ['Consul', 'CWN15AB', 15, modelSources.CWN15AB],

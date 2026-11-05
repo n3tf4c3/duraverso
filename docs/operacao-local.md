@@ -3,7 +3,7 @@
 ## Escopo da entrega
 
 Esta é a base local, não o piloto público completo. O catálogo inicial e sua API usam
-20 modelos candidatos embutidos e 16 GTINs documentados de 8 modelos Electrolux.
+20 modelos candidatos embutidos e 40 GTINs documentados de todos os 20 modelos.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
 Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
 
@@ -20,7 +20,7 @@ Nenhuma captura da câmera é enviada. A biblioteca de leitura só carrega ao so
 
 As fontes e evidências estão em `apps/web/src/lib/catalog-evidence.ts`, consumidas pelo
 catálogo em `apps/web/src/lib/catalog.ts`. Modelo e capacidade foram conferidos nos 20
-candidatos. Os 16 GTINs identificam apenas modelos; código completo e voltagem ainda
+candidatos. Os 40 GTINs identificam apenas modelos; código completo e voltagem ainda
 precisam de conferência antes da criação de uma variante para avaliações.
 Não deduzir tensão pela ordem dos códigos ou por um seletor comercial 110V/127V.
 O campo EAN-13 truncado da LED13 foi descartado; os campos individuais fornecem os
@@ -138,7 +138,9 @@ Foram verificados persistência, posse, permissões, revogação, edição sem a
 publicada, retirada, duplicidade de envio, concorrência e limiar de 20 proprietários.
 Testes locais das rotas/callbacks cobrem origem, limites, sessão e redirecionamento.
 A navegação no navegador foi conferida em preview. OAuth, Upstash/Neon reais, formulários
-autenticados no navegador e câmera em dispositivo real continuam sem validação ponta a ponta.
+autenticados no navegador continuam sem validação ponta a ponta. O usuário confirmou leitura
+de um código de produto fora do catálogo no Samsung A52s, seguida de busca sem resultado.
+Isso valida esse caso de leitura, sem garantir todos os aparelhos, navegadores ou formatos.
 
 ## Antes da abertura pública
 

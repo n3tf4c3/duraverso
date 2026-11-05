@@ -12,15 +12,15 @@ describe('catálogo e contrato público', () => {
   });
   it('mantém códigos válidos, únicos e com evidência do fabricante', () => {
     const gtins = catalog.flatMap((p) => p.confirmedGtins);
-    expect(gtins).toHaveLength(16);
+    expect(gtins).toHaveLength(40);
     expect(new Set(gtins).size).toBe(gtins.length);
     expect(gtins.every(isValidGtin)).toBe(true);
     for (const [slug, evidence] of Object.entries(barcodeEvidence)) {
       expect(catalog.some((p) => p.slug === slug)).toBe(true);
-      expect(evidence?.sourceUrl).toMatch(/^https:\/\/(loja\.electrolux\.com\.br|api\.electrolux-medialibrary\.com)\//);
+      expect(evidence?.sourceUrl).toMatch(/^https:\/\/(loja\.electrolux\.com\.br|api\.electrolux-medialibrary\.com|www\.brastemp\.com\.br|www\.consul\.com\.br|www\.compracerta\.com\.br)\//);
       expect(evidence?.checkedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
-    expect(catalog.filter((p) => p.brand !== 'Electrolux').every((p) => p.confirmedGtins.length === 0)).toBe(true);
+    expect(catalog.every((p) => p.confirmedGtins.length === 2)).toBe(true);
   });
   it('cada código conferido encontra exatamente seu modelo pela API', async () => {
     for (const product of catalog) {
@@ -37,8 +37,17 @@ describe('catálogo e contrato público', () => {
     expect(catalogResponse('7896584072144').total).toBe(0);
     expect(catalogResponse('789658407214').total).toBe(0);
     expect(catalogResponse('96385074').total).toBe(0);
+    expect(catalogResponse('7909641317467').total).toBe(0);
     expect(catalogResponse('7896584072143', 'Consul').total).toBe(0);
     expect(catalogResponse('7896584072143', '', 'large').total).toBe(0);
+  });
+  it('não confunde os quatro modelos substituídos com seus sucessores no catálogo', () => {
+    for (const model of ['BWK12A', 'CWB08A', 'CWB09A', 'CWH11B']) {
+      expect(catalogResponse(model).total).toBe(0);
+    }
+    // Código encontrado somente no varejo para BWK12AB: não pertence ao BWM13AB.
+    expect(catalogResponse('7891129498204').total).toBe(0);
+    expect(catalogResponse('7891129614529').data[0]?.model).toBe('BWM13AB');
   });
   it('o contrato recusa um código truncado ou com dígito incorreto', () => {
     expect(productSchema.safeParse({ ...catalog[0], confirmedGtins: ['79095693584'] }).success).toBe(false);

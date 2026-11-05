@@ -45,8 +45,8 @@ pnpm test:integration
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.
 O fluxo inicial tem consulta a 20 candidatos, filtros, detalhes e leitura de código.
-As fontes dos 20 modelos foram conferidas. A busca reconhece 16 GTINs oficiais de 8
-modelos Electrolux; a cobertura é parcial. Códigos identificam o modelo, sem selecionar
+As fontes dos 20 modelos foram conferidas. A busca reconhece 40 GTINs oficiais dos 20
+modelos Brastemp, Consul e Electrolux; a cobertura de versões continua parcial. Códigos identificam o modelo, sem selecionar
 voltagem nem criar variantes para avaliações. Evidências em `apps/web/src/lib/catalog-evidence.ts`.
 Por padrão, contas e administração apresentam seu estado de preparação sem simular gravação.
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração
