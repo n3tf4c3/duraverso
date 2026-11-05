@@ -3,8 +3,9 @@
 ## Escopo da entrega
 
 Esta é a base local, não o piloto público completo. O catálogo inicial e sua API usam
-20 candidatos embutidos. No modo conectado, avaliações, contas e revisão manual usam
-persistência real. Nenhum recurso externo, domínio ou administrador foi criado.
+20 modelos candidatos embutidos e 16 GTINs documentados de 8 modelos Electrolux.
+No modo conectado, avaliações, contas e revisão manual usam persistência real.
+Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
 
 O padrão `DURAVERSO_MODE=preview` funciona sem credenciais e recusa login e todas as
 escritas com HTTP 503. Não há login simulado ou atalho de administrador para testes.
@@ -17,8 +18,13 @@ Servidor vinculado apenas a 127.0.0.1:3107. Câmera depende de permissão e nave
 Permissão negada, dispositivo indisponível ou GTIN desconhecido têm pesquisa manual como alternativa.
 Nenhuma captura da câmera é enviada. A biblioteca de leitura só carrega ao solicitar a câmera.
 
-As fontes do catálogo estão em `apps/web/src/lib/catalog.ts`; código completo,
-voltagem e GTIN precisam de evidência antes da criação de uma variante verificada.
+As fontes e evidências estão em `apps/web/src/lib/catalog-evidence.ts`, consumidas pelo
+catálogo em `apps/web/src/lib/catalog.ts`. Modelo e capacidade foram conferidos nos 20
+candidatos. Os 16 GTINs identificam apenas modelos; código completo e voltagem ainda
+precisam de conferência antes da criação de uma variante para avaliações.
+Não deduzir tensão pela ordem dos códigos ou por um seletor comercial 110V/127V.
+O campo EAN-13 truncado da LED13 foi descartado; os campos individuais fornecem os
+códigos completos. Para LDA13, o manual sustenta 13 kg apesar do campo 13,1 kg na loja.
 GTIN ausente não impede busca por marca/modelo; nunca adivinhar a correspondência.
 
 ## Banco e migrations

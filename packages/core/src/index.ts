@@ -9,7 +9,7 @@ export const functioningStatuses = ['working', 'with_problem', 'not_working'] as
 export const productSchema = z.object({
   id: z.string().min(1), slug: z.string().min(1), brand: z.enum(brands), model: z.string().min(1),
   capacityKg: z.number().positive(), sourceUrl: z.url(), sourceCheckedAt: z.iso.date(),
-  identification: z.literal('candidate'), confirmedGtins: z.array(z.string()),
+  identification: z.literal('candidate'), confirmedGtins: z.array(z.string().refine(isValidGtin, 'GTIN inválido.')),
 });
 export type Product = z.infer<typeof productSchema>;
 export const catalogResponseSchema = z.object({
