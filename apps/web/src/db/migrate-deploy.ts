@@ -1,4 +1,3 @@
-if (process.env.VERCEL_ENV === 'production' || process.env.VERCEL_ENV === 'preview') {
-  throw new Error('Base local: publicação bloqueada até concluir autenticação, banco, proteção contra abuso e autorização de deploy.');
-}
-console.info('Base local: nenhuma migration aplicada no build.');
+import { assertDeploymentMode } from '../lib/deployment';
+assertDeploymentMode();
+console.info('Nenhuma migration aplicada no build. Na Vercel, somente a prévia do catálogo está habilitada.');

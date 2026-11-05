@@ -19,7 +19,7 @@ export function Breadcrumb({ current }: { current: string }) {
   return <nav aria-label="Caminho de navegação" className="breadcrumb"><Link href="/">Início</Link><span>/</span><span aria-current="page">{current}</span></nav>;
 }
 export function PreparationNotice() {
-  return <div className="preparation-notice"><ShieldCheck size={18} /><p><strong>Prévia local.</strong> Explore o catálogo. Contas e contribuições serão abertas após a configuração do serviço.</p></div>;
+  return <div className="preparation-notice"><ShieldCheck size={18} /><p><strong>Prévia do catálogo.</strong> Explore o catálogo. Contas e contribuições serão abertas após a configuração do serviço.</p></div>;
 }
 export function ValuesStrip() {
   return <div className="values-strip"><span><ShieldCheck size={18} /> Experiências de quem usa</span><span><RefreshCw size={18} /> Histórias que continuam</span><span><MoveUpRight size={18} /> Informação para escolher melhor</span></div>;

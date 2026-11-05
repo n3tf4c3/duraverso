@@ -2,8 +2,8 @@
 
 Histórias reais. Escolhas que duram.
 
-Base local web do catálogo comunitário de lavadoras. Não há site publicado,
-contas ativas ou banco provisionado nesta etapa.
+Base web do catálogo comunitário de lavadoras. A prévia do catálogo pode ser hospedada
+na Vercel, com contas e contribuições desativadas. Nenhum banco é necessário nessa fase.
 
 ## Executar localmente
 
@@ -17,6 +17,14 @@ pnpm web
 Abra http://127.0.0.1:3107. O desenvolvimento funciona sem credenciais.
 Para testar o build: `pnpm web:build`, depois `pnpm web:start`.
 Não executar desenvolvimento e produção na mesma porta ao mesmo tempo.
+
+## Prévia na Vercel
+
+Projeto `duraverso`, Root Directory `apps/web`, preset Next.js, Node 24.x.
+Build `pnpm run build`, instalação `pnpm install --frozen-lockfile`, saída padrão.
+Defina `DURAVERSO_MODE=preview` e `ENABLE_EXPERIMENTAL_COREPACK=1` em Production e Preview.
+Não adicionar Neon/Upstash nem credenciais Google para essa prévia. O modo `connected`
+continua bloqueado na Vercel, tanto no build quanto na inicialização.
 
 ## Estrutura
 

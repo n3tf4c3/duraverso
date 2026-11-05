@@ -27,10 +27,12 @@ Somente pnpm, versão exata em packageManager, um lockfile na raiz. Não usar np
 
 O site usa catálogo estático de candidatos, não um banco em produção. Não inferir variantes/GTIN.
 O modo preview mantém contas e escritas desativadas e funciona sem serviços externos.
+Somente esse modo pode ser hospedado na Vercel; guardas no build e na inicialização
+recusam connected. A prévia hospedada não aplica migrations nem exige banco/Google/Redis.
 O modo connected integra Google, sessões, avaliações e revisão manual; depende de Neon,
 credenciais Google e Upstash configurados e verificados no preflight. Nada foi provisionado.
-Não habilitar gravação nem publicar apenas removendo a guarda de VERCEL_ENV.
-Antes disso concluir: teste OAuth real de ponta a ponta, conferência das variantes,
+Não habilitar gravação nem publicar o modo conectado apenas removendo as guardas.
+Antes de abrir contas concluir: teste OAuth real de ponta a ponta, conferência das variantes,
 catálogo persistente completo, administração inicial autorizada e política de privacidade.
 
 ## Invariantes para a continuidade

@@ -31,11 +31,30 @@ não oferece transações interativas. Os locks seguem a ordem posse, avaliaçã
 O migrador usa advisory lock na mesma sessão. Não imprimir a connection string.
 Não há seed que crie administrador ou escreva candidatos em produção.
 
-Migrations não rodam automaticamente no build local. Ele funciona sem segredos em
-preview e recusa VERCEL_ENV de preview/produção. A futura publicação exige autorização,
-preservar expand/contract e conectar o migrador ao ambiente correto. Preview hospedado
+Migrations não rodam automaticamente no build. A prévia funciona sem segredos tanto
+localmente quanto na Vercel. Build e inicialização recusam connected na Vercel. A futura
+abertura de contas exige autorização, preservar expand/contract e conectar o migrador
+ao ambiente correto. Preview hospedado
 jamais compartilha banco ou segredos de produção. As funções são SECURITY INVOKER;
 o banco não deve ser exposto diretamente ao navegador.
+
+## Publicar somente a prévia do catálogo
+
+Importar `n3tf4c3/duraverso`, branch `main`, na equipe escolhida pelo usuário, com nome
+`duraverso`, Root Directory `apps/web`, Next.js, Node 24.x, build `pnpm run build`,
+install `pnpm install --frozen-lockfile` e saída padrão. Manter os arquivos compartilhados
+do monorepo acessíveis ao build. `engines.node` também está no pacote web.
+
+Em Production e Preview: `DURAVERSO_MODE=preview` e `ENABLE_EXPERIMENTAL_COREPACK=1`.
+O segundo usa o `packageManager` fixado na raiz. Não adicionar integrações Neon/Upstash
+ou credenciais Google para essa etapa. Não é preciso APP_ORIGIN para a consulta pública;
+o valor local padrão não é usado por login ou escritas, pois estão desativados.
+
+Na primeira publicação conferir página inicial, busca, produto, conta desativada e
+respostas 503 das rotas de login/escrita. A câmera usa HTTPS e depende de permissão.
+Os textos identificam uma prévia do catálogo; não há avaliações, cadastro nem analytics.
+As páginas pedem aos buscadores que não indexem essa fase. Publicar a prévia não abre
+o piloto participativo e não dispensa conferir consumo e limites da hospedagem.
 
 ## Preparação do acesso conectado
 
@@ -100,7 +119,7 @@ conservam a CSP anterior; não há analytics, anúncios, uploads, IA paga ou e-m
 ## Verificação local
 
 `pnpm lint`, `pnpm web:build`, `pnpm typecheck`, `pnpm test` e `pnpm test:integration`.
-A CI está preparada, mas não foi executada remotamente. `pnpm audit --prod` verifica
+A CI executa essas verificações em cada push na main e em pull requests. `pnpm audit --prod` verifica
 dependências de produção; a ausência de alertas conhecidos não substitui os testes.
 
 O runner de integração usa imagem PostgreSQL fixada por digest, senha sintética, porta

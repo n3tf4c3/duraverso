@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 export default async function EvaluatePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; const product = findProduct(slug); if (!product) notFound();
   let content;
-  if (!isConnected()) content = <section className="empty-state"><h2>Estamos preparando a participação.</h2><p>As contas e o envio de avaliações ainda não estão abertos nesta prévia local.</p><Link href={`/produtos/${slug}`} className="button button-outline">Voltar ao produto</Link></section>;
+  if (!isConnected()) content = <section className="empty-state"><h2>Estamos preparando a participação.</h2><p>As contas e o envio de avaliações ainda não estão abertos nesta prévia.</p><Link href={`/produtos/${slug}`} className="button button-outline">Voltar ao produto</Link></section>;
   else {
     const actor = await currentActor();
     if (!actor) content = <section className="account-panel"><h2>Uma experiência, uma pessoa.</h2><p>Entre com Google para enviar seu relato à revisão.</p><LoginButton returnTo={`/avaliar/${slug}`} /></section>;
