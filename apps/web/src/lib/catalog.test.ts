@@ -1,14 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { catalog, catalogResponse } from './catalog';
+import { catalog, catalogResponse, washingMachineCatalog } from './catalog';
+import { applianceCatalog } from './catalog-appliances';
 import { catalogResponseSchema, isValidGtin, productSchema } from '@duraverso/core';
 import { barcodeEvidence } from './catalog-evidence';
 import { GET } from '../app/api/v1/products/route';
 
 describe('catálogo e contrato público', () => {
-  it('expõe 20 modelos distintos, ainda sem liberar variantes para avaliações', () => {
-    expect(catalog).toHaveLength(20);
-    expect(new Set(catalog.map((p) => p.slug)).size).toBe(20);
+  it('expõe 26 modelos distintos, preservando as 20 lavadoras e sem liberar avaliações', () => {
+    expect(catalog).toHaveLength(26);
+    expect(washingMachineCatalog).toHaveLength(20);
+    expect(new Set(catalog.map((p) => p.slug)).size).toBe(catalog.length);
     expect(catalog.every((p) => p.identification === 'candidate')).toBe(true);
+    expect(catalog.every((p) => productSchema.safeParse(p).success)).toBe(true);
   });
   it('mantém códigos válidos, únicos e com evidência do fabricante', () => {
     const gtins = catalog.flatMap((p) => p.confirmedGtins);
@@ -20,7 +23,21 @@ describe('catálogo e contrato público', () => {
       expect(evidence?.sourceUrl).toMatch(/^https:\/\/(loja\.electrolux\.com\.br|api\.electrolux-medialibrary\.com|www\.brastemp\.com\.br|www\.consul\.com\.br|www\.compracerta\.com\.br)\//);
       expect(evidence?.checkedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
-    expect(catalog.every((p) => p.confirmedGtins.length === 2)).toBe(true);
+    expect(washingMachineCatalog.every((p) => p.confirmedGtins.length === 2)).toBe(true);
+    expect(applianceCatalog.every((p) => p.confirmedGtins.length === 0)).toBe(true);
+  });
+  it('inclui medidas próprias e fontes oficiais para geladeiras, micro-ondas e fogões', () => {
+    for (const category of ['refrigerator', 'microwave', 'stove']) {
+      const products = catalogResponse('', '', '', category).data;
+      expect(products).toHaveLength(2);
+      expect(products.every((product) => product.category === category && product.capacityKg === undefined)).toBe(true);
+      expect(products.every((product) => product.sourceCheckedAt === '2026-11-06' &&
+        /^https:\/\/www\.(brastemp|consul)\.com\.br\//.test(product.sourceUrl))).toBe(true);
+    }
+    expect(catalogResponse('CRB39AB').data[0]?.capacityLiters).toBe(342);
+    expect(catalogResponse('BMS46AB').data[0]?.capacityLiters).toBe(32);
+    expect(catalogResponse('CFO4NAB').data[0]?.burnerCount).toBe(4);
+    expect(catalogResponse('', '', 'small', 'refrigerator').total).toBe(0);
   });
   it('cada código conferido encontra exatamente seu modelo pela API', async () => {
     for (const product of catalog) {
@@ -61,10 +78,21 @@ describe('catálogo e contrato público', () => {
     const response = await GET(new Request('http://localhost/api/v1/products?brand=Consul'));
     expect(response.status).toBe(200);
     const parsed = catalogResponseSchema.parse(await response.json());
-    expect(parsed.total).toBe(6); expect(parsed.data.every((p) => p.brand === 'Consul')).toBe(true);
+    expect(parsed.total).toBe(9); expect(parsed.data.every((p) => p.brand === 'Consul')).toBe(true);
+  });
+  it('a API combina categoria, marca e busca sem converter unidades em kg', async () => {
+    const response = await GET(new Request('http://localhost/api/v1/products?category=refrigerator&brand=Consul&q=342'));
+    expect(response.status).toBe(200);
+    const result = catalogResponseSchema.parse(await response.json());
+    expect(result.total).toBe(1);
+    expect(result.data[0]?.model).toBe('CRB39AB');
+    expect(result.data[0]?.capacityKg).toBeUndefined();
+    const washers = await GET(new Request('http://localhost/api/v1/products?category=washing_machine'));
+    expect(catalogResponseSchema.parse(await washers.json()).total).toBe(20);
   });
   it('recusa consulta excessiva e filtro inválido', async () => {
     expect((await GET(new Request(`http://localhost/api/v1/products?q=${'a'.repeat(121)}`))).status).toBe(400);
     expect((await GET(new Request('http://localhost/api/v1/products?brand=Desconhecida'))).status).toBe(400);
+    expect((await GET(new Request('http://localhost/api/v1/products?category=Desconhecida'))).status).toBe(400);
   });
 });

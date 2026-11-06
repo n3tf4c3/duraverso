@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Duraverso — como cada lavadora se comporta na vida de quem usa",
-    "description": "Experiências de proprietários sobre funcionamento, problemas, reparos e satisfação, por versão exata do produto. Prévia do catálogo de lavadoras vendidas no Brasil."
+    "title": "Duraverso — experiências com eletrodomésticos",
+    "description": "Experiências de proprietários sobre funcionamento, problemas, reparos e satisfação, por versão exata do produto. Catálogo de eletrodomésticos vendidos no Brasil."
   },
   "header": {
     "skip": "Pular para o conteúdo",
@@ -30,9 +30,9 @@
     "originalReport": "Relato original em {language}"
   },
   "home": {
-    "eyebrow": "Lavadoras de roupas · prévia do catálogo",
+    "eyebrow": "Eletrodomésticos · prévia do catálogo",
     "title": "Encontre seu modelo.",
-    "lead": "Como cada lavadora se comporta na vida de quem usa: funcionamento, problemas, reparos e satisfação — sempre pela versão exata do produto.",
+    "lead": "Como cada eletrodoméstico se comporta na vida de quem usa: funcionamento, problemas, reparos e satisfação — sempre pela versão exata do produto.",
     "searchLabel": "Buscar no catálogo",
     "searchPlaceholder": "Marca, modelo ou código de barras",
     "searchButton": "Buscar",
@@ -44,8 +44,8 @@
     "statusSubmissions": "Envio de relatos",
     "statusSubmissionsValue": "Ainda não aberto",
     "statusNote": "Esta é uma prévia. Não há avaliações fictícias: o que aparece aqui é o que já foi conferido.",
-    "catalogTitle": "Catálogo de lavadoras",
-    "catalogSub": "20 modelos candidatos, por marca. Ordem de catálogo, não é ranking.",
+    "catalogTitle": "Catálogo de eletrodomésticos",
+    "catalogSub": "Modelos candidatos, por marca e categoria. Ordem de catálogo, sem ranking.",
     "catalogAll": "Ver catálogo com filtros",
     "catalogNoReports": "Nenhum modelo tem relatos publicados ainda.",
     "howTitle": "O que uma ficha reúne",
@@ -56,7 +56,7 @@
       },
       {
         "title": "Tempo de uso",
-        "text": "Relatos organizados por quanto tempo a lavadora está em uso, com a data da última confirmação do proprietário."
+        "text": "Relatos organizados por quanto tempo o produto está em uso, com a data da última confirmação do proprietário."
       },
       {
         "title": "Manutenção e reparos",
@@ -67,20 +67,20 @@
         "text": "Nota de 1 a 5, separada da durabilidade. A média só aparece com 20 avaliações elegíveis de proprietários distintos por variante."
       }
     ],
-    "ownersTitle": "Já tem uma destas lavadoras?",
+    "ownersTitle": "Já tem um destes eletrodomésticos?",
     "ownersText": "O envio de relatos ainda não está aberto nesta prévia. Quando abrir, cada pessoa terá uma avaliação ativa por modelo, que poderá ser atualizada com o tempo.",
     "ownersLink": "Ler as regras de participação"
   },
   "catalog": {
-    "title": "Catálogo de lavadoras",
-    "sub": "20 modelos candidatos de Brastemp, Consul e Electrolux vendidos no Brasil.",
+    "title": "Catálogo de eletrodomésticos",
+    "sub": "Modelos candidatos de Brastemp, Consul e Electrolux vendidos no Brasil.",
     "searchLabel": "Buscar por marca, modelo ou código de barras",
     "searchPlaceholder": "Ex.: CWH13AB ou 7891129614529",
     "searchButton": "Buscar",
     "filters": "Filtros",
     "brand": "Marca",
     "allBrands": "Todas",
-    "capacity": "Capacidade",
+    "capacity": "Capacidade de lavagem",
     "allCapacities": "Todas as capacidades",
     "capUpTo10": "Até 10 kg",
     "cap10to13": "Mais de 10 até 13 kg",
@@ -89,7 +89,7 @@
     "order": "Ordem do catálogo · sem ranking",
     "colModel": "Modelo",
     "colBrand": "Marca",
-    "colCapacity": "Capacidade",
+    "colCapacity": "Medida",
     "colReports": "Relatos",
     "colAction": "Ação",
     "footnote": "Tensão e variantes são conferidas dentro de cada ficha.",
@@ -98,15 +98,18 @@
     "countFor": "para “{q}”",
     "emptyQueryTitle": "Nenhum modelo encontrado para “{q}”.",
     "emptyFiltersTitle": "Nenhum modelo com esses filtros.",
-    "emptyCodeText": "Este código não está entre os 40 documentados nesta prévia. Isso não significa que o produto não exista nem que a câmera falhou — ele só ainda não está no catálogo. Confira os números na embalagem.",
+    "emptyCodeText": "Este código ainda não está documentado no catálogo. Confira os números na embalagem ou busque pela marca e pelo modelo.",
     "emptyQueryText": "Confira o modelo como aparece na etiqueta do produto, ou tente buscar só pela marca.",
-    "emptyFiltersText": "Tente outra faixa de capacidade ou volte a mostrar todas as marcas.",
+    "emptyFiltersText": "Tente outra categoria, marca ou faixa de capacidade de lavagem.",
     "emptyScan": "Ler o código de barras pela câmera",
-    "emptyScope": "Nesta prévia o catálogo tem apenas lavadoras de Brastemp, Consul e Electrolux vendidas no Brasil."
+    "emptyScope": "Nesta prévia, o catálogo inclui lavadoras, geladeiras, micro-ondas e fogões de Brastemp, Consul e Electrolux vendidos no Brasil.",
+    "category": "Categoria",
+    "allCategories": "Todas as categorias",
+    "capacityHint": "As faixas em kg filtram somente lavadoras de roupas."
   },
   "scanner": {
     "title": "Ler código de barras",
-    "intro": "Use o código com números embaixo das barras, na embalagem ou na etiqueta da lavadora.",
+    "intro": "Use o código com números embaixo das barras, na embalagem ou na etiqueta do produto.",
     "openCamera": "Abrir câmera",
     "privacy": "A câmera só abre quando você permitir. A leitura acontece no seu aparelho; nenhuma imagem é enviada ao Duraverso.",
     "or": "ou",
@@ -123,17 +126,17 @@
     "found": "Código reconhecido",
     "codeForModel": "Código deste modelo",
     "voltage": "Tensão",
-    "labelTip": "Antes de comprar, confira a tensão (127 V ou 220 V) na etiqueta do produto.",
+    "labelTip": "Antes de comprar ou ligar o produto, confira a tensão de alimentação elétrica na etiqueta.",
     "openRecord": "Abrir ficha do modelo",
     "scanAnother": "Ler outro código",
     "notFoundTag": "Não está no catálogo",
     "notFoundTitle": "Ainda não temos este código.",
-    "notFoundText": "Ele não está entre os 40 códigos documentados nesta prévia. A câmera funcionou: o produto é que ainda não entrou no catálogo.",
+    "notFoundText": "Este código ainda não está documentado no catálogo. Confira os números ou busque pela marca e pelo modelo.",
     "retype": "Conferir e digitar os números",
     "invalidLength": "O código precisa ter 8, 12, 13 ou 14 números.",
     "permissionDenied": "Sem permissão para usar a câmera. Você pode digitar os números do código logo abaixo.",
     "cameraUnavailable": "Não foi possível abrir a câmera neste aparelho. Digite os números do código.",
-    "scope": "Nesta prévia, o catálogo inclui só lavadoras de Brastemp, Consul e Electrolux vendidas no Brasil."
+    "scope": "O catálogo reúne lavadoras, geladeiras, micro-ondas e fogões vendidos no Brasil. A busca por código encontra somente os GTINs documentados."
   },
   "product": {
     "breadcrumb": "Caminho",
@@ -143,7 +146,7 @@
     "summaryReports": "Relatos de proprietários",
     "noneYet": "Nenhum publicado",
     "checkedOn": "Fonte do fabricante consultada em {date}.",
-    "knownTitle": "O que já sabemos sobre esta lavadora",
+    "knownTitle": "O que já sabemos sobre este produto",
     "field": "Campo",
     "value": "Valor",
     "status": "Situação",
@@ -161,12 +164,12 @@
     "colRatings": "Avaliações para a média",
     "experienceTitle": "Experiências de uso",
     "experienceEmpty": "Ainda não há relatos publicados.",
-    "experienceEmptySub": "Quando houver, cada relato aparecerá nesta régua pelo tempo de uso da lavadora, com a data da última confirmação do proprietário.",
+    "experienceEmptySub": "Quando houver, cada relato aparecerá nesta régua pelo tempo de uso do produto, com a data da última confirmação do proprietário.",
     "oneYear": "1 ano",
     "slots": [
       {
         "title": "Funcionamento",
-        "text": "Como a lavadora se comporta no dia a dia: ruído, consumo, resultado da lavagem."
+        "text": "Como o produto se comporta no dia a dia: funcionamento, ruído, consumo e resultado de uso."
       },
       {
         "title": "Problemas e reparos",
@@ -179,10 +182,10 @@
     ],
     "zeroReports": "0 relatos",
     "nextTitle": "Próximos passos",
-    "nextSimilar": "Ver outras lavadoras de 10 a 13 kg",
+    "nextSimilar": "Ver outros produtos desta categoria",
     "voltageHowTitle": "Como conferir a tensão",
-    "voltageHowText": "A tensão (127 V ou 220 V) aparece na etiqueta do produto e na embalagem. Confira antes de comprar.",
-    "ownersTitle": "Tem esta lavadora?",
+    "voltageHowText": "Confira a tensão de alimentação elétrica na etiqueta do produto e na embalagem antes de comprar ou ligar. Não presuma a tensão a partir do nome do modelo.",
+    "ownersTitle": "Tem este produto?",
     "ownersText": "O envio de relatos ainda não está aberto nesta prévia. A consulta continua livre, sem conta.",
     "reviewTitle": "Estamos conferindo esta versão.",
     "reviewText": "Os dados abaixo ainda não foram confirmados na fonte do fabricante. Até lá, a ficha não recebe relatos e nada aqui deve ser lido como especificação.",
@@ -196,8 +199,8 @@
     "privacy": "Privacidade"
   },
   "catalogMobile": {
-    "title": "Catálogo de lavadoras",
-    "sub": "20 modelos candidatos vendidos no Brasil. Ordem de catálogo, sem ranking.",
+    "title": "Catálogo de eletrodomésticos",
+    "sub": "Modelos candidatos vendidos no Brasil. Ordem de catálogo, sem ranking.",
     "searchLabel": "Marca, modelo ou código de barras",
     "placeholder": "Ex.: CWH13AB",
     "searchBtn": "Buscar",
@@ -209,7 +212,7 @@
     "removeFilter": "Remover filtro",
     "closeFilters": "Fechar filtros",
     "brand": "Marca",
-    "capacity": "Capacidade",
+    "capacity": "Capacidade de lavagem",
     "all": "Todas as marcas",
     "allCap": "Todas as capacidades",
     "c1": "Até 10 kg",
@@ -217,7 +220,7 @@
     "c3": "Mais de 13 kg",
     "colModel": "Modelo",
     "colBrand": "Marca",
-    "colCap": "Capacidade",
+    "colCap": "Medida",
     "colReports": "Relatos",
     "colAction": "Ação",
     "none": "nenhum ainda",
@@ -231,10 +234,10 @@
     "emptyTitleQ": "Nenhum modelo encontrado para “{q}”.",
     "emptyTitleF": "Nenhum modelo com essa combinação de filtros.",
     "emptyText": "Confira o modelo como aparece na etiqueta do produto, ou busque só pela marca.",
-    "emptyCode": "Este código não está entre os 40 documentados nesta prévia. Isso não significa que o produto não exista — ele só ainda não está no catálogo.",
-    "emptyFilters": "Não há lavadoras {brand} com {cap} no catálogo da prévia. Mude um dos filtros.",
+    "emptyCode": "Este código ainda não está documentado no catálogo. Confira os números ou busque pela marca e pelo modelo.",
+    "emptyFilters": "Não há modelos {brand} com {cap} no catálogo da prévia. Mude um dos filtros.",
     "emptyScan": "Ler o código de barras",
-    "emptyScope": "Nesta prévia o catálogo tem apenas lavadoras de Brastemp, Consul e Electrolux vendidas no Brasil."
+    "emptyScope": "Nesta prévia, o catálogo inclui lavadoras, geladeiras, micro-ondas e fogões de Brastemp, Consul e Electrolux vendidos no Brasil."
   },
   "scannerStates": {
     "deniedTitle": "A câmera não foi liberada",
@@ -256,7 +259,7 @@
     "typedFound": "Código encontrado no catálogo",
     "openRecord": "Abrir ficha do modelo",
     "notInCatTag": "Código válido, fora do catálogo",
-    "typedNotInCat": "Este código não está entre os 40 documentados nesta prévia. Isso não quer dizer que o produto não exista — ele só ainda não entrou no catálogo.",
+    "typedNotInCat": "Este código ainda não está documentado no catálogo. Isso não significa que o produto não exista.",
     "checking": "Consultando…",
     "checkingText": "Consultando o código 7891129614529 no catálogo.",
     "checkingNote": "O botão fica ocupado para evitar envio duplo. Sem resposta no tempo-limite (sugestão: 10 s), aparece a falha temporária.",
@@ -314,7 +317,7 @@
           },
           {
             "title": "Transparência sobre o piloto",
-            "text": "Esta prévia permite explorar 20 modelos candidatos e experimentar a pesquisa. O login, a publicação de experiências e a revisão administrativa ainda não estão ativos. Não há avaliações fictícias nem coleta de comprovantes."
+            "text": "Esta prévia permite explorar modelos candidatos de eletrodomésticos e experimentar a pesquisa. O login, a publicação de experiências e a revisão administrativa ainda não estão ativos. Não há avaliações fictícias nem coleta de comprovantes."
           }
         ]
       },

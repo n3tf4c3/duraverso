@@ -1,5 +1,6 @@
 import { catalogResponseSchema, searchProducts, type Product } from '@duraverso/core';
 import { barcodeEvidence, catalogCheckedAt, modelSources } from './catalog-evidence';
+import { applianceCatalog } from './catalog-appliances';
 
 const { brastempManual } = modelSources;
 const candidates: [Product['brand'], string, number, string][] = [
@@ -17,14 +18,16 @@ const candidates: [Product['brand'], string, number, string][] = [
   ['Electrolux', 'LAC12', 12, modelSources.LAC12],
 ];
 
-export const catalog: Product[] = candidates.map(([brand, model, capacityKg, sourceUrl]) => ({
+export const washingMachineCatalog: Product[] = candidates.map(([brand, model, capacityKg, sourceUrl]) => ({
   id: `${brand}-${model}`.toLowerCase(), slug: `${brand}-${model}`.toLowerCase(), brand, model, capacityKg,
   sourceUrl, sourceCheckedAt: catalogCheckedAt, identification: 'candidate',
   confirmedGtins: [...(barcodeEvidence[`${brand}-${model}`.toLowerCase()]?.gtins ?? [])],
 }));
 
-export function catalogResponse(query = '', brand = '', capacity = '') {
-  const data = searchProducts(catalog, query, brand, capacity);
+export const catalog: Product[] = [...washingMachineCatalog, ...applianceCatalog];
+
+export function catalogResponse(query = '', brand = '', capacity = '', category = '') {
+  const data = searchProducts(catalog, query, brand, capacity, category);
   return catalogResponseSchema.parse({ data, total: data.length, mode: 'local_catalog' });
 }
 export function findProduct(slug: string) { return catalog.find((p) => p.slug === slug); }

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Duraverso — how each washing machine holds up in everyday use",
-    "description": "Owner experiences on performance, problems, repairs and satisfaction, by exact product version. A preview catalog of washing machines sold in Brazil."
+    "title": "Duraverso — owner experiences with home appliances",
+    "description": "Owner experiences on performance, problems, repairs and satisfaction, by exact product version. A catalog of home appliances sold in Brazil."
   },
   "header": {
     "skip": "Skip to content",
@@ -30,9 +30,9 @@
     "originalReport": "Original report in {language}"
   },
   "home": {
-    "eyebrow": "Washing machines · catalog preview",
+    "eyebrow": "Home appliances · catalog preview",
     "title": "Find your model.",
-    "lead": "How each washing machine holds up in everyday use: performance, problems, repairs and satisfaction — always tied to the exact product version.",
+    "lead": "How each appliance holds up in everyday use: performance, problems, repairs and satisfaction — always tied to the exact product version.",
     "searchLabel": "Search the catalog",
     "searchPlaceholder": "Brand, model or barcode",
     "searchButton": "Search",
@@ -44,8 +44,8 @@
     "statusSubmissions": "Report submissions",
     "statusSubmissionsValue": "Not open yet",
     "statusNote": "This is a preview. There are no placeholder reviews: what you see here is what has been verified.",
-    "catalogTitle": "Washing machine catalog",
-    "catalogSub": "20 candidate models, by brand. Listed in catalog order, not ranked.",
+    "catalogTitle": "Home appliance catalog",
+    "catalogSub": "Candidate models by brand and category. Catalog order, not ranked.",
     "catalogAll": "Open catalog with filters",
     "catalogNoReports": "No model has published owner reports yet.",
     "howTitle": "What each product record covers",
@@ -56,7 +56,7 @@
       },
       {
         "title": "Time in use",
-        "text": "Reports arranged by how long the machine has been in use, with the date the owner last confirmed it."
+        "text": "Reports arranged by how long the product has been in use, with the date the owner last confirmed it."
       },
       {
         "title": "Maintenance and repairs",
@@ -67,20 +67,20 @@
         "text": "A 1–5 rating, kept separate from durability. An average only appears after 20 eligible ratings from different owners of the same variant."
       }
     ],
-    "ownersTitle": "Already own one of these?",
+    "ownersTitle": "Already own one of these appliances?",
     "ownersText": "Owner reports aren’t open yet in this preview. When they open, each person will have one active rating per model, which they can update over time.",
     "ownersLink": "Read the participation rules"
   },
   "catalog": {
-    "title": "Washing machine catalog",
-    "sub": "20 candidate models from Brastemp, Consul and Electrolux sold in Brazil.",
+    "title": "Home appliance catalog",
+    "sub": "Candidate models from Brastemp, Consul and Electrolux sold in Brazil.",
     "searchLabel": "Search by brand, model or barcode",
     "searchPlaceholder": "e.g. CWH13AB or 7891129614529",
     "searchButton": "Search",
     "filters": "Filters",
     "brand": "Brand",
     "allBrands": "All",
-    "capacity": "Capacity",
+    "capacity": "Washing capacity",
     "allCapacities": "Any capacity",
     "capUpTo10": "Up to 10 kg",
     "cap10to13": "Over 10, up to 13 kg",
@@ -89,7 +89,7 @@
     "order": "Catalog order · not ranked",
     "colModel": "Model",
     "colBrand": "Brand",
-    "colCapacity": "Capacity",
+    "colCapacity": "Size",
     "colReports": "Reports",
     "colAction": "Action",
     "footnote": "Voltage and variants are checked on each product record.",
@@ -98,15 +98,18 @@
     "countFor": "for “{q}”",
     "emptyQueryTitle": "No models found for “{q}”.",
     "emptyFiltersTitle": "No models match these filters.",
-    "emptyCodeText": "This code isn’t one of the 40 documented in this preview. That doesn’t mean the product doesn’t exist or that your camera failed — it just isn’t in the catalog yet. Check the digits on the box.",
+    "emptyCodeText": "This code is not documented in the catalog yet. Check the digits on the box or search by brand and model.",
     "emptyQueryText": "Check the model name as it appears on the product label, or try searching by brand only.",
-    "emptyFiltersText": "Try another capacity range or show all brands again.",
+    "emptyFiltersText": "Try another category, brand or washing capacity range.",
     "emptyScan": "Scan the barcode with your camera",
-    "emptyScope": "In this preview, the catalog only includes Brastemp, Consul and Electrolux washers sold in Brazil."
+    "emptyScope": "This preview includes washing machines, refrigerators, microwaves and stoves from Brastemp, Consul and Electrolux sold in Brazil.",
+    "category": "Category",
+    "allCategories": "All categories",
+    "capacityHint": "Ranges in kg filter washing machines only."
   },
   "scanner": {
     "title": "Scan a barcode",
-    "intro": "Use the barcode with numbers under the bars, on the box or on the washer’s label.",
+    "intro": "Use the barcode with numbers under the bars, on the box or on the product label.",
     "openCamera": "Open camera",
     "privacy": "The camera only opens when you allow it. Scanning happens on your device; no images are sent to Duraverso.",
     "or": "or",
@@ -123,17 +126,17 @@
     "found": "Code recognized",
     "codeForModel": "Code for this model",
     "voltage": "Voltage",
-    "labelTip": "Before buying, check the voltage (127 V or 220 V) on the product label.",
+    "labelTip": "Before buying or connecting the product, check the electrical supply voltage on its label.",
     "openRecord": "Open model record",
     "scanAnother": "Scan another code",
     "notFoundTag": "Not in the catalog",
     "notFoundTitle": "We don’t have this code yet.",
-    "notFoundText": "It isn’t one of the 40 codes documented in this preview. Your camera worked fine — the product just hasn’t been added to the catalog.",
+    "notFoundText": "This code is not documented in the catalog yet. Check the digits or search by brand and model.",
     "retype": "Check and type the numbers",
     "invalidLength": "The code must have 8, 12, 13 or 14 digits.",
     "permissionDenied": "Camera access wasn’t allowed. You can type the barcode numbers below.",
     "cameraUnavailable": "We couldn’t open the camera on this device. Please type the barcode numbers.",
-    "scope": "In this preview, the catalog only includes Brastemp, Consul and Electrolux washers sold in Brazil."
+    "scope": "The catalog includes washing machines, refrigerators, microwaves and stoves sold in Brazil. Barcode lookup matches documented GTINs only."
   },
   "product": {
     "breadcrumb": "Breadcrumb",
@@ -143,7 +146,7 @@
     "summaryReports": "Owner reports",
     "noneYet": "None published",
     "checkedOn": "Manufacturer source checked on {date}.",
-    "knownTitle": "What we know about this washer so far",
+    "knownTitle": "What we know about this product so far",
     "field": "Field",
     "value": "Value",
     "status": "Status",
@@ -161,12 +164,12 @@
     "colRatings": "Ratings toward average",
     "experienceTitle": "Owner experience",
     "experienceEmpty": "No owner reports published yet.",
-    "experienceEmptySub": "Once there are, each report will appear on this scale by how long the washer has been in use, with the date the owner last confirmed it.",
+    "experienceEmptySub": "Once there are, each report will appear on this scale by how long the product has been in use, with the date the owner last confirmed it.",
     "oneYear": "1 year",
     "slots": [
       {
         "title": "Performance",
-        "text": "How the washer behaves day to day: noise, consumption, washing results."
+        "text": "How the product behaves day to day: operation, noise, consumption and results."
       },
       {
         "title": "Problems and repairs",
@@ -179,10 +182,10 @@
     ],
     "zeroReports": "0 reports",
     "nextTitle": "Next steps",
-    "nextSimilar": "See other 10–13 kg washers",
+    "nextSimilar": "See other products in this category",
     "voltageHowTitle": "How to check the voltage",
-    "voltageHowText": "The voltage (127 V or 220 V) is shown on the product label and on the box. Check it before buying.",
-    "ownersTitle": "Own this washer?",
+    "voltageHowText": "Check the electrical supply voltage on the product label and on the box before buying or connecting it. Do not infer voltage from the model name.",
+    "ownersTitle": "Own this product?",
     "ownersText": "Owner reports aren’t open yet in this preview. Browsing stays free, no account needed.",
     "reviewTitle": "We’re checking this version.",
     "reviewText": "The details below haven’t been confirmed with the manufacturer’s source yet. Until then, this record won’t take reports, and nothing here should be read as a specification.",
@@ -196,8 +199,8 @@
     "privacy": "Privacy"
   },
   "catalogMobile": {
-    "title": "Washing machine catalog",
-    "sub": "20 candidate models sold in Brazil. Catalog order, not ranked.",
+    "title": "Home appliance catalog",
+    "sub": "Candidate models sold in Brazil. Catalog order, not ranked.",
     "searchLabel": "Brand, model or barcode",
     "placeholder": "e.g. CWH13AB",
     "searchBtn": "Search",
@@ -209,7 +212,7 @@
     "removeFilter": "Remove filter",
     "closeFilters": "Close filters",
     "brand": "Brand",
-    "capacity": "Capacity",
+    "capacity": "Washing capacity",
     "all": "All brands",
     "allCap": "Any capacity",
     "c1": "Up to 10 kg",
@@ -217,7 +220,7 @@
     "c3": "Over 13 kg",
     "colModel": "Model",
     "colBrand": "Brand",
-    "colCap": "Capacity",
+    "colCap": "Size",
     "colReports": "Reports",
     "colAction": "Action",
     "none": "none yet",
@@ -231,10 +234,10 @@
     "emptyTitleQ": "No models found for “{q}”.",
     "emptyTitleF": "No models match this combination of filters.",
     "emptyText": "Check the model name as it appears on the product label, or search by brand only.",
-    "emptyCode": "This code isn’t one of the 40 documented in this preview. That doesn’t mean the product doesn’t exist — it just isn’t in the catalog yet.",
-    "emptyFilters": "There are no {brand} washers {cap} in the preview catalog. Change one of the filters.",
+    "emptyCode": "This code is not documented in the catalog yet. Check the digits or search by brand and model.",
+    "emptyFilters": "There are no {brand} models {cap} in the preview catalog. Change one of the filters.",
     "emptyScan": "Scan the barcode",
-    "emptyScope": "In this preview, the catalog only includes Brastemp, Consul and Electrolux washers sold in Brazil."
+    "emptyScope": "This preview includes washing machines, refrigerators, microwaves and stoves from Brastemp, Consul and Electrolux sold in Brazil."
   },
   "scannerStates": {
     "deniedTitle": "Camera access wasn’t allowed",
@@ -256,7 +259,7 @@
     "typedFound": "Code found in the catalog",
     "openRecord": "Open model record",
     "notInCatTag": "Valid code, not in the catalog",
-    "typedNotInCat": "This code isn’t one of the 40 documented in this preview. That doesn’t mean the product doesn’t exist — it just hasn’t been added to the catalog yet.",
+    "typedNotInCat": "This code is not documented in the catalog yet. That does not mean the product does not exist.",
     "checking": "Looking up…",
     "checkingText": "Looking up code 7891129614529 in the catalog.",
     "checkingNote": "The button stays busy to prevent double submissions. With no answer within the timeout (suggested: 10 s), the temporary failure appears.",
@@ -314,7 +317,7 @@
           },
           {
             "title": "Transparency about the pilot",
-            "text": "This preview lets you explore 20 candidate models and try the search. Login, publishing experiences and administrative review aren’t active yet. There are no fictitious reviews and no collection of receipts."
+            "text": "This preview lets you explore candidate home appliance models and try the search. Login, publishing experiences and administrative review are not active yet. There are no fictitious reviews and no collection of receipts."
           }
         ]
       },

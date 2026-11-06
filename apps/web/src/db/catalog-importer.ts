@@ -1,5 +1,5 @@
 import type { Client, PoolClient } from 'pg';
-import { reconcileCatalog, type StoredCatalog } from '@duraverso/core';
+import { productCategory, reconcileCatalog, type StoredCatalog } from '@duraverso/core';
 
 // Aceita apenas uma sessão dedicada. Não usar pool.query nem Neon HTTP aqui.
 type Session = Client | PoolClient;
@@ -18,8 +18,11 @@ export async function importCatalog(client: Session, products: unknown, evidence
       await client.query('LOCK TABLE products, variants, gtins, catalog_variant_evidence IN SHARE ROW EXCLUSIVE MODE');
     }
     const stored: StoredCatalog = {
-      products: (await client.query(`SELECT id,slug,brand,model,capacity_kg::float AS "capacityKg",source_url AS "sourceUrl",
-        to_char(source_checked_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS "sourceCheckedAt" FROM products`)).rows,
+      products: (await client.query(`SELECT id,slug,brand,model,category,capacity_kg::float AS "capacityKg",
+        capacity_liters::float AS "capacityLiters",burner_count AS "burnerCount",source_url AS "sourceUrl",
+        to_char(source_checked_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS "sourceCheckedAt" FROM products`)).rows.map((row) => ({
+          ...row, capacityKg: row.capacityKg ?? undefined, capacityLiters: row.capacityLiters ?? undefined, burnerCount: row.burnerCount ?? undefined,
+        })),
       variants: (await client.query('SELECT id,product_id AS "productId",manufacturer_code AS "manufacturerCode",voltage,code_kind AS "codeKind" FROM variants')).rows,
       gtins: (await client.query('SELECT code,variant_id AS "variantId",source_url AS "sourceUrl" FROM gtins')).rows,
       evidence: (await client.query(`SELECT gtin_code AS "gtinCode",voltage_source_url AS "voltageSourceUrl",
@@ -39,8 +42,10 @@ export async function importCatalog(client: Session, products: unknown, evidence
     }
     const productIds = new Map(stored.products.map((product) => [product.slug, product.id]));
     for (const product of plan.productsToInsert) {
-      const result = await client.query(`INSERT INTO products(slug,brand,model,capacity_kg,source_url,source_checked_at,verified)
-        VALUES($1,$2,$3,$4,$5,$6,false) RETURNING id`, [product.slug, product.brand, product.model, product.capacityKg, product.sourceUrl, `${product.sourceCheckedAt}T00:00:00Z`]);
+      const result = await client.query(`INSERT INTO products(slug,brand,model,capacity_kg,source_url,source_checked_at,verified,category,capacity_liters,burner_count)
+        VALUES($1,$2,$3,$4,$5,$6,false,$7,$8,$9) RETURNING id`, [product.slug, product.brand, product.model,
+        product.capacityKg ?? null, product.sourceUrl, `${product.sourceCheckedAt}T00:00:00Z`,
+        productCategory(product), product.capacityLiters ?? null, product.burnerCount ?? null]);
       productIds.set(product.slug, result.rows[0].id);
     }
     const key = (productId: string, code: string) => JSON.stringify([productId, code]);

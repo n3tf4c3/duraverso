@@ -3,6 +3,7 @@ import { catalogResponseSchema } from '@duraverso/core';
 import { catalogGet } from './catalog-http';
 import { PublicCatalogService } from './catalog';
 import { readCatalog, readProduct } from './catalog-runtime';
+import { catalog } from '@/lib/catalog';
 
 const mocks = vi.hoisted(() => ({ connected: vi.fn(() => false), query: vi.fn(), connection: vi.fn(), database: vi.fn() }));
 vi.mock('@/lib/env', () => ({ isConnected: mocks.connected }));
@@ -13,7 +14,7 @@ afterEach(() => { vi.resetAllMocks(); mocks.connected.mockReturnValue(false); })
 describe('consulta pública do catálogo', () => {
   it('a prévia não abre conexão e conserva a resposta existente', async () => {
     const result = await readCatalog();
-    expect(result).toMatchObject({ mode: 'local_catalog', total: 20 });
+    expect(result).toMatchObject({ mode: 'local_catalog', total: catalog.length });
     expect(mocks.database).not.toHaveBeenCalled();
     expect(mocks.connection).not.toHaveBeenCalled();
     expect(await readProduct('nao-existe')).toBeUndefined();
@@ -47,6 +48,20 @@ describe('consulta pública do catálogo', () => {
   it('consulta inválida é recusada antes de acessar o banco', async () => {
     const read = vi.fn();
     expect((await catalogGet(read)(new Request('http://localhost/api/v1/products?brand=Outra'))).status).toBe(400);
+    expect((await catalogGet(read)(new Request('http://localhost/api/v1/products?category=other'))).status).toBe(400);
     expect(read).not.toHaveBeenCalled();
+  });
+  it('omite medidas nulas e filtra categorias no contrato conectado', async () => {
+    const row = { id: 'fridge', slug: 'fridge', brand: 'Consul', model: 'Fixture', category: 'refrigerator',
+      capacityKg: null, capacityLiters: 300, burnerCount: null, sourceUrl: 'https://example.test/model',
+      sourceCheckedAt: '2026-11-06', identification: 'verified', confirmedGtins: [] };
+    const service = new PublicCatalogService({ query: vi.fn().mockResolvedValue([row]) });
+    const result = await service.read();
+    expect(result.data[0]).toMatchObject({ category: 'refrigerator', capacityLiters: 300 });
+    expect(result.data[0]).not.toHaveProperty('capacityKg');
+    expect(result.data[0]).not.toHaveProperty('burnerCount');
+    const handler = catalogGet(() => service.read());
+    expect(await (await handler(new Request('http://localhost/api/v1/products?category=refrigerator'))).json()).toMatchObject({ total: 1 });
+    expect(await (await handler(new Request('http://localhost/api/v1/products?capacity=large'))).json()).toMatchObject({ total: 0 });
   });
 });

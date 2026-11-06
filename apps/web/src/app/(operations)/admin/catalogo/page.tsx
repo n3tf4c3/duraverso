@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { catalogActivationIssues } from '@duraverso/core';
+import { catalogActivationIssues, productCategory } from '@duraverso/core';
+import { categoryLabel, formatProductMeasure } from '@/lib/product-presentation';
 import { currentActor } from '@/auth';
 import { Breadcrumb } from '@/components/ui';
 import { CatalogDecisionForm } from '@/components/catalog-decision-form';
@@ -33,7 +34,8 @@ export default async function CatalogAdminPage() {
     <p>Suspender o modelo oculta suas variantes e relatos e impede novas avaliações. As liberações individuais são preservadas e voltam a valer quando o modelo é liberado novamente. Suspender uma variante oculta seus códigos e relatos e impede novas avaliações nessa variante.</p>
     {result.error ? <p role="alert" className="inline-notice">{result.error}</p> : result.entries.length === 0 && <div className="empty-state"><h2>Nenhum modelo importado.</h2></div>}
     <div className="review-list">{result.entries.map(({ product, token, history }) => <article className="info-panel" key={product.id}>
-      <h2>{product.brand} {product.model} · {product.capacityKg} kg</h2>
+      <h2>{product.brand} {product.model} · {formatProductMeasure(product, 'pt')}</h2>
+      <p>{categoryLabel(productCategory(product), 'pt')}</p>
       <p><strong>{product.verified ? 'Modelo liberado' : 'Modelo suspenso ou ainda não revisado'}</strong> · {product.slug}</p>
       <p><Source url={product.sourceUrl}>Fonte do modelo</Source> · Conferida em {date(product.sourceCheckedAt)}</p>
       <CatalogDecisionForm key={`${product.id}-${token}`} productId={product.id} variantId={null} token={token} verified={product.verified} issues={catalogActivationIssues(product, null)} />

@@ -466,6 +466,31 @@ svg {
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:36px
 }
+.category-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-bottom: 28px;
+}
+.category-index a {
+  border-bottom: 1px solid currentColor;
+  padding: 8px 0;
+}
+.category-index .mono {
+  margin-left: 8px;
+}
+.home-category,
+.row-category {
+  display: block;
+  font-family: var(--font-plex-sans), Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 3px;
+}
+.filters fieldset:disabled {
+  opacity: 0.55;
+}
 .brand-index h3 {
   font-size:21px;
   display:flex;

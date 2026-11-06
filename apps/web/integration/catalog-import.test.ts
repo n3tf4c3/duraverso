@@ -72,6 +72,20 @@ describe.sequential('importação persistente do catálogo', () => {
     expect((await pool.query(`SELECT p.verified AS p,v.verified AS v FROM products p JOIN variants v ON v.product_id=p.id
       WHERE p.slug=$1`, [plan.products[0].slug])).rows).toEqual([{ p: true, v: true }]);
   });
+  it('importa categoria e litros apenas com evidência completa, preservando medidas existentes', async () => {
+    const plan = fixture();
+    plan.products[0] = { ...plan.products[0], category: 'refrigerator', capacityKg: undefined, capacityLiters: 300 };
+    expect((await run(plan, true)).applied).toBe(true);
+    const persisted = (await pool.query('SELECT category,capacity_kg,capacity_liters::float AS liters,burner_count FROM products WHERE slug=$1',
+      [plan.products[0].slug])).rows[0];
+    expect(persisted).toEqual({ category: 'refrigerator', capacity_kg: null, liters: 300, burner_count: null });
+    expect(await run(plan, true)).toMatchObject({ applied: true, insertions: { products: 0, variants: 0, gtins: 0, evidence: 0 } });
+    for (const change of [{ capacityLiters: 310 }, { category: 'microwave' as const }]) {
+      expect(await run({ ...plan, products: [{ ...plan.products[0], ...change }] }, true)).toMatchObject({ applied: false,
+        conflicts: [{ entity: 'product', key: plan.products[0].slug }] });
+    }
+    expect((await pool.query('SELECT capacity_liters::float AS liters FROM products WHERE slug=$1', [plan.products[0].slug])).rows[0].liters).toBe(300);
+  });
   it('executa o comando administrativo e recusa confirmação de outro destino', async () => {
     const require = createRequire(import.meta.url);
     const cli = (args: string[]) => spawnSync(process.execPath, [require.resolve('tsx/cli'), 'src/db/catalog-import.ts', ...args], {

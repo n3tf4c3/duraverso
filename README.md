@@ -2,7 +2,7 @@
 
 Experiências de uso de produtos, por versão.
 
-Base web do catálogo comunitário de lavadoras. A prévia do catálogo pode ser hospedada
+Base web do catálogo comunitário de lavadoras, geladeiras, micro-ondas e fogões. A prévia pode ser hospedada
 na Vercel, com contas e contribuições desativadas. Nenhum banco é necessário nessa fase.
 
 ## Executar localmente
@@ -20,7 +20,7 @@ Não executar desenvolvimento e produção na mesma porta ao mesmo tempo.
 
 ## Interface e idiomas
 
-O visual segue a direção “Arquivo de uso”: busca, índice por marca, lista de modelos,
+O visual segue a direção “Arquivo de uso”: busca, índice por marca, filtro de categoria, lista de modelos,
 fichas com fontes e estados explícitos de conferência. Fotos só entram quando houver
 uma imagem licenciada do modelo. As contagens da interface vêm do catálogo.
 
@@ -68,22 +68,30 @@ substitui a revisão visual e a leitura com câmera real.
 
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.
-No modo preview, o fluxo inicial tem consulta a 20 candidatos, filtros, detalhes e leitura de código.
-As fontes dos 20 modelos foram conferidas. A busca reconhece 40 GTINs oficiais dos 20
+No modo preview, o fluxo inicial tem consulta a 26 candidatos: 20 lavadoras, duas geladeiras,
+dois micro-ondas e dois fogões, com filtros, detalhes e leitura de código. As novas fontes
+oficiais estão em `apps/web/src/lib/catalog-appliances.ts`; esses seis modelos podem ser
+encontrados pelo nome, mas ainda não possuem GTINs ou variantes documentadas no catálogo.
+O filtro `category` aceita `washing_machine`, `refrigerator`, `microwave` e `stove` na
+API e nas páginas. O filtro de capacidade em kg vale somente para lavadoras; geladeiras
+e micro-ondas mostram litros nominais, e fogões mostram o número de bocas.
+A busca reconhece 40 GTINs oficiais dos 20
 modelos Brastemp, Consul e Electrolux; a cobertura de versões continua parcial. Códigos identificam o modelo, sem selecionar
 voltagem nem criar variantes para avaliações. Evidências em `apps/web/src/lib/catalog-evidence.ts`.
 Por padrão, contas e administração apresentam seu estado de preparação sem simular gravação.
 
-`pnpm catalog:plan` confere localmente a preparação dos 20 modelos e 40 associações
+`pnpm catalog:plan` confere localmente o lote preparado de 20 lavadoras e 40 associações
 entre GTIN, identificador do fabricante e tensão nominal. `pnpm catalog:plan --json`
-exibe os dados e suas fontes para revisão. O comando não acessa banco, não grava dados
+exibe os dados e suas fontes para revisão. `pnpm catalog:plan --all` inclui as quatro
+categorias e retorna código não zero enquanto houver modelos sem variantes documentadas.
+O comando não acessa banco, não grava dados
 nem habilita avaliações. Evidências separadas em `apps/web/src/lib/catalog-variants.ts`;
 a busca pública continua retornando somente o modelo.
 
 O importador `pnpm catalog:import` compara esse plano com um PostgreSQL autorizado e
 somente lê por padrão. A gravação explícita insere modelos, variantes, GTINs e evidências
 em uma transação, preservando registros existentes e mantendo novos itens não verificados.
-Exige a migration 0003 e conexão direta. Consulte os argumentos e limites em
+Exige as migrations até 0005 e conexão direta. Consulte os argumentos e limites em
 `docs/operacao-local.md` antes de usar um banco permanente.
 
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração

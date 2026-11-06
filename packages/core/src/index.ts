@@ -5,16 +5,38 @@ export { reconcileCatalog, type StoredCatalog, type CatalogImportConflict } from
 export const MIN_COMMUNITY_REVIEWS = 20;
 export const MAX_REVIEW_LENGTH = 2000;
 export const brands = ['Brastemp', 'Consul', 'Electrolux'] as const;
+export const productCategories = ['washing_machine', 'refrigerator', 'microwave', 'stove'] as const;
+export type ProductCategory = typeof productCategories[number];
+export function productCategory(product: { category?: ProductCategory }): ProductCategory {
+  return product.category ?? 'washing_machine';
+}
 export const reviewStatuses = ['pending', 'changes_requested', 'published', 'rejected', 'withdrawn'] as const;
 export const functioningStatuses = ['working', 'with_problem', 'not_working'] as const;
 
-export const productSchema = z.object({
+const productBaseSchema = z.object({
   id: z.string().min(1), slug: z.string().min(1), brand: z.enum(brands), model: z.string().min(1),
-  capacityKg: z.number().positive(), sourceUrl: z.url(), sourceCheckedAt: z.iso.date(),
-  identification: z.literal('candidate'), confirmedGtins: z.array(z.string().refine(isValidGtin, 'GTIN inválido.')),
+  category: z.enum(productCategories).optional(),
+  capacityKg: z.number().positive().optional(), capacityLiters: z.number().positive().optional(),
+  burnerCount: z.number().int().positive().optional(), sourceUrl: z.url(), sourceCheckedAt: z.iso.date(),
+  identification: z.enum(['candidate', 'verified']), confirmedGtins: z.array(z.string().refine(isValidGtin, 'GTIN inválido.')),
+}).superRefine((product, context) => {
+  const category = productCategory(product);
+  if (category === 'washing_machine' && product.capacityKg === undefined) {
+    context.addIssue({ code: 'custom', path: ['capacityKg'], message: 'Informe a capacidade da lavadora em kg.' });
+  }
+  for (const [field, allowed] of [
+    ['capacityKg', category === 'washing_machine'],
+    ['capacityLiters', category === 'refrigerator' || category === 'microwave'],
+    ['burnerCount', category === 'stove'],
+  ] as const) {
+    if (!allowed && product[field] !== undefined) {
+      context.addIssue({ code: 'custom', path: [field], message: 'Medida incompatível com a categoria.' });
+    }
+  }
 });
+export const productSchema = productBaseSchema.safeExtend({ identification: z.literal('candidate') });
 export type Product = z.infer<typeof productSchema>;
-export const verifiedProductSchema = productSchema.extend({ identification: z.literal('verified') });
+export const verifiedProductSchema = productBaseSchema.safeExtend({ identification: z.literal('verified') });
 export type PublicProduct = Product | z.infer<typeof verifiedProductSchema>;
 // A resposta da prévia preserva os valores e campos existentes.
 export const catalogResponseSchema = z.discriminatedUnion('mode', [
@@ -25,9 +47,10 @@ export type CatalogResponse = z.infer<typeof catalogResponseSchema>;
 export const catalogQuerySchema = z.object({
   q: z.string().max(120).default(''), brand: z.union([z.enum(brands), z.literal('')]).default(''),
   capacity: z.enum(['', 'small', 'medium', 'large']).default(''),
+  category: z.union([z.enum(productCategories), z.literal('')]).default(''),
 });
-export function filterCatalog(snapshot: CatalogResponse, query = '', brand = '', capacity = ''): CatalogResponse {
-  const data = searchProducts<PublicProduct>(snapshot.data, query, brand, capacity);
+export function filterCatalog(snapshot: CatalogResponse, query = '', brand = '', capacity = '', category = ''): CatalogResponse {
+  const data = searchProducts<PublicProduct>(snapshot.data, query, brand, capacity, category);
   return catalogResponseSchema.parse({ mode: snapshot.mode, data, total: data.length });
 }
 
@@ -86,17 +109,28 @@ export function communitySummary(reviews: readonly CurrentReview[], variantId: s
 export function normalizeSearch(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/\s+/g, ' ');
 }
-export function searchProducts<T extends PublicProduct>(products: readonly T[], query = '', brand = '', capacity = '') {
+const categorySearchTerms: Record<ProductCategory, string> = {
+  washing_machine: 'lavadora lavadoras máquina de lavar washing machine washer lavadora de ropa',
+  refrigerator: 'geladeira geladeiras refrigerador refrigeradores refrigerator fridge frigorífico nevera',
+  microwave: 'micro-ondas microondas microwave microwave oven',
+  stove: 'fogão fogões stove cooker range cocina estufa',
+};
+export function searchProducts<T extends PublicProduct>(products: readonly T[], query = '', brand = '', capacity = '', category = '') {
   const normalized = normalizeSearch(query).slice(0, 120);
   const compact = normalized.replace(/[\s-]/g, '');
   return products.filter((p) => {
-    const text = normalizeSearch(`${p.brand} ${p.model} ${p.capacityKg} kg`);
+    const productKind = productCategory(p);
+    const measure = productKind === 'washing_machine' ? `${p.capacityKg} kg`
+      : productKind === 'stove' ? `${p.burnerCount ?? ''} bocas burners quemadores`
+        : `${p.capacityLiters ?? ''} litros liters litres l`;
+    const text = normalizeSearch(`${p.brand} ${p.model} ${categorySearchTerms[productKind]} ${measure}`);
     const textMatch = normalized.split(' ').every((token) => text.includes(token));
     const codeMatch = p.confirmedGtins.includes(compact);
     const modelMatch = normalizeSearch(p.model).replace(/[\s-]/g, '').includes(compact);
-    const capacityMatch = !capacity || (capacity === 'small' && p.capacityKg <= 10) ||
-      (capacity === 'medium' && p.capacityKg > 10 && p.capacityKg <= 13) || (capacity === 'large' && p.capacityKg > 13);
-    return (!brand || p.brand === brand) && capacityMatch && (textMatch || codeMatch || modelMatch);
+    const capacityMatch = !capacity || (productKind === 'washing_machine' && p.capacityKg !== undefined && (
+      (capacity === 'small' && p.capacityKg <= 10) ||
+      (capacity === 'medium' && p.capacityKg > 10 && p.capacityKg <= 13) || (capacity === 'large' && p.capacityKg > 13)));
+    return (!category || productKind === category) && (!brand || p.brand === brand) && capacityMatch && (textMatch || codeMatch || modelMatch);
   });
 }
 
@@ -142,7 +176,8 @@ export const catalogDecisionSchema = z.strictObject({
 }).refine((input) => !input.verified || input.evidenceConfirmed, { message: 'Confirme a conferência das evidências.' });
 export type CatalogDecision = z.infer<typeof catalogDecisionSchema>;
 export const adminCatalogProductSchema = z.object({
-  id: z.uuid(), slug: z.string(), brand: z.string(), model: z.string(), capacityKg: z.number(),
+  id: z.uuid(), slug: z.string(), brand: z.string(), model: z.string(), category: z.enum(productCategories).optional(),
+  capacityKg: z.number().optional(), capacityLiters: z.number().optional(), burnerCount: z.number().optional(),
   sourceUrl: z.string(), sourceCheckedAt: z.string(), verified: z.boolean(), revision: z.number().int(),
   variants: z.array(z.object({
     id: z.uuid(), manufacturerCode: z.string(), codeKind: z.string().nullable(), voltage: z.number(), verified: z.boolean(),

@@ -4,6 +4,7 @@ describe('public language navigation', () => {
   it('keeps product identity, search, filters and section while changing language', () => {
     expect(localizePath('/en/produtos/consul-cwh13ab?variante=exact#experiencias', 'es')).toBe('/es/produtos/consul-cwh13ab?variante=exact#experiencias');
     expect(localizePath('/es/produtos?q=CWH13AB&brand=Consul&capacity=medium', 'pt')).toBe('/produtos?q=CWH13AB&brand=Consul&capacity=medium');
+    expect(localizePath('/produtos?category=refrigerator&brand=Consul#resultados', 'en')).toBe('/en/produtos?category=refrigerator&brand=Consul#resultados');
     expect(localizePath('/pt', 'pt')).toBe('/');
     expect(localizePath('/', 'en')).toBe('/en');
     expect(stripLocale('/enigma')).toBe('/enigma');

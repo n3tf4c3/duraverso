@@ -43,7 +43,7 @@ describe('visibilidade do catálogo persistente', () => {
     await pool.query('UPDATE products SET verified=true WHERE id=$1', [id]);
     const result = await request(approvedCode);
     expect(result.mode).toBe('database_catalog');
-    expect(result.data).toEqual([{ id: slug, slug, brand: 'Consul', model: slug, capacityKg: 9,
+    expect(result.data).toEqual([{ id: slug, slug, brand: 'Consul', model: slug, category: 'washing_machine', capacityKg: 9,
       sourceUrl: 'https://example.test/model', sourceCheckedAt: '2026-11-06', identification: 'verified', confirmedGtins: [approvedCode] }]);
     expect((await request(pendingCode)).total).toBe(0);
     expect((await request(approvedCode, '&brand=Brastemp')).total).toBe(0);
@@ -55,5 +55,22 @@ describe('visibilidade do catálogo persistente', () => {
     expect((await request(slug)).data[0]?.confirmedGtins).toEqual([]);
     await pool.query('UPDATE products SET verified=false WHERE id=$1', [id]);
     expect((await request(slug)).total).toBe(0);
+  });
+  it('consulta geladeira, micro-ondas e fogão com medidas corretas e sem usar kg', async () => {
+    const prefix = `categories-${randomUUID()}`;
+    for (const [category, liters, burners] of [['refrigerator', 300, null], ['microwave', 32, null], ['stove', null, 4]] as const) {
+      const slug = `${prefix}-${category}`;
+      await pool.query(`INSERT INTO products(slug,brand,model,category,capacity_liters,burner_count,source_url,source_checked_at,verified)
+        VALUES($1,'Consul',$1,$2,$3,$4,'https://example.test/model','2026-11-06',true)`, [slug, category, liters, burners]);
+      const response = await get(new Request(`http://localhost/api/v1/products?q=${prefix}&category=${category}`));
+      const result = catalogResponseSchema.parse(await response.json());
+      expect(result.total).toBe(1);
+      expect(result.data[0]).toMatchObject({ category, slug, confirmedGtins: [] });
+      expect(result.data[0]).not.toHaveProperty('capacityKg');
+      if (liters) expect(result.data[0]?.capacityLiters).toBe(liters);
+      if (burners) expect(result.data[0]?.burnerCount).toBe(burners);
+    }
+    const response = await get(new Request(`http://localhost/api/v1/products?q=${prefix}&capacity=large`));
+    expect((await response.json()).total).toBe(0);
   });
 });

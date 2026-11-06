@@ -1,7 +1,7 @@
-import { prepareCatalog, type CatalogVariantEvidence, type Product } from './index';
+import { prepareCatalog, productCategory, type CatalogVariantEvidence, type Product } from './index';
 
 export type StoredCatalog = {
-  products: (Pick<Product, 'slug' | 'brand' | 'model' | 'capacityKg' | 'sourceUrl' | 'sourceCheckedAt'> & { id: string })[];
+  products: (Pick<Product, 'slug' | 'brand' | 'model' | 'category' | 'capacityKg' | 'capacityLiters' | 'burnerCount' | 'sourceUrl' | 'sourceCheckedAt'> & { id: string })[];
   variants: { id: string; productId: string; manufacturerCode: string; voltage: number; codeKind: string | null }[];
   gtins: { code: string; variantId: string; sourceUrl: string }[];
   evidence: { gtinCode: string; voltageSourceUrl: string; checkedAt: string; note: string }[];
@@ -22,7 +22,8 @@ export function reconcileCatalog(productsInput: unknown, evidenceInput: unknown,
     const row = stored.products.find((entry) => entry.slug === product.slug);
     const sameName = stored.products.find((entry) => entry.brand === product.brand && entry.model === product.model);
     if ((sameName && sameName.slug !== product.slug) || (row &&
-      (row.brand !== product.brand || row.model !== product.model || row.capacityKg !== product.capacityKg ||
+      (row.brand !== product.brand || row.model !== product.model || productCategory(row) !== productCategory(product) ||
+       row.capacityKg !== product.capacityKg || row.capacityLiters !== product.capacityLiters || row.burnerCount !== product.burnerCount ||
        row.sourceUrl !== product.sourceUrl || row.sourceCheckedAt !== product.sourceCheckedAt))) {
       conflicts.push({ entity: 'product', key: product.slug });
     } else if (!row) productsToInsert.push(product);

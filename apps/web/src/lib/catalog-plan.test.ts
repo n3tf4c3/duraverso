@@ -1,8 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { catalogPlan } from './catalog-plan';
-import { catalogResponse } from './catalog';
+import { catalog, catalogResponse, washingMachineCatalog } from './catalog';
 
 describe('evidências do catálogo selecionado', () => {
+  it('expõe lacunas das novas categorias sem alterar o lote preparado para importação', () => {
+    const complete = catalogPlan('all');
+    expect(complete.products).toHaveLength(catalog.length);
+    expect(complete.selectedCatalogCovered).toBe(false);
+    expect(complete.productsWithoutVariants.sort()).toEqual(catalog.filter((product) =>
+      !washingMachineCatalog.some((washer) => washer.slug === product.slug)).map((product) => product.slug).sort());
+    expect(complete.unresolvedGtins).toEqual([]);
+    expect(catalogPlan().products.map((product) => product.slug)).toEqual(washingMachineCatalog.map((product) => product.slug));
+  });
   it('cobre os 40 códigos dos 20 modelos sem ativar avaliações', () => {
     const plan = catalogPlan();
     expect(plan.products).toHaveLength(20);

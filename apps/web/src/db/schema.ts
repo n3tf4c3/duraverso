@@ -18,10 +18,21 @@ export const users = pgTable('users', {
 export const products = pgTable('products', {
   id: uuid('id').primaryKey().defaultRandom(), slug: varchar('slug', { length: 120 }).notNull().unique(),
   brand: varchar('brand', { length: 80 }).notNull(), model: varchar('model', { length: 80 }).notNull(),
-  capacityKg: numeric('capacity_kg', { precision: 4, scale: 1 }).notNull(), sourceUrl: text('source_url').notNull(),
+  category: varchar('category', { length: 30 }).notNull().default('washing_machine'),
+  capacityKg: numeric('capacity_kg', { precision: 4, scale: 1 }),
+  capacityLiters: numeric('capacity_liters', { precision: 6, scale: 1 }), burnerCount: integer('burner_count'),
+  sourceUrl: text('source_url').notNull(),
   sourceCheckedAt: timestamp('source_checked_at', { withTimezone: true }).notNull(), verified: boolean('verified').notNull().default(false),
   catalogRevision: integer('catalog_revision').notNull().default(0),
-}, (t) => [unique('product_brand_model_unique').on(t.brand, t.model), check('capacity_positive', sql`${t.capacityKg} > 0`)]);
+}, (t) => [unique('product_brand_model_unique').on(t.brand, t.model), check('capacity_positive', sql`${t.capacityKg} > 0`),
+  check('product_category_supported', sql`${t.category} IN ('washing_machine', 'refrigerator', 'microwave', 'stove')`),
+  check('capacity_liters_positive', sql`${t.capacityLiters} > 0`), check('burner_count_positive', sql`${t.burnerCount} > 0`),
+  check('product_category_measures', sql`(
+    (${t.category} = 'washing_machine' AND ${t.capacityKg} IS NOT NULL AND ${t.capacityLiters} IS NULL AND ${t.burnerCount} IS NULL) OR
+    (${t.category} IN ('refrigerator', 'microwave') AND ${t.capacityKg} IS NULL AND ${t.burnerCount} IS NULL) OR
+    (${t.category} = 'stove' AND ${t.capacityKg} IS NULL AND ${t.capacityLiters} IS NULL)
+  )`),
+]);
 export const variants = pgTable('variants', {
   id: uuid('id').primaryKey().defaultRandom(), productId: uuid('product_id').notNull().references(() => products.id),
   manufacturerCode: varchar('manufacturer_code', { length: 100 }).notNull(), voltage: integer('voltage').notNull(),

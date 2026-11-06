@@ -3,7 +3,8 @@
 ## Escopo da entrega
 
 Esta é a base local, não o piloto público completo. Em preview, catálogo e API usam
-20 modelos candidatos embutidos e 40 GTINs documentados de todos os 20 modelos.
+26 modelos candidatos embutidos: 20 lavadoras, duas geladeiras, dois micro-ondas e dois
+fogões. Os 40 GTINs documentados continuam associados somente às 20 lavadoras.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
 Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
 
@@ -26,12 +27,23 @@ Não deduzir tensão pela ordem dos códigos ou por um seletor comercial 110V/12
 O campo EAN-13 truncado da LED13 foi descartado; os campos individuais fornecem os
 códigos completos. Para LDA13, o manual sustenta 13 kg apesar do campo 13,1 kg na loja.
 GTIN ausente não impede busca por marca/modelo; nunca adivinhar a correspondência.
+As fontes oficiais das outras categorias estão em `catalog-appliances.ts`, com data de
+conferência, modelo e medida nominal. Nenhuma tensão, variante ou código novo foi inferido.
+As fichas distinguem kg (lavadoras), litros (geladeiras/micro-ondas) e bocas (fogões).
+O filtro `category` funciona na busca e em `/api/v1/products`, combinado com marca e texto.
+As faixas `capacity=small|medium|large` continuam restritas às lavadoras, mesmo sem filtro
+de categoria; litros e bocas nunca são comparados com kg.
 
-`pnpm catalog:plan` valida as 40 associações de GTIN, identificador e tensão e indica
+`pnpm catalog:plan` seleciona explicitamente o lote preparado das 20 lavadoras,
+valida as 40 associações de GTIN, identificador e tensão e indica
 lacunas; `pnpm catalog:plan --json` exibe o plano com fontes. É uma operação inteiramente
 local, sem carregar credenciais, conectar ao banco, aplicar SQL ou atribuir `verified`.
 As regras de validação ficam no core. Erros de associação/duplicidade são recusados;
 lacunas deixam a cobertura incompleta e o comando retorna código de saída diferente de zero.
+`pnpm catalog:plan --all` confere todo o catálogo público e expõe os seis novos modelos
+sem variantes, com cobertura incompleta e saída não zero. `--json` funciona nos dois
+escopos. O importador padrão mantém o lote preparado; acrescentar modelos à consulta
+pública não os inclui silenciosamente na importação nem contorna lacunas de evidência.
 
 Brastemp/Consul: GTIN e código completo vêm do mesmo item da API oficial; tensão nominal
 vem da linha desse código no histórico do registro Inmetro 000727/2023. O histórico inclui
@@ -49,13 +61,22 @@ Nenhuma revisão física é inferida, fundida ou habilitada para avaliações au
 
 ## Banco e migrations
 
-`db:generate` gera arquivos locais e não acessa o banco. As migrations 0000 até 0004
-foram aplicadas e testadas em PostgreSQL descartável. As funções da migration 0002
+`db:generate` gera arquivos locais e não acessa o banco. As migrations são validadas
+somente em PostgreSQL descartável. As funções da migration 0002
 executam cada submissão/decisão/retirada em uma única transação PostgreSQL; Neon HTTP
 não oferece transações interativas. Os locks seguem a ordem posse, avaliação e revisão.
 `db:migrate` exige DATABASE_URL_DIRECT em apps/web/.env.local, conexão direta e banco autorizado.
 O migrador usa advisory lock na mesma sessão. Não imprimir a connection string.
 O build não importa catálogo nem cria administrador.
+
+A migration 0005 acrescenta categoria, litros e número de bocas. Registros anteriores
+recebem `washing_machine` e mantêm sua capacidade em kg; inserções legadas de lavadoras
+continuam válidas. As constraints impedem misturar unidades e exigem kg nas lavadoras.
+O snapshot administrativo inclui categoria e medidas: uma alteração invalida decisões
+baseadas na leitura anterior. O preflight conectado exige a estrutura atualizada.
+No futuro banco autorizado, aplicar a expansão antes do código novo e atualizar todos
+os consumidores antes de importar/liberar categorias novas: versões antigas da aplicação
+só compreendem lavadoras. Nenhuma migration foi aplicada a banco permanente.
 
 ### Importação administrativa do catálogo
 

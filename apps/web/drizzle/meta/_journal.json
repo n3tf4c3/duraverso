@@ -36,6 +36,13 @@
       "when": 1793982598264,
       "tag": "0004_catalog-decisions",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793999840929,
+      "tag": "0005_product-categories",
+      "breakpoints": true
     }
   ]
 }
