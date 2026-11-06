@@ -70,6 +70,11 @@ verificados são públicos, e códigos de variantes não verificadas ficam ocult
 não publica os itens. Uma falha do banco retorna indisponibilidade, sem usar candidatos
 locais como substituição. A prévia continua independente do banco e com o contrato anterior.
 
+A revisão do catálogo está preparada em `/admin/catalogo`, exclusiva de administradores
+no modo conectado. Permite liberar/suspender modelos e variantes com motivo, conferência
+das evidências e histórico atômico. Exige a migration 0004; não cria administrador nem
+infere revisões físicas. Telas desatualizadas são recusadas. Fluxo autenticado real ainda pendente.
+
 ## Dados e privacidade
 
 Os modelos vêm de fontes de fabricantes, registradas no catálogo. Ilustrações são genéricas.

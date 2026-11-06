@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, foreignKey, integer, pgEnum, pgTable, text, timestamp, unique, uuid, varchar, boolean, numeric } from 'drizzle-orm/pg-core';
+import { check, foreignKey, integer, jsonb, pgEnum, pgTable, text, timestamp, unique, uuid, varchar, boolean, numeric } from 'drizzle-orm/pg-core';
 import { MAX_REVIEW_LENGTH, reviewStatuses, functioningStatuses } from '@duraverso/core';
 
 export const roleEnum = pgEnum('account_role', ['member', 'moderator', 'admin']);
@@ -20,6 +20,7 @@ export const products = pgTable('products', {
   brand: varchar('brand', { length: 80 }).notNull(), model: varchar('model', { length: 80 }).notNull(),
   capacityKg: numeric('capacity_kg', { precision: 4, scale: 1 }).notNull(), sourceUrl: text('source_url').notNull(),
   sourceCheckedAt: timestamp('source_checked_at', { withTimezone: true }).notNull(), verified: boolean('verified').notNull().default(false),
+  catalogRevision: integer('catalog_revision').notNull().default(0),
 }, (t) => [unique('product_brand_model_unique').on(t.brand, t.model), check('capacity_positive', sql`${t.capacityKg} > 0`)]);
 export const variants = pgTable('variants', {
   id: uuid('id').primaryKey().defaultRandom(), productId: uuid('product_id').notNull().references(() => products.id),
@@ -38,6 +39,14 @@ export const catalogVariantEvidence = pgTable('catalog_variant_evidence', {
   checkedAt: timestamp('checked_at', { withTimezone: true }).notNull(),
   note: text('note').notNull(), createdAt: createdAt(),
 }, (t) => [check('catalog_evidence_note_required', sql`length(trim(${t.note})) > 0`)]);
+export const catalogDecisions = pgTable('catalog_decisions', {
+  id: uuid('id').primaryKey().defaultRandom(), administratorId: uuid('administrator_id').notNull().references(() => users.id),
+  productId: uuid('product_id').notNull().references(() => products.id), variantId: uuid('variant_id'),
+  beforeVerified: boolean('before_verified').notNull(), afterVerified: boolean('after_verified').notNull(),
+  reason: varchar('reason', { length: MAX_REVIEW_LENGTH }).notNull(), snapshot: jsonb('snapshot').notNull(), createdAt: createdAt(),
+}, (t) => [foreignKey({ columns: [t.variantId, t.productId], foreignColumns: [variants.id, variants.productId] }),
+  check('catalog_decision_reason_required', sql`length(trim(${t.reason})) > 0`),
+  check('catalog_decision_changes_state', sql`${t.beforeVerified} <> ${t.afterVerified}`)]);
 export const ownerships = pgTable('ownerships', {
   id: uuid('id').primaryKey().defaultRandom(), ownerId: uuid('owner_id').notNull().references(() => users.id),
   productId: uuid('product_id').notNull().references(() => products.id), variantId: uuid('variant_id').notNull(),

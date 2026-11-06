@@ -15,3 +15,7 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .camera-active .camera-overlay{position:absolute;inset:0;justify-content:space-between;padding:16px;width:100%}.barcode-guide{width:min(85%,340px);height:100px;border:2px solid #fff9;border-radius:8px;margin:auto}.camera-choice{margin-top:16px}.camera-choice label{display:block;font-size:13px;margin-bottom:6px}.camera-choice select{width:100%;padding:10px;border:1px solid #cfd9c5;border-radius:7px;background:white;color:var(--ink)}
+
+.catalog-variant { margin-block: 1.5rem; padding-block: 1.5rem; border-top: 1px solid var(--border, #d6dfd8); }
+.catalog-confirm { display: flex; align-items: flex-start; gap: .6rem; }
+.review-form .catalog-confirm input { width: auto; margin-top: .25rem; }

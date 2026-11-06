@@ -49,7 +49,7 @@ Nenhuma revisão física é inferida, fundida ou habilitada para avaliações au
 
 ## Banco e migrations
 
-`db:generate` gera arquivos locais e não acessa o banco. As migrations 0000 até 0003
+`db:generate` gera arquivos locais e não acessa o banco. As migrations 0000 até 0004
 foram aplicadas e testadas em PostgreSQL descartável. As funções da migration 0002
 executam cada submissão/decisão/retirada em uma única transação PostgreSQL; Neon HTTP
 não oferece transações interativas. Os locks seguem a ordem posse, avaliação e revisão.
@@ -90,6 +90,41 @@ Novos produtos e variantes entram com `verified=false`. A importação não abre
 não decide equivalência de revisões físicas e não substitui a ativação administrativa
 posterior. O comando é administrativo,
 recusado na hospedagem Vercel e não é chamado pelo build nem por rotas HTTP.
+
+### Revisão e liberação do catálogo
+
+No modo conectado, `/admin/catalogo` permite conferir e liberar/suspender modelos e
+variantes separadamente. Só administradores podem ler essa área e enviar decisões por
+`POST /api/v1/admin/catalog`; moderadores continuam limitados às contribuições.
+A migration 0004 acrescenta a revisão do catálogo, o histórico e as funções atômicas.
+O preflight exige essas funções. Nenhuma conta ganha papel com essa migration.
+
+Cada liberação exige motivo e confirmação explícita das fontes. O core valida os dados;
+o PostgreSQL revalida sessão/papel, estado e evidências na mesma transação da alteração
+e do registro de auditoria. GTINs precisam de checksum válido, fonte HTTPS, evidência de
+tensão, data não futura e nota. Referência sem classificação não pode ser liberada.
+O modelo precisa estar liberado antes da variante. Identidade documental significa
+referência + tensão + GTIN; não atesta uma revisão física, especialmente para `RefId`.
+Uma ambiguidade documental deve manter o item suspenso até reconciliação explícita.
+
+A decisão conserva responsável, motivo, data, estado anterior/posterior e snapshot das
+evidências. A tela mostra as últimas 20 decisões de cada modelo; o banco conserva todas.
+O token de concorrência inclui evidências e revisão monotônica: mudanças de dados ou
+outro administrador tornam a tela antiga inválida (409). O token não é uma credencial.
+As decisões serializam brevemente as tabelas do catálogo, inclusive contra o importador,
+para proteger inserções de códigos/evidências durante a conferência. Adequado ao piloto
+pequeno; revisar essa estratégia e paginar a listagem antes de ampliar o catálogo.
+
+Suspender um modelo oculta variantes e relatos e impede novas avaliações. Preserva as
+liberações individuais, que voltam a valer quando o modelo é reativado; suas evidências
+são revalidadas nessa reativação. Suspender uma variante remove seus códigos/relatos da
+consulta e impede novos envios. Suspensão funciona mesmo com evidência incompleta.
+Correção de identidade/dados continua fora da tela: suspender antes de reconciliar no
+banco autorizado. Não há gestão de papéis, criação de administrador nem exclusão de dados.
+
+O fluxo foi testado por serviços/HTTP e PostgreSQL descartável: acesso, revogação,
+concorrência, evidência alterada, rollback se a auditoria falhar e visibilidade pública.
+A interação autenticada no navegador e OAuth real continuam pendentes.
 
 ### Consulta pública no modo conectado
 
@@ -225,7 +260,7 @@ Isso valida esse caso de leitura, sem garantir todos os aparelhos, navegadores o
 1. Banco, limitador e credenciais Google configurados em ambientes separados, com autorização.
 2. Login Google e ciclo de contribuição validados de ponta a ponta com os serviços reais.
 3. Catálogo persistente completo, variantes e códigos conferidos sem dados inventados.
-4. Reparos detalhados, denúncias/reconsideração e administração de catálogo implementados conforme o recorte do piloto.
+4. Reparos detalhados e denúncias/reconsideração implementados; administração de catálogo validada com login real.
 5. Store compartilhado e preflight verificados com as credenciais reais, inclusive indisponibilidade.
 6. Privacidade, canal do responsável, retenção e exclusão definidos.
 7. Integração com Postgres descartável e verificação de navegador/câmera em dispositivos reais.

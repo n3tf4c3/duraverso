@@ -133,6 +133,46 @@ export const catalogVariantEvidenceSchema = z.strictObject({
 });
 export type CatalogVariantEvidence = z.infer<typeof catalogVariantEvidenceSchema>;
 
+// Catálogo administrativo: separado do contrato público e sem identidade de conta.
+export const catalogDecisionSchema = z.strictObject({
+  productId: z.uuid(), variantId: z.uuid().nullable(), verified: z.boolean(),
+  expectedToken: z.string().regex(/^[a-f0-9]{32}$/),
+  reason: z.string().trim().min(1).max(MAX_REVIEW_LENGTH),
+  evidenceConfirmed: z.boolean(),
+}).refine((input) => !input.verified || input.evidenceConfirmed, { message: 'Confirme a conferência das evidências.' });
+export type CatalogDecision = z.infer<typeof catalogDecisionSchema>;
+export const adminCatalogProductSchema = z.object({
+  id: z.uuid(), slug: z.string(), brand: z.string(), model: z.string(), capacityKg: z.number(),
+  sourceUrl: z.string(), sourceCheckedAt: z.string(), verified: z.boolean(), revision: z.number().int(),
+  variants: z.array(z.object({
+    id: z.uuid(), manufacturerCode: z.string(), codeKind: z.string().nullable(), voltage: z.number(), verified: z.boolean(),
+    gtins: z.array(z.object({ code: z.string(), sourceUrl: z.string(), voltageSourceUrl: z.string().nullable(),
+      checkedAt: z.string().nullable(), note: z.string().nullable() })),
+  })),
+});
+export type AdminCatalogProduct = z.infer<typeof adminCatalogProductSchema>;
+/** Identidade documental: referência + tensão + GTIN; não atesta revisão física. */
+export function catalogActivationIssues(product: AdminCatalogProduct, variantId: string | null, today = new Date()): string[] {
+  const date = (value: string | null) => value && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString().slice(0, 10) : '';
+  const day = today.toISOString().slice(0, 10);
+  const productValid = verifiedProductSchema.safeParse({ ...product, identification: 'verified',
+    sourceCheckedAt: date(product.sourceCheckedAt), confirmedGtins: [] }).success &&
+    evidenceUrl.safeParse(product.sourceUrl).success && date(product.sourceCheckedAt) <= day;
+  if (!productValid) return ['Complete a identidade e a fonte datada do modelo.'];
+  if (variantId === null) return [...new Set(product.variants.filter((variant) => variant.verified)
+    .flatMap((variant) => catalogActivationIssues({ ...product, verified: true }, variant.id, today)))];
+  const issues: string[] = [];
+  if (!product.verified) issues.push('Libere o modelo antes de liberar a variante.');
+  const variant = product.variants.find((item) => item.id === variantId);
+  if (!variant) return [...issues, 'Variante não encontrada neste modelo.'];
+  if (variant.gtins.length === 0 || variant.gtins.some((gtin) => !catalogVariantEvidenceSchema.safeParse({
+    productSlug: product.slug, gtin: gtin.code, manufacturerCode: variant.manufacturerCode,
+    codeKind: variant.codeKind, voltage: variant.voltage, sourceUrl: gtin.sourceUrl,
+    voltageSourceUrl: gtin.voltageSourceUrl, checkedAt: date(gtin.checkedAt), note: gtin.note,
+  }).success || date(gtin.checkedAt) > day)) issues.push('Complete as evidências de todos os GTINs, da referência e da tensão.');
+  return issues;
+}
+
 export function prepareCatalog(productsInput: unknown, evidenceInput: unknown) {
   const products = z.array(productSchema).min(1).parse(productsInput);
   const variants = z.array(catalogVariantEvidenceSchema).parse(evidenceInput);

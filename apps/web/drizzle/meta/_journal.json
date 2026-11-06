@@ -29,6 +29,13 @@
       "when": 1793980314872,
       "tag": "0003_catalog-evidence",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793982598264,
+      "tag": "0004_catalog-decisions",
+      "breakpoints": true
     }
   ]
 }

@@ -43,6 +43,7 @@ catálogo persistente completo, administração inicial autorizada e política d
 - Regras e contratos canônicos no core, consumidos pelo web/API; testes de conformidade no web.
 - Catálogo publicado é público; posse/conta/rascunhos exigem filtro de dono no servidor.
 - Papel administrativo vem do banco; nenhuma permissão vinda do cliente, query string ou e-mail de formulário.
+- Decisões de catálogo exigem administrador, motivo e evidências conferidas; estado e auditoria são atômicos. Mudanças desde a leitura invalidam a decisão. Referência de catálogo não comprova revisão física.
 - Alteração pendente fica em review_revisions e não substitui o voto publicado antes da revisão.
 - Moderador não revisa a própria contribuição. Decisões registram motivo/responsável/data.
 - Proibir rebaixar/excluir o último administrador, de forma atômica, antes de habilitar gestão de papéis.
