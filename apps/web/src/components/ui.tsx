@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowUpRight, MoveUpRight, RefreshCw, ShieldCheck } from 'lucide-react';
-import type { Product } from '@duraverso/core';
+import type { PublicProduct } from '@duraverso/core';
 import { capacityLabel } from '@/lib/catalog';
 
 export function WasherIllustration({ large = false }: { large?: boolean }) {
@@ -9,7 +9,7 @@ export function WasherIllustration({ large = false }: { large?: boolean }) {
     <div className="washer-lid"><div /></div><div className="washer-front"><span /></div><div className="washer-feet"><i /><i /></div>
   </div>;
 }
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product }: { product: PublicProduct }) {
   return <Link href={`/produtos/${product.slug}`} className="product-card">
     <div className={`product-art art-${product.brand.toLowerCase()}`}><span className="capacity-pill">{capacityLabel(product.capacityKg)}</span><WasherIllustration /><span className="illustration-label">Ilustração</span></div>
     <div className="product-card-body"><span className="overline">{product.brand}</span><h3>Lavadora {product.model}</h3><p>Abertura superior · {capacityLabel(product.capacityKg)}</p><div className="card-divider" /><div className="card-bottom"><span><span className="empty-dot" /> Conhecer o modelo</span><ArrowUpRight size={19} /></div></div>

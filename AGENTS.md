@@ -25,7 +25,10 @@ Somente pnpm, versão exata em packageManager, um lockfile na raiz. Não usar np
 
 ## Estado operacional da base
 
-O site usa catálogo estático de candidatos, não um banco em produção. Não inferir variantes/GTIN.
+O modo preview usa catálogo estático de candidatos. Não há banco em produção. Não inferir variantes/GTIN.
+No modo connected, a consulta pública usa produtos verificados do banco e somente GTINs
+de variantes verificadas. Importar não publica: novos registros entram não verificados.
+Falha do banco não pode ser substituída por candidatos locais nem confundida com catálogo vazio.
 O modo preview mantém contas e escritas desativadas e funciona sem serviços externos.
 Somente esse modo pode ser hospedado na Vercel; guardas no build e na inicialização
 recusam connected. A prévia hospedada não aplica migrations nem exige banco/Google/Redis.

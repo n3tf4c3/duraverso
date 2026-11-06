@@ -44,7 +44,7 @@ pnpm test:integration
 
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.
-O fluxo inicial tem consulta a 20 candidatos, filtros, detalhes e leitura de código.
+No modo preview, o fluxo inicial tem consulta a 20 candidatos, filtros, detalhes e leitura de código.
 As fontes dos 20 modelos foram conferidas. A busca reconhece 40 GTINs oficiais dos 20
 modelos Brastemp, Consul e Electrolux; a cobertura de versões continua parcial. Códigos identificam o modelo, sem selecionar
 voltagem nem criar variantes para avaliações. Evidências em `apps/web/src/lib/catalog-evidence.ts`.
@@ -64,6 +64,11 @@ Exige a migration 0003 e conexão direta. Consulte os argumentos e limites em
 
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração
 externa e o login real ainda não foram executados. Veja `docs/operacao-local.md`.
+
+No modo conectado, páginas e API consultam o catálogo persistente: somente produtos
+verificados são públicos, e códigos de variantes não verificadas ficam ocultos. Importar
+não publica os itens. Uma falha do banco retorna indisponibilidade, sem usar candidatos
+locais como substituição. A prévia continua independente do banco e com o contrato anterior.
 
 ## Dados e privacidade
 

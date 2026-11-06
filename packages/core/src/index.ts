@@ -14,10 +14,22 @@ export const productSchema = z.object({
   identification: z.literal('candidate'), confirmedGtins: z.array(z.string().refine(isValidGtin, 'GTIN inválido.')),
 });
 export type Product = z.infer<typeof productSchema>;
-export const catalogResponseSchema = z.object({
-  data: z.array(productSchema), total: z.number().int().nonnegative(), mode: z.literal('local_catalog'),
-});
+export const verifiedProductSchema = productSchema.extend({ identification: z.literal('verified') });
+export type PublicProduct = Product | z.infer<typeof verifiedProductSchema>;
+// A resposta da prévia preserva os valores e campos existentes.
+export const catalogResponseSchema = z.discriminatedUnion('mode', [
+  z.object({ data: z.array(productSchema), total: z.number().int().nonnegative(), mode: z.literal('local_catalog') }),
+  z.object({ data: z.array(verifiedProductSchema), total: z.number().int().nonnegative(), mode: z.literal('database_catalog') }),
+]);
 export type CatalogResponse = z.infer<typeof catalogResponseSchema>;
+export const catalogQuerySchema = z.object({
+  q: z.string().max(120).default(''), brand: z.union([z.enum(brands), z.literal('')]).default(''),
+  capacity: z.enum(['', 'small', 'medium', 'large']).default(''),
+});
+export function filterCatalog(snapshot: CatalogResponse, query = '', brand = '', capacity = ''): CatalogResponse {
+  const data = searchProducts<PublicProduct>(snapshot.data, query, brand, capacity);
+  return catalogResponseSchema.parse({ mode: snapshot.mode, data, total: data.length });
+}
 
 export const reviewInputSchema = z.strictObject({
   variantId: z.uuid(), rating: z.number().int().min(1).max(5),
@@ -74,7 +86,7 @@ export function communitySummary(reviews: readonly CurrentReview[], variantId: s
 export function normalizeSearch(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/\s+/g, ' ');
 }
-export function searchProducts(products: readonly Product[], query = '', brand = '', capacity = '') {
+export function searchProducts<T extends PublicProduct>(products: readonly T[], query = '', brand = '', capacity = '') {
   const normalized = normalizeSearch(query).slice(0, 120);
   const compact = normalized.replace(/[\s-]/g, '');
   return products.filter((p) => {

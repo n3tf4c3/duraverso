@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import { ArrowRight, Check, CircleHelp, MessageCircle, ScanLine, Search, Sprout } from 'lucide-react';
-import { catalog } from '@/lib/catalog';
+import { readCatalog } from '@/server/catalog-runtime';
 import { SearchForm } from '@/components/search';
 import { PreparationNotice, ProductCard, ValuesStrip, WasherIllustration } from '@/components/ui';
-export default function Home() {
-  const featured = ['electrolux-lac12', 'brastemp-bwk13a', 'consul-cwh13ab'].map((slug) => catalog.find((p) => p.slug === slug)!);
+export default async function Home() {
+  const result = await readCatalog();
+  const preview = result.mode === 'local_catalog';
+  const featured = preview
+    ? ['electrolux-lac12', 'brastemp-bwk13a', 'consul-cwh13ab'].flatMap((slug) => result.data.filter((product) => product.slug === slug))
+    : result.data.slice(0, 3);
   return <><section className="hero"><div className="container hero-grid"><div className="hero-copy"><div className="eyebrow"><span /> CONHECER MELHOR. ESCOLHER MELHOR.</div><h1>Antes de comprar,<br />conheça a <em>história.</em></h1><p className="hero-description">O que um produto promete é só o começo.<br className="desktop-break" /> Descubra o que acontece depois, com quem usa de verdade.</p><SearchForm /><p className="hero-note"><Check size={15} /> Consulta livre, sem precisar criar uma conta.</p></div><div className="hero-visual"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><span className="visual-label"><Sprout size={17} /> Uma boa escolha vai longe.</span><WasherIllustration large /><div className="story-note"><span className="story-icon"><MessageCircle size={20} /></span><div><strong>Cada produto tem uma história.</strong><p>A sua experiência faz parte dela.</p></div></div><span className="hero-illustration-label">Ilustração conceitual</span></div></div></section>
-    <div className="container"><ValuesStrip /><PreparationNotice />
-    <section className="section"><div className="section-heading"><div><span className="eyebrow muted">NOSSO PONTO DE PARTIDA</span><h2>Começamos pela lavanderia.</h2><p>20 modelos candidatos. Muitas histórias para conhecer.</p></div><Link href="/produtos" className="text-link">Explorar catálogo <ArrowRight size={18} /></Link></div><div className="product-grid">{featured.map((product) => <ProductCard key={product.id} product={product} />)}</div><p className="section-footnote">Seleção inicial, sem ranking. Variantes e códigos de barras ainda estão em conferência.</p></section>
+    <div className="container"><ValuesStrip />{preview ? <PreparationNotice /> : null}
+    <section className="section"><div className="section-heading"><div><span className="eyebrow muted">NOSSO PONTO DE PARTIDA</span><h2>Começamos pela lavanderia.</h2><p>{result.total} modelos {preview ? 'candidatos' : 'conferidos'}. Muitas histórias para conhecer.</p></div><Link href="/produtos" className="text-link">Explorar catálogo <ArrowRight size={18} /></Link></div><div className="product-grid">{featured.map((product) => <ProductCard key={product.id} product={product} />)}</div>{!featured.length ? <p className="empty-state">Os modelos estão em conferência. Volte em breve para consultar o catálogo.</p> : null}<p className="section-footnote">Seleção inicial, sem ranking. As avaliações dependem da conferência de cada versão do produto.</p></section>
     <section className="how-section"><div className="section-heading"><div><span className="eyebrow muted">SIMPLES, DESDE O COMEÇO</span><h2>Boas decisões começam<br />com experiências reais.</h2></div><Link href="/como-funciona" className="text-link">Conheça o Duraverso <ArrowRight size={18} /></Link></div><div className="steps-grid">{[
       { icon: Search, number: '01', title: 'Encontre o modelo', text: 'Pesquise a marca e o modelo ou use o código de barras da embalagem.' },
       { icon: CircleHelp, number: '02', title: 'Conheça a experiência', text: 'Veja relatos de uso, problemas e reparos. Poucos dados? Isso fica claro.' },

@@ -2,7 +2,7 @@
 
 ## Escopo da entrega
 
-Esta é a base local, não o piloto público completo. O catálogo inicial e sua API usam
+Esta é a base local, não o piloto público completo. Em preview, catálogo e API usam
 20 modelos candidatos embutidos e 40 GTINs documentados de todos os 20 modelos.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
 Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
@@ -88,8 +88,32 @@ destino são recusados; credenciais e detalhes brutos de erros não são impress
 
 Novos produtos e variantes entram com `verified=false`. A importação não abre avaliações,
 não decide equivalência de revisões físicas e não substitui a ativação administrativa
-posterior. A API pública continua no catálogo estático. O comando é administrativo,
+posterior. O comando é administrativo,
 recusado na hospedagem Vercel e não é chamado pelo build nem por rotas HTTP.
+
+### Consulta pública no modo conectado
+
+Busca, página inicial, scanner, detalhes e formulário de avaliação usam a mesma leitura
+do catálogo do servidor. Em preview, ela retorna os candidatos locais sem acessar banco.
+Em connected, uma consulta seleciona apenas `products.verified=true`, com GTINs somente
+de `variants.verified=true`. Um modelo verificado sem variantes verificadas pode aparecer
+na busca por nome com lista vazia de códigos; isso não libera avaliações.
+
+Importação com `verified=false` não publica modelos nem códigos. Revogar a verificação
+remove os dados da próxima consulta. Não há cache público da API conectada nem cache
+de catálogo entre requisições. Home e scanner conectados aguardam uma requisição antes
+de consultar o banco; suas versões preview continuam estáticas.
+
+O contrato do core distingue `mode=local_catalog`/`identification=candidate` de
+`mode=database_catalog`/`identification=verified`. Os campos da prévia são preservados;
+o `id` público permanece o slug, sem expor UUIDs de banco. Os mesmos filtros e validação
+de GTIN atendem ambos os modos. Nenhum dado de conta ou rascunho participa da consulta.
+
+Falhas de consulta ou dados fora do contrato retornam HTTP 503 e mensagem genérica na
+API; páginas usam o estado de erro. Nunca usar o catálogo local como fallback conectado,
+nem tratar falha como ausência de produto. Banco vazio resulta em catálogo vazio legítimo.
+O fluxo Google/Neon/Upstash real continua pendente; esta leitura foi testada com banco
+descartável e a prévia renderizada foi conferida por HTTP.
 
 Migrations não rodam automaticamente no build. A prévia funciona sem segredos tanto
 localmente quanto na Vercel. Build e inicialização recusam connected na Vercel. A futura

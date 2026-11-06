@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { currentActor } from '@/auth';
 import { isConnected } from '@/lib/env';
-import { findProduct } from '@/lib/catalog';
+import { readProduct } from '@/server/catalog-runtime';
 import { database } from '@/server/database';
 import { ReviewService } from '@/server/reviews';
 import { Breadcrumb } from '@/components/ui';
@@ -12,7 +12,7 @@ import { LoginButton } from '@/components/account-actions';
 export const metadata: Metadata = { title: 'Compartilhar experiência' };
 export const dynamic = 'force-dynamic';
 export default async function EvaluatePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params; const product = findProduct(slug); if (!product) notFound();
+  const { slug } = await params; const product = await readProduct(slug); if (!product) notFound();
   let content;
   if (!isConnected()) content = <section className="empty-state"><h2>Estamos preparando a participação.</h2><p>As contas e o envio de avaliações ainda não estão abertos nesta prévia.</p><Link href={`/produtos/${slug}`} className="button button-outline">Voltar ao produto</Link></section>;
   else {
