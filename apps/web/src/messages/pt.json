@@ -69,11 +69,12 @@
     ],
     "ownersTitle": "Já tem um destes eletrodomésticos?",
     "ownersText": "O envio de relatos ainda não está aberto nesta prévia. Quando abrir, cada pessoa terá uma avaliação ativa por modelo, que poderá ser atualizada com o tempo.",
-    "ownersLink": "Ler as regras de participação"
+    "ownersLink": "Ler as regras de participação",
+    "catalogBrandAll": "Ver os {n} modelos de {brand}"
   },
   "catalog": {
     "title": "Catálogo de eletrodomésticos",
-    "sub": "Modelos candidatos de Brastemp, Consul e Electrolux vendidos no Brasil.",
+    "sub": "Modelos candidatos de diferentes marcas vendidos no Brasil.",
     "searchLabel": "Buscar por marca, modelo ou código de barras",
     "searchPlaceholder": "Ex.: CWH13AB ou 7891129614529",
     "searchButton": "Buscar",
@@ -102,7 +103,7 @@
     "emptyQueryText": "Confira o modelo como aparece na etiqueta do produto, ou tente buscar só pela marca.",
     "emptyFiltersText": "Tente outra categoria, marca ou faixa de capacidade de lavagem.",
     "emptyScan": "Ler o código de barras pela câmera",
-    "emptyScope": "Nesta prévia, o catálogo inclui lavadoras, geladeiras, micro-ondas e fogões de Brastemp, Consul e Electrolux vendidos no Brasil.",
+    "emptyScope": "Nesta prévia, o catálogo reúne eletrodomésticos de cozinha, lavanderia e limpeza vendidos no Brasil.",
     "category": "Categoria",
     "allCategories": "Todas as categorias",
     "capacityHint": "As faixas em kg filtram somente lavadoras de roupas."
@@ -136,7 +137,7 @@
     "invalidLength": "O código precisa ter 8, 12, 13 ou 14 números.",
     "permissionDenied": "Sem permissão para usar a câmera. Você pode digitar os números do código logo abaixo.",
     "cameraUnavailable": "Não foi possível abrir a câmera neste aparelho. Digite os números do código.",
-    "scope": "O catálogo reúne lavadoras, geladeiras, micro-ondas e fogões vendidos no Brasil. A busca por código encontra somente os GTINs documentados."
+    "scope": "Consulte eletrodomésticos de diferentes categorias e marcas. A busca por código encontra somente os GTINs documentados."
   },
   "product": {
     "breadcrumb": "Caminho",
@@ -237,7 +238,7 @@
     "emptyCode": "Este código ainda não está documentado no catálogo. Confira os números ou busque pela marca e pelo modelo.",
     "emptyFilters": "Não há modelos {brand} com {cap} no catálogo da prévia. Mude um dos filtros.",
     "emptyScan": "Ler o código de barras",
-    "emptyScope": "Nesta prévia, o catálogo inclui lavadoras, geladeiras, micro-ondas e fogões de Brastemp, Consul e Electrolux vendidos no Brasil."
+    "emptyScope": "Nesta prévia, o catálogo reúne eletrodomésticos de cozinha, lavanderia e limpeza vendidos no Brasil."
   },
   "scannerStates": {
     "deniedTitle": "A câmera não foi liberada",

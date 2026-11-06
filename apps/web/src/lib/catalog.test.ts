@@ -1,15 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { catalog, catalogResponse, washingMachineCatalog } from './catalog';
 import { applianceCatalog } from './catalog-appliances';
-import { catalogResponseSchema, isValidGtin, productSchema } from '@duraverso/core';
+import { brands, catalogResponseSchema, isValidGtin, productCategories, productCategory, productSchema } from '@duraverso/core';
 import { barcodeEvidence } from './catalog-evidence';
 import { GET } from '../app/api/v1/products/route';
 
 describe('catálogo e contrato público', () => {
-  it('expõe 26 modelos distintos, preservando as 20 lavadoras e sem liberar avaliações', () => {
-    expect(catalog).toHaveLength(26);
+  it('amplia o catálogo com modelos distintos, preservando as 20 lavadoras e sem liberar avaliações', () => {
+    expect(catalog.length).toBeGreaterThanOrEqual(80);
     expect(washingMachineCatalog).toHaveLength(20);
     expect(new Set(catalog.map((p) => p.slug)).size).toBe(catalog.length);
+    expect(new Set(catalog.map((p) => `${p.brand}:${p.model}`)).size).toBe(catalog.length);
+    expect(catalog.every((p) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug))).toBe(true);
+    expect([...new Set(catalog.map(productCategory))].sort()).toEqual([...productCategories].sort());
+    expect([...new Set(catalog.map((p) => p.brand))].sort()).toEqual([...brands].sort());
     expect(catalog.every((p) => p.identification === 'candidate')).toBe(true);
     expect(catalog.every((p) => productSchema.safeParse(p).success)).toBe(true);
   });
@@ -26,13 +30,20 @@ describe('catálogo e contrato público', () => {
     expect(washingMachineCatalog.every((p) => p.confirmedGtins.length === 2)).toBe(true);
     expect(applianceCatalog.every((p) => p.confirmedGtins.length === 0)).toBe(true);
   });
-  it('inclui medidas próprias e fontes oficiais para geladeiras, micro-ondas e fogões', () => {
-    for (const category of ['refrigerator', 'microwave', 'stove']) {
+  it('inclui fontes oficiais e medidas próprias para cada categoria', () => {
+    const officialHosts = ['www.brastemp.com.br', 'www.consul.com.br', 'loja.electrolux.com.br',
+      'www.midea.com.br', 'www.midea.com', 'conteudo.midea.com.br', 'www.panasonic.com', 'loja.panasonic.com.br', 'parceiros.panasonic.com.br',
+      'www.philips.com.br', 'www.walita.com.br', 'www.philips.com', 'www.wap.ind.br', 'wap.ind.br', 'loja.wap.ind.br'];
+    for (const category of productCategories.filter((value) => value !== 'washing_machine')) {
       const products = catalogResponse('', '', '', category).data;
-      expect(products).toHaveLength(2);
+      expect(products.length).toBeGreaterThanOrEqual(2);
       expect(products.every((product) => product.category === category && product.capacityKg === undefined)).toBe(true);
-      expect(products.every((product) => product.sourceCheckedAt === '2026-11-06' &&
-        /^https:\/\/www\.(brastemp|consul)\.com\.br\//.test(product.sourceUrl))).toBe(true);
+      for (const product of products) {
+        expect(product.sourceCheckedAt).toBe('2026-11-06');
+        expect(new URL(product.sourceUrl).protocol).toBe('https:');
+        expect(officialHosts, product.sourceUrl).toContain(new URL(product.sourceUrl).hostname);
+        expect(product.confirmedGtins).toEqual([]);
+      }
     }
     expect(catalogResponse('CRB39AB').data[0]?.capacityLiters).toBe(342);
     expect(catalogResponse('BMS46AB').data[0]?.capacityLiters).toBe(32);
@@ -78,7 +89,7 @@ describe('catálogo e contrato público', () => {
     const response = await GET(new Request('http://localhost/api/v1/products?brand=Consul'));
     expect(response.status).toBe(200);
     const parsed = catalogResponseSchema.parse(await response.json());
-    expect(parsed.total).toBe(9); expect(parsed.data.every((p) => p.brand === 'Consul')).toBe(true);
+    expect(parsed.total).toBe(catalog.filter((p) => p.brand === 'Consul').length); expect(parsed.data.every((p) => p.brand === 'Consul')).toBe(true);
   });
   it('a API combina categoria, marca e busca sem converter unidades em kg', async () => {
     const response = await GET(new Request('http://localhost/api/v1/products?category=refrigerator&brand=Consul&q=342'));

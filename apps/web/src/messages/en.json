@@ -69,11 +69,12 @@
     ],
     "ownersTitle": "Already own one of these appliances?",
     "ownersText": "Owner reports aren’t open yet in this preview. When they open, each person will have one active rating per model, which they can update over time.",
-    "ownersLink": "Read the participation rules"
+    "ownersLink": "Read the participation rules",
+    "catalogBrandAll": "View all {n} {brand} models"
   },
   "catalog": {
     "title": "Home appliance catalog",
-    "sub": "Candidate models from Brastemp, Consul and Electrolux sold in Brazil.",
+    "sub": "Candidate models from different brands sold in Brazil.",
     "searchLabel": "Search by brand, model or barcode",
     "searchPlaceholder": "e.g. CWH13AB or 7891129614529",
     "searchButton": "Search",
@@ -102,7 +103,7 @@
     "emptyQueryText": "Check the model name as it appears on the product label, or try searching by brand only.",
     "emptyFiltersText": "Try another category, brand or washing capacity range.",
     "emptyScan": "Scan the barcode with your camera",
-    "emptyScope": "This preview includes washing machines, refrigerators, microwaves and stoves from Brastemp, Consul and Electrolux sold in Brazil.",
+    "emptyScope": "This preview includes kitchen, laundry and floor-care appliances sold in Brazil.",
     "category": "Category",
     "allCategories": "All categories",
     "capacityHint": "Ranges in kg filter washing machines only."
@@ -136,7 +137,7 @@
     "invalidLength": "The code must have 8, 12, 13 or 14 digits.",
     "permissionDenied": "Camera access wasn’t allowed. You can type the barcode numbers below.",
     "cameraUnavailable": "We couldn’t open the camera on this device. Please type the barcode numbers.",
-    "scope": "The catalog includes washing machines, refrigerators, microwaves and stoves sold in Brazil. Barcode lookup matches documented GTINs only."
+    "scope": "Browse appliances from different categories and brands. Barcode lookup matches documented GTINs only."
   },
   "product": {
     "breadcrumb": "Breadcrumb",
@@ -237,7 +238,7 @@
     "emptyCode": "This code is not documented in the catalog yet. Check the digits or search by brand and model.",
     "emptyFilters": "There are no {brand} models {cap} in the preview catalog. Change one of the filters.",
     "emptyScan": "Scan the barcode",
-    "emptyScope": "This preview includes washing machines, refrigerators, microwaves and stoves from Brastemp, Consul and Electrolux sold in Brazil."
+    "emptyScope": "This preview includes kitchen, laundry and floor-care appliances sold in Brazil."
   },
   "scannerStates": {
     "deniedTitle": "Camera access wasn’t allowed",

@@ -119,6 +119,27 @@ describe('administração auditável do catálogo', () => {
     const visible = (await publicCatalog.read()).data.find((product) => product.slug === f.slug);
     expect(visible).toMatchObject({ category: 'microwave', capacityLiters: 310 });
   });
+  it.each([
+    ['dishwasher', 'Midea', 14, null, 15, null],
+    ['vacuum_cleaner', 'WAP', null, 1500, null, 1600],
+  ] as const)('audita novas medidas de %s e invalida decisões antigas', async (category, brand, settings, watts, nextSettings, nextWatts) => {
+    const f = await fixture();
+    await pool.query(`UPDATE products SET category=$2,brand=$3,capacity_kg=NULL,place_settings=$4,power_watts=$5 WHERE id=$1`,
+      [f.productId, category, brand, settings, watts]);
+    const old = await f.input();
+    await pool.query('UPDATE products SET place_settings=$2,power_watts=$3 WHERE id=$1', [f.productId, nextSettings, nextWatts]);
+    await expect(service.decide(f.actor, old)).rejects.toMatchObject({ status: 409 });
+    await service.decide(f.actor, await f.input());
+    const audit = (await pool.query('SELECT snapshot FROM catalog_decisions WHERE product_id=$1', [f.productId])).rows[0].snapshot;
+    const visible = (await publicCatalog.read()).data.find((product) => product.slug === f.slug);
+    for (const data of [audit, visible]) {
+      expect(data).toMatchObject({ category, brand });
+      expect(data).not.toHaveProperty('capacityKg');
+      expect(data).not.toHaveProperty('capacityLiters');
+      if (nextSettings) expect(data).toHaveProperty('placeSettings', nextSettings);
+      if (nextWatts) expect(data).toHaveProperty('powerWatts', nextWatts);
+    }
+  });
   it('SQL recusa evidência incompleta, checksum inválido e data futura mesmo sem a validação web', async () => {
     const f = await fixture();
     await service.decide(f.actor, await f.input());

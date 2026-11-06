@@ -8,7 +8,8 @@ const catalog = await catalogResponse.json();
 assert.equal(catalog.mode, 'local_catalog', 'Run this check only against preview mode.');
 const product = catalog.data.find((p) => p.confirmedGtins.length);
 assert.ok(product);
-const categories = ['washing_machine', 'refrigerator', 'microwave', 'stove'];
+const categories = ['washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven',
+  'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker'];
 const categoryOf = (item) => item.category ?? 'washing_machine';
 assert.deepEqual([...new Set(catalog.data.map(categoryOf))].sort(), [...categories].sort());
 let checked = 1;
@@ -21,7 +22,8 @@ for (const category of categories) {
   assert.equal(body.total, expected.length);
   const example = expected[0];
   assert.ok(example, `Category has documented models: ${category}`);
-  const combined = await fetch(`${origin}/api/v1/products?category=${category}&brand=${example.brand}&q=${example.model}`);
+  const combinedQuery = new URLSearchParams({ category, brand: example.brand, q: example.model });
+  const combined = await fetch(`${origin}/api/v1/products?${combinedQuery}`);
   assert.equal(combined.status, 200);
   assert.deepEqual((await combined.json()).data.map((item) => item.slug), [example.slug]);
   if (category !== 'washing_machine') {
@@ -35,6 +37,24 @@ for (const category of categories) {
 }
 const invalidCategory = await fetch(`${origin}/api/v1/products?category=unsupported`);
 assert.equal(invalidCategory.status, 400);
+checked += 1;
+const brands = [...new Set(catalog.data.map((item) => item.brand))];
+for (const brand of brands) {
+  const response = await fetch(`${origin}/api/v1/products?${new URLSearchParams({ brand })}`);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.deepEqual(body.data.map((item) => item.slug).sort(), catalog.data.filter((item) => item.brand === brand).map((item) => item.slug).sort());
+  checked += 1;
+}
+for (const query of ['RI2244/90', 'RI2244-90', 'RI224490']) {
+  const response = await fetch(`${origin}/api/v1/products?${new URLSearchParams({ q: query })}`);
+  assert.equal(response.status, 200);
+  assert.ok((await response.json()).data.some((item) => item.model === 'RI2244/90'));
+  checked += 1;
+}
+const decimalQuery = await fetch(`${origin}/api/v1/products?${new URLSearchParams({ q: '3,2 L', category: 'air_fryer' })}`);
+assert.equal(decimalQuery.status, 200);
+assert.ok((await decimalQuery.json()).data.some((item) => item.model === 'EAF10'));
 checked += 1;
 for (const [prefix, language] of [['', 'pt-BR'], ['/en', 'en-US'], ['/es', 'es-ES']]) {
   for (const path of ['', '/produtos', '/scanner', '/como-funciona', '/regras', '/privacidade', '/conta', `/produtos/${product.slug}`]) {
@@ -55,6 +75,10 @@ for (const [prefix, language] of [['', 'pt-BR'], ['/en', 'en-US'], ['/es', 'es-E
     }
     if (path === '/conta') assert.ok(/<button[^>]*disabled/.test(html));
     if (path === '/privacidade') assert.ok(html.includes('duraverso_locale'));
+    if (path === '') {
+      for (const category of categories) assert.ok(html.includes(`href="${prefix}/produtos?category=${category}"`));
+      for (const brand of brands) assert.ok(html.includes(`href="${prefix}/produtos?brand=${encodeURIComponent(brand)}"`));
+    }
     checked += 1;
   }
   const filtered = await fetch(`${origin}${prefix}/produtos?q=${product.model}&brand=${product.brand}`);
@@ -85,10 +109,19 @@ for (const [prefix, language] of [['', 'pt-BR'], ['/en', 'en-US'], ['/es', 'es-E
     assert.ok(detailHtml.includes(`lang="${language}"`));
     const nonce = detail.headers.get('content-security-policy')?.match(/'nonce-([^']+)'/)?.[1];
     assert.ok(nonce && detailHtml.includes(`nonce="${nonce}"`));
-    assert.ok(!/(?:undefined|NaN) (?:kg|L|bocas|burners|quemadores)/.test(detailHtml), 'No undefined capacity in detail.');
-    if (example.capacityLiters) assert.ok(detailHtml.includes(`${example.capacityLiters} L`), 'Volume is rendered in liters.');
+    assert.ok(!/(?:undefined|NaN) (?:kg|L|W|bocas|burners|quemadores|servi)/.test(detailHtml), 'No undefined measure in detail.');
+    const format = (value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value);
+    if (example.capacityLiters) assert.ok(detailHtml.includes(`${format(example.capacityLiters)} L`), 'Volume is rendered in localized liters.');
+    if (example.powerWatts) assert.ok(detailHtml.includes(`${format(example.powerWatts)} W`), 'Electrical power is rendered in watts.');
+    if (example.placeSettings) assert.ok(detailHtml.includes(`${example.placeSettings} ${language === 'pt-BR' ? 'serviços' : language === 'en-US' ? 'place settings' : 'servicios'}`), 'Dishwashers show place settings.');
     checked += 2;
   }
+  const unknownMeasure = await fetch(`${origin}${prefix}/produtos/philips-walita-hr2270-91`);
+  assert.equal(unknownMeasure.status, 200);
+  const unknownHtml = await unknownMeasure.text();
+  const pending = language === 'pt-BR' ? 'A confirmar' : language === 'en-US' ? 'To be confirmed' : 'Por confirmar';
+  assert.ok(unknownHtml.includes(`<td>${pending}</td><td class="pending-text">${pending}</td>`), 'Missing measure must not be marked as documented.');
+  checked += 1;
 }
 const rememberedQuery = `q=${product.model}&brand=${product.brand}&category=washing_machine`;
 const remembered = await fetch(`${origin}/produtos?${rememberedQuery}`, { redirect: 'manual', headers: { Cookie: 'duraverso_locale=es' } });
@@ -112,4 +145,4 @@ for (const route of ['/admin', '/admin/catalogo', `/avaliar/${product.slug}`]) {
   assert.ok(!html.includes('<form'), 'Preview operations must not expose forms.');
   checked += 1;
 }
-console.log(`Preview smoke passed: ${checked + 2} checks; four appliance categories, three languages, disabled accounts, API, combined filters, all documented codes and nonce CSP.`);
+console.log(`Preview smoke passed: ${checked + 2} checks; ${categories.length} appliance categories, ${brands.length} brands, three languages, disabled accounts, API, combined filters, all documented codes and nonce CSP.`);

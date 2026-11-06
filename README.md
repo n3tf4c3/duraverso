@@ -2,7 +2,7 @@
 
 Experiências de uso de produtos, por versão.
 
-Base web do catálogo comunitário de lavadoras, geladeiras, micro-ondas e fogões. A prévia pode ser hospedada
+Base web do catálogo comunitário de eletrodomésticos de cozinha, lavanderia e limpeza. A prévia pode ser hospedada
 na Vercel, com contas e contribuições desativadas. Nenhum banco é necessário nessa fase.
 
 ## Executar localmente
@@ -68,13 +68,17 @@ substitui a revisão visual e a leitura com câmera real.
 
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.
-No modo preview, o fluxo inicial tem consulta a 26 candidatos: 20 lavadoras, duas geladeiras,
-dois micro-ondas e dois fogões, com filtros, detalhes e leitura de código. As novas fontes
-oficiais estão em `apps/web/src/lib/catalog-appliances.ts`; esses seis modelos podem ser
-encontrados pelo nome, mas ainda não possuem GTINs ou variantes documentadas no catálogo.
-O filtro `category` aceita `washing_machine`, `refrigerator`, `microwave` e `stove` na
-API e nas páginas. O filtro de capacidade em kg vale somente para lavadoras; geladeiras
-e micro-ondas mostram litros nominais, e fogões mostram o número de bocas.
+No modo preview, a consulta reúne 91 candidatos de sete marcas em 12 categorias:
+20 lavadoras, sete geladeiras, sete micro-ondas, sete fogões, cinco freezers, cinco fornos,
+cinco cooktops, cinco lava-louças, dez air fryers, seis liquidificadores, oito aspiradores
+e seis cafeteiras. Fontes oficiais e datas em `apps/web/src/lib/catalog-appliances.ts`,
+`catalog-large-appliances.ts` e `catalog-small-appliances.ts`. Os 71 modelos além das
+lavadoras ainda não possuem GTINs ou variantes documentadas; são encontrados pelo nome.
+O filtro `category` aceita as chaves canônicas de `productCategories` no core, tanto na
+API quanto nas páginas. A home mostra uma amostra por marca, com acesso à lista completa.
+O filtro em kg vale somente para lavadoras. As demais fichas distinguem litros nominais,
+bocas, serviços e watts elétricos; esses valores não são comparáveis entre categorias.
+Medidas não documentadas ficam “a confirmar”. Não converter xícaras em litros.
 A busca reconhece 40 GTINs oficiais dos 20
 modelos Brastemp, Consul e Electrolux; a cobertura de versões continua parcial. Códigos identificam o modelo, sem selecionar
 voltagem nem criar variantes para avaliações. Evidências em `apps/web/src/lib/catalog-evidence.ts`.
@@ -82,7 +86,7 @@ Por padrão, contas e administração apresentam seu estado de preparação sem 
 
 `pnpm catalog:plan` confere localmente o lote preparado de 20 lavadoras e 40 associações
 entre GTIN, identificador do fabricante e tensão nominal. `pnpm catalog:plan --json`
-exibe os dados e suas fontes para revisão. `pnpm catalog:plan --all` inclui as quatro
+exibe os dados e suas fontes para revisão. `pnpm catalog:plan --all` inclui todas as
 categorias e retorna código não zero enquanto houver modelos sem variantes documentadas.
 O comando não acessa banco, não grava dados
 nem habilita avaliações. Evidências separadas em `apps/web/src/lib/catalog-variants.ts`;
@@ -91,7 +95,7 @@ a busca pública continua retornando somente o modelo.
 O importador `pnpm catalog:import` compara esse plano com um PostgreSQL autorizado e
 somente lê por padrão. A gravação explícita insere modelos, variantes, GTINs e evidências
 em uma transação, preservando registros existentes e mantendo novos itens não verificados.
-Exige as migrations até 0005 e conexão direta. Consulte os argumentos e limites em
+Exige as migrations até 0006 e conexão direta. Consulte os argumentos e limites em
 `docs/operacao-local.md` antes de usar um banco permanente.
 
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração

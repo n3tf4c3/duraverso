@@ -491,6 +491,23 @@ svg {
 .filters fieldset:disabled {
   opacity: 0.55;
 }
+.filter-select {
+  margin-bottom: 25px;
+  min-width: 0;
+}
+.filter-select select {
+  width: 100%;
+  min-width: 0;
+}
+.filters .filter-select label,.filters-dialog .filter-select label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.brand-index .brand-all {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+}
 .brand-index h3 {
   font-size:21px;
   display:flex;

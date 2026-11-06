@@ -2,7 +2,7 @@
 
 ## Produto e limites
 
-Plataforma de experiências de proprietários de produtos: lavadoras, geladeiras, micro-ondas e fogões.
+Plataforma de experiências de proprietários de eletrodomésticos de cozinha, lavanderia e limpeza.
 Consulta pública; Google será o único login inicial. Revisão manual antes da publicação.
 Satisfação é diferente de durabilidade. Não criar avaliações, percentuais ou selos fictícios.
 Média preliminar somente com 20 avaliações elegíveis de proprietários distintos por variante.
@@ -26,8 +26,10 @@ Somente pnpm, versão exata em packageManager, um lockfile na raiz. Não usar np
 ## Estado operacional da base
 
 O modo preview usa catálogo estático de candidatos. Não há banco em produção. Não inferir variantes/GTIN.
-Categoria e medidas pertencem ao contrato canônico: kg somente para lavadoras, litros
-para geladeiras/micro-ondas e bocas para fogões. Filtros de kg nunca comparam outras unidades.
+Categoria e medidas pertencem ao contrato canônico: `productMeasurementField` define
+kg, litros, bocas, serviços ou watts por categoria. Kg somente para lavadoras; filtros
+de kg nunca comparam outras unidades. Medidas ausentes ficam a confirmar; não converter
+xícaras em litros nem tratar potência elétrica como sucção/desempenho.
 No modo connected, a consulta pública usa produtos verificados do banco e somente GTINs
 de variantes verificadas. Importar não publica: novos registros entram não verificados.
 Falha do banco não pode ser substituída por candidatos locais nem confundida com catálogo vazio.

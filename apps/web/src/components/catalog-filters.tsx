@@ -14,8 +14,8 @@ function FilterFields({ locale, labels: t, q, brand, capacity, category, prefix 
   const supportsCapacity = !selectedCategory || selectedCategory === 'washing_machine';
   return <form action={localizePath('/produtos', locale)}>
     <input type="hidden" name="q" value={q} />
-    <fieldset><legend>{t.category}</legend>{[['', t.allCategories], ...productCategories.map((value) => [value, categoryLabel(value, locale)])].map(([value, label]) => <label key={value} htmlFor={`${prefix}-category-${value}`}><input id={`${prefix}-category-${value}`} type="radio" name="category" value={value} checked={value === selectedCategory} onChange={() => { setSelectedCategory(value!); if (value && value !== 'washing_machine') setSelectedCapacity(''); }} />{label}</label>)}</fieldset>
-    <fieldset><legend>{t.brand}</legend>{[['', t.allBrands], ...brands.map((b) => [b, b])].map(([value, label]) => <label key={value} htmlFor={`${prefix}-brand-${value}`}><input id={`${prefix}-brand-${value}`} type="radio" name="brand" value={value} defaultChecked={value === brand} />{label}</label>)}</fieldset>
+    <div className="filter-select"><label htmlFor={`${prefix}-category`}>{t.category}</label><select id={`${prefix}-category`} name="category" value={selectedCategory} onChange={(event) => { const value = event.target.value; setSelectedCategory(value); if (value && value !== 'washing_machine') setSelectedCapacity(''); }}><option value="">{t.allCategories}</option>{productCategories.map((value) => <option key={value} value={value}>{categoryLabel(value, locale)}</option>)}</select></div>
+    <div className="filter-select"><label htmlFor={`${prefix}-brand`}>{t.brand}</label><select id={`${prefix}-brand`} name="brand" defaultValue={brand}><option value="">{t.allBrands}</option>{brands.map((value) => <option key={value} value={value}>{value}</option>)}</select></div>
     <fieldset disabled={!supportsCapacity}><legend>{t.capacity}</legend><p className="small">{t.capacityHint}</p>{[['', t.allCapacities], ['small', t.capUpTo10], ['medium', t.cap10to13], ['large', t.capOver13]].map(([value, label]) => <label key={value} htmlFor={`${prefix}-capacity-${value}`}><input id={`${prefix}-capacity-${value}`} type="radio" name="capacity" value={value} checked={value === selectedCapacity} onChange={() => setSelectedCapacity(value!)} />{label}</label>)}</fieldset>
     <button className="button button-primary" type="submit">{c.apply} →</button><a className="clear-filters" href={localizePath('/produtos', locale)}>{t.clear}</a>
   </form>;
@@ -26,9 +26,9 @@ export function CatalogFilters(props: FiltersProps) {
   const dialog = useRef<HTMLDialogElement>(null); const trigger = useRef<HTMLButtonElement>(null);
   const [expanded, setExpanded] = useState(false); const id = useId();
   return <>
-    <button ref={trigger} className="button button-outline filters-trigger" type="button" aria-expanded={expanded} aria-controls={id} onClick={() => { if (window.matchMedia('(max-width: 599px)').matches) { dialog.current?.showModal(); setExpanded(true); } else setExpanded(!expanded); }}>{t.filters} {brand || capacity || category ? '·' : '+'}</button>
+    <button ref={trigger} className="button button-outline filters-trigger" type="button" aria-expanded={expanded} aria-controls={`${id} ${id}-dialog`} onClick={() => { if (window.matchMedia('(max-width: 599px)').matches) { dialog.current?.showModal(); setExpanded(true); } else setExpanded(!expanded); }}>{t.filters} {brand || capacity || category ? '·' : '+'}</button>
     <aside id={id} className={`filters ${expanded ? 'filters-expanded' : ''}`}><h2>{t.filters}</h2><FilterFields {...props} prefix={`${id}-inline`} /></aside>
-    <dialog className="filters-dialog" ref={dialog} aria-labelledby={`${id}-title`} onClose={() => { setExpanded(false); trigger.current?.focus(); }} onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
+    <dialog id={`${id}-dialog`} className="filters-dialog" ref={dialog} aria-labelledby={`${id}-title`} onClose={() => { setExpanded(false); trigger.current?.focus(); }} onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="dialog-heading"><h2 id={`${id}-title`}>{t.filters}</h2><button type="button" className="button button-outline" onClick={() => dialog.current?.close()} aria-label={locale === 'pt' ? 'Fechar filtros' : locale === 'en' ? 'Close filters' : 'Cerrar filtros'}>×</button></div><FilterFields {...props} prefix={`${id}-modal`} />
     </dialog>
   </>;

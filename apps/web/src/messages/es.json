@@ -69,11 +69,12 @@
     ],
     "ownersTitle": "¿Ya tienes uno de estos electrodomésticos?",
     "ownersText": "El envío de experiencias aún no está disponible en esta vista previa. Cuando se abra, cada persona tendrá una valoración activa por modelo, que podrá actualizar con el tiempo.",
-    "ownersLink": "Leer las normas de participación"
+    "ownersLink": "Leer las normas de participación",
+    "catalogBrandAll": "Ver los {n} modelos de {brand}"
   },
   "catalog": {
     "title": "Catálogo de electrodomésticos",
-    "sub": "Modelos candidatos de Brastemp, Consul y Electrolux vendidos en Brasil.",
+    "sub": "Modelos candidatos de distintas marcas vendidos en Brasil.",
     "searchLabel": "Buscar por marca, modelo o código de barras",
     "searchPlaceholder": "Ej.: CWH13AB o 7891129614529",
     "searchButton": "Buscar",
@@ -102,7 +103,7 @@
     "emptyQueryText": "Revisa el modelo tal como aparece en la etiqueta del producto o busca solo por la marca.",
     "emptyFiltersText": "Prueba otra categoría, marca o rango de capacidad de lavado.",
     "emptyScan": "Escanear el código de barras con la cámara",
-    "emptyScope": "Esta vista previa incluye lavadoras, refrigeradores, microondas y cocinas de Brastemp, Consul y Electrolux vendidos en Brasil.",
+    "emptyScope": "Esta vista previa reúne electrodomésticos de cocina, lavandería y limpieza vendidos en Brasil.",
     "category": "Categoría",
     "allCategories": "Todas las categorías",
     "capacityHint": "Los rangos en kg filtran solo lavadoras."
@@ -136,7 +137,7 @@
     "invalidLength": "El código debe tener 8, 12, 13 o 14 dígitos.",
     "permissionDenied": "No se ha permitido el uso de la cámara. Puedes escribir los números del código aquí abajo.",
     "cameraUnavailable": "No se pudo abrir la cámara en este dispositivo. Escribe los números del código.",
-    "scope": "El catálogo reúne lavadoras, refrigeradores, microondas y cocinas vendidos en Brasil. La búsqueda por código solo encuentra los GTIN documentados."
+    "scope": "Consulta electrodomésticos de distintas categorías y marcas. La búsqueda por código solo encuentra los GTIN documentados."
   },
   "product": {
     "breadcrumb": "Ruta",
@@ -237,7 +238,7 @@
     "emptyCode": "Este código todavía no está documentado en el catálogo. Revisa los números o busca por marca y modelo.",
     "emptyFilters": "No hay modelos {brand} de {cap} en el catálogo de la vista previa. Cambia uno de los filtros.",
     "emptyScan": "Escanear el código de barras",
-    "emptyScope": "Esta vista previa incluye lavadoras, refrigeradores, microondas y cocinas de Brastemp, Consul y Electrolux vendidos en Brasil."
+    "emptyScope": "Esta vista previa reúne electrodomésticos de cocina, lavandería y limpieza vendidos en Brasil."
   },
   "scannerStates": {
     "deniedTitle": "No se permitió usar la cámara",

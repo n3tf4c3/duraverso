@@ -19,9 +19,11 @@ export async function importCatalog(client: Session, products: unknown, evidence
     }
     const stored: StoredCatalog = {
       products: (await client.query(`SELECT id,slug,brand,model,category,capacity_kg::float AS "capacityKg",
-        capacity_liters::float AS "capacityLiters",burner_count AS "burnerCount",source_url AS "sourceUrl",
+        capacity_liters::float AS "capacityLiters",burner_count AS "burnerCount",
+        place_settings AS "placeSettings",power_watts::float AS "powerWatts",source_url AS "sourceUrl",
         to_char(source_checked_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS "sourceCheckedAt" FROM products`)).rows.map((row) => ({
           ...row, capacityKg: row.capacityKg ?? undefined, capacityLiters: row.capacityLiters ?? undefined, burnerCount: row.burnerCount ?? undefined,
+          placeSettings: row.placeSettings ?? undefined, powerWatts: row.powerWatts ?? undefined,
         })),
       variants: (await client.query('SELECT id,product_id AS "productId",manufacturer_code AS "manufacturerCode",voltage,code_kind AS "codeKind" FROM variants')).rows,
       gtins: (await client.query('SELECT code,variant_id AS "variantId",source_url AS "sourceUrl" FROM gtins')).rows,
@@ -42,10 +44,10 @@ export async function importCatalog(client: Session, products: unknown, evidence
     }
     const productIds = new Map(stored.products.map((product) => [product.slug, product.id]));
     for (const product of plan.productsToInsert) {
-      const result = await client.query(`INSERT INTO products(slug,brand,model,capacity_kg,source_url,source_checked_at,verified,category,capacity_liters,burner_count)
-        VALUES($1,$2,$3,$4,$5,$6,false,$7,$8,$9) RETURNING id`, [product.slug, product.brand, product.model,
+      const result = await client.query(`INSERT INTO products(slug,brand,model,capacity_kg,source_url,source_checked_at,verified,category,capacity_liters,burner_count,place_settings,power_watts)
+        VALUES($1,$2,$3,$4,$5,$6,false,$7,$8,$9,$10,$11) RETURNING id`, [product.slug, product.brand, product.model,
         product.capacityKg ?? null, product.sourceUrl, `${product.sourceCheckedAt}T00:00:00Z`,
-        productCategory(product), product.capacityLiters ?? null, product.burnerCount ?? null]);
+        productCategory(product), product.capacityLiters ?? null, product.burnerCount ?? null, product.placeSettings ?? null, product.powerWatts ?? null]);
       productIds.set(product.slug, result.rows[0].id);
     }
     const key = (productId: string, code: string) => JSON.stringify([productId, code]);

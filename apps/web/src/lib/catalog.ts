@@ -1,6 +1,8 @@
 import { catalogResponseSchema, searchProducts, type Product } from '@duraverso/core';
 import { barcodeEvidence, catalogCheckedAt, modelSources } from './catalog-evidence';
 import { applianceCatalog } from './catalog-appliances';
+import { largeApplianceCatalog } from './catalog-large-appliances';
+import { smallApplianceCatalog } from './catalog-small-appliances';
 
 const { brastempManual } = modelSources;
 const candidates: [Product['brand'], string, number, string][] = [
@@ -24,7 +26,7 @@ export const washingMachineCatalog: Product[] = candidates.map(([brand, model, c
   confirmedGtins: [...(barcodeEvidence[`${brand}-${model}`.toLowerCase()]?.gtins ?? [])],
 }));
 
-export const catalog: Product[] = [...washingMachineCatalog, ...applianceCatalog];
+export const catalog: Product[] = [...washingMachineCatalog, ...applianceCatalog, ...largeApplianceCatalog, ...smallApplianceCatalog];
 
 export function catalogResponse(query = '', brand = '', capacity = '', category = '') {
   const data = searchProducts(catalog, query, brand, capacity, category);

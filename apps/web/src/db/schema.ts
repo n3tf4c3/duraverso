@@ -20,17 +20,22 @@ export const products = pgTable('products', {
   brand: varchar('brand', { length: 80 }).notNull(), model: varchar('model', { length: 80 }).notNull(),
   category: varchar('category', { length: 30 }).notNull().default('washing_machine'),
   capacityKg: numeric('capacity_kg', { precision: 4, scale: 1 }),
-  capacityLiters: numeric('capacity_liters', { precision: 6, scale: 1 }), burnerCount: integer('burner_count'),
+  capacityLiters: numeric('capacity_liters', { precision: 7, scale: 2 }), burnerCount: integer('burner_count'),
+  placeSettings: integer('place_settings'), powerWatts: numeric('power_watts', { precision: 8, scale: 2 }),
   sourceUrl: text('source_url').notNull(),
   sourceCheckedAt: timestamp('source_checked_at', { withTimezone: true }).notNull(), verified: boolean('verified').notNull().default(false),
   catalogRevision: integer('catalog_revision').notNull().default(0),
 }, (t) => [unique('product_brand_model_unique').on(t.brand, t.model), check('capacity_positive', sql`${t.capacityKg} > 0`),
-  check('product_category_supported', sql`${t.category} IN ('washing_machine', 'refrigerator', 'microwave', 'stove')`),
+  check('product_category_supported', sql`${t.category} IN ('washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven', 'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker')`),
   check('capacity_liters_positive', sql`${t.capacityLiters} > 0`), check('burner_count_positive', sql`${t.burnerCount} > 0`),
+  check('place_settings_positive', sql`${t.placeSettings} > 0`), check('power_watts_positive', sql`${t.powerWatts} > 0`),
   check('product_category_measures', sql`(
-    (${t.category} = 'washing_machine' AND ${t.capacityKg} IS NOT NULL AND ${t.capacityLiters} IS NULL AND ${t.burnerCount} IS NULL) OR
-    (${t.category} IN ('refrigerator', 'microwave') AND ${t.capacityKg} IS NULL AND ${t.burnerCount} IS NULL) OR
-    (${t.category} = 'stove' AND ${t.capacityKg} IS NULL AND ${t.capacityLiters} IS NULL)
+    (${t.category} <> 'washing_machine' OR ${t.capacityKg} IS NOT NULL) AND
+    (${t.capacityKg} IS NULL OR ${t.category} = 'washing_machine') AND
+    (${t.capacityLiters} IS NULL OR ${t.category} IN ('refrigerator', 'microwave', 'freezer', 'oven', 'air_fryer', 'blender', 'coffee_maker')) AND
+    (${t.burnerCount} IS NULL OR ${t.category} IN ('stove', 'cooktop')) AND
+    (${t.placeSettings} IS NULL OR ${t.category} = 'dishwasher') AND
+    (${t.powerWatts} IS NULL OR ${t.category} = 'vacuum_cleaner')
   )`),
 ]);
 export const variants = pgTable('variants', {

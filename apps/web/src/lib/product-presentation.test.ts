@@ -17,6 +17,17 @@ describe('product presentation by category', () => {
     expect(formatProductMeasure({ category: 'refrigerator', capacityKg: 13 }, 'pt')).toBe('A confirmar');
     expect(formatProductMeasure({ category: 'stove', capacityLiters: 80 }, 'en')).toBe('To be confirmed');
     expect(formatProductMeasure({ category: 'microwave' }, 'es')).toBe('Por confirmar');
+    expect(formatProductMeasure({ category: 'coffee_maker' }, 'pt')).toBe('A confirmar');
+    expect(formatProductMeasure({ category: 'dishwasher', capacityLiters: 14 }, 'en')).toBe('To be confirmed');
+    expect(formatProductMeasure({ category: 'vacuum_cleaner', capacityKg: 2 }, 'pt')).toBe('A confirmar');
+  });
+  it('preserves decimal volumes and distinguishes dishwasher capacity from electrical power', () => {
+    expect(formatProductMeasure({ category: 'coffee_maker', capacityLiters: 1.25 }, 'pt')).toBe('1,25 L');
+    expect(formatProductMeasure({ category: 'air_fryer', capacityLiters: 4.1 }, 'en')).toBe('4.1 L');
+    expect(formatProductMeasure({ category: 'dishwasher', placeSettings: 14 }, 'pt')).toBe('14 serviços');
+    expect(formatProductMeasure({ category: 'vacuum_cleaner', powerWatts: 1500 }, 'en')).toBe('1,500 W');
+    expect(productMeasureLabel({ category: 'vacuum_cleaner' }, 'pt')).toBe('Potência nominal');
+    expect(productMeasureLabel({ category: 'cooktop' }, 'pt')).toBe('Queimadores');
   });
   it('names every supported category in every interface language', () => {
     for (const locale of locales) {
