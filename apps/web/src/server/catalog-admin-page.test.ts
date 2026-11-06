@@ -6,7 +6,7 @@ vi.mock('@/auth', () => ({ currentActor: mocks.actor }));
 vi.mock('@/server/database', () => ({ database: mocks.database }));
 vi.mock('@/server/catalog-admin', () => ({ CatalogAdminService: class { read = mocks.read; } }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: mocks.refresh }) }));
-import CatalogAdminPage from '@/app/admin/catalogo/page';
+import CatalogAdminPage from '@/app/(operations)/admin/catalogo/page';
 
 beforeEach(() => { vi.clearAllMocks(); mocks.connected.mockReturnValue(true); });
 describe('renderização da revisão do catálogo', () => {

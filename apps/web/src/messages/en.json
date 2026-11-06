@@ -1,0 +1,399 @@
+{
+  "meta": {
+    "title": "Duraverso — how each washing machine holds up in everyday use",
+    "description": "Owner experiences on performance, problems, repairs and satisfaction, by exact product version. A preview catalog of washing machines sold in Brazil."
+  },
+  "header": {
+    "skip": "Skip to content",
+    "home": "home",
+    "navLabel": "Main",
+    "catalog": "Catalog",
+    "scan": "Scan barcode",
+    "how": "How it works",
+    "preview": "Preview · open access",
+    "langButton": "Language",
+    "menuTitle": "Interface language",
+    "menuNote": "The catalog covers products sold in Brazil. Changing the language only changes the site text."
+  },
+  "common": {
+    "market": "Catalog of products sold in Brazil.",
+    "verified": "Verified",
+    "toConfirm": "To be confirmed",
+    "inReview": "Under review",
+    "noReportsYet": "No reports yet",
+    "viewRecord": "View record",
+    "washer": "Washer",
+    "washingMachine": "Washing machine",
+    "topLoad": "Top-load",
+    "models": "models",
+    "ofThreshold": "{n} of 20",
+    "originalReport": "Original report in {language}"
+  },
+  "home": {
+    "eyebrow": "Washing machines · catalog preview",
+    "title": "Find your model.",
+    "lead": "How each washing machine holds up in everyday use: performance, problems, repairs and satisfaction — always tied to the exact product version.",
+    "searchLabel": "Search the catalog",
+    "searchPlaceholder": "Brand, model or barcode",
+    "searchButton": "Search",
+    "scanLink": "Scan a barcode with your camera",
+    "statusTitle": "Archive status",
+    "statusModels": "Candidate models",
+    "statusCodes": "Documented barcodes",
+    "statusReports": "Published owner reports",
+    "statusSubmissions": "Report submissions",
+    "statusSubmissionsValue": "Not open yet",
+    "statusNote": "This is a preview. There are no placeholder reviews: what you see here is what has been verified.",
+    "catalogTitle": "Washing machine catalog",
+    "catalogSub": "20 candidate models, by brand. Listed in catalog order, not ranked.",
+    "catalogAll": "Open catalog with filters",
+    "catalogNoReports": "No model has published owner reports yet.",
+    "howTitle": "What each product record covers",
+    "how": [
+      {
+        "title": "Exact version",
+        "text": "Model, reference, voltage and GTIN. Every field shows its source and when it was checked. Variants are never merged."
+      },
+      {
+        "title": "Time in use",
+        "text": "Reports arranged by how long the machine has been in use, with the date the owner last confirmed it."
+      },
+      {
+        "title": "Maintenance and repairs",
+        "text": "What went wrong, when, and how it was fixed. Repairs are added to the history; they don’t count as votes."
+      },
+      {
+        "title": "Satisfaction",
+        "text": "A 1–5 rating, kept separate from durability. An average only appears after 20 eligible ratings from different owners of the same variant."
+      }
+    ],
+    "ownersTitle": "Already own one of these?",
+    "ownersText": "Owner reports aren’t open yet in this preview. When they open, each person will have one active rating per model, which they can update over time.",
+    "ownersLink": "Read the participation rules"
+  },
+  "catalog": {
+    "title": "Washing machine catalog",
+    "sub": "20 candidate models from Brastemp, Consul and Electrolux sold in Brazil.",
+    "searchLabel": "Search by brand, model or barcode",
+    "searchPlaceholder": "e.g. CWH13AB or 7891129614529",
+    "searchButton": "Search",
+    "filters": "Filters",
+    "brand": "Brand",
+    "allBrands": "All",
+    "capacity": "Capacity",
+    "allCapacities": "Any capacity",
+    "capUpTo10": "Up to 10 kg",
+    "cap10to13": "Over 10, up to 13 kg",
+    "capOver13": "Over 13 kg",
+    "clear": "Clear search and filters",
+    "order": "Catalog order · not ranked",
+    "colModel": "Model",
+    "colBrand": "Brand",
+    "colCapacity": "Capacity",
+    "colReports": "Reports",
+    "colAction": "Action",
+    "footnote": "Voltage and variants are checked on each product record.",
+    "countOne": "{n} model found",
+    "countMany": "{n} models found",
+    "countFor": "for “{q}”",
+    "emptyQueryTitle": "No models found for “{q}”.",
+    "emptyFiltersTitle": "No models match these filters.",
+    "emptyCodeText": "This code isn’t one of the 40 documented in this preview. That doesn’t mean the product doesn’t exist or that your camera failed — it just isn’t in the catalog yet. Check the digits on the box.",
+    "emptyQueryText": "Check the model name as it appears on the product label, or try searching by brand only.",
+    "emptyFiltersText": "Try another capacity range or show all brands again.",
+    "emptyScan": "Scan the barcode with your camera",
+    "emptyScope": "In this preview, the catalog only includes Brastemp, Consul and Electrolux washers sold in Brazil."
+  },
+  "scanner": {
+    "title": "Scan a barcode",
+    "intro": "Use the barcode with numbers under the bars, on the box or on the washer’s label.",
+    "openCamera": "Open camera",
+    "privacy": "The camera only opens when you allow it. Scanning happens on your device; no images are sent to Duraverso.",
+    "or": "or",
+    "typeLabel": "Type the barcode numbers",
+    "typePlaceholder": "13 digits",
+    "typeHint": "The numbers printed right under the bars (EAN/GTIN).",
+    "lookUp": "Look up",
+    "byName": "Search by brand or model",
+    "cameraView": "Camera view",
+    "looking": "Looking for a barcode…",
+    "aim": "Fit the bars inside the frame. QR codes and model names can’t be read here.",
+    "typeInstead": "Type numbers",
+    "closeCamera": "Close camera",
+    "found": "Code recognized",
+    "codeForModel": "Code for this model",
+    "voltage": "Voltage",
+    "labelTip": "Before buying, check the voltage (127 V or 220 V) on the product label.",
+    "openRecord": "Open model record",
+    "scanAnother": "Scan another code",
+    "notFoundTag": "Not in the catalog",
+    "notFoundTitle": "We don’t have this code yet.",
+    "notFoundText": "It isn’t one of the 40 codes documented in this preview. Your camera worked fine — the product just hasn’t been added to the catalog.",
+    "retype": "Check and type the numbers",
+    "invalidLength": "The code must have 8, 12, 13 or 14 digits.",
+    "permissionDenied": "Camera access wasn’t allowed. You can type the barcode numbers below.",
+    "cameraUnavailable": "We couldn’t open the camera on this device. Please type the barcode numbers.",
+    "scope": "In this preview, the catalog only includes Brastemp, Consul and Electrolux washers sold in Brazil."
+  },
+  "product": {
+    "breadcrumb": "Breadcrumb",
+    "photoPlaceholder": "Space for manufacturer photo — no licensed image yet",
+    "summaryId": "Model identification",
+    "summaryVoltage": "Voltage per barcode",
+    "summaryReports": "Owner reports",
+    "noneYet": "None published",
+    "checkedOn": "Manufacturer source checked on {date}.",
+    "knownTitle": "What we know about this washer so far",
+    "field": "Field",
+    "value": "Value",
+    "status": "Status",
+    "brand": "Brand",
+    "reference": "Reference model",
+    "capacity": "Rated capacity",
+    "type": "Type",
+    "voltage": "Voltage",
+    "voltageNote": "Not confirmed per barcode. Check the label.",
+    "sourceMaker": "View manufacturer source",
+    "sourceCodes": "View barcode source",
+    "variantsTitle": "Known variants",
+    "variantsSub": "Each barcode may match a different version. Reports and averages are never mixed across variants.",
+    "colReports": "Reports",
+    "colRatings": "Ratings toward average",
+    "experienceTitle": "Owner experience",
+    "experienceEmpty": "No owner reports published yet.",
+    "experienceEmptySub": "Once there are, each report will appear on this scale by how long the washer has been in use, with the date the owner last confirmed it.",
+    "oneYear": "1 year",
+    "slots": [
+      {
+        "title": "Performance",
+        "text": "How the washer behaves day to day: noise, consumption, washing results."
+      },
+      {
+        "title": "Problems and repairs",
+        "text": "What failed, after how long, and how it was fixed. Not counted in the average."
+      },
+      {
+        "title": "Satisfaction",
+        "text": "A 1–5 rating. An average only appears after 20 eligible ratings from different owners of the same variant."
+      }
+    ],
+    "zeroReports": "0 reports",
+    "nextTitle": "Next steps",
+    "nextSimilar": "See other 10–13 kg washers",
+    "voltageHowTitle": "How to check the voltage",
+    "voltageHowText": "The voltage (127 V or 220 V) is shown on the product label and on the box. Check it before buying.",
+    "ownersTitle": "Own this washer?",
+    "ownersText": "Owner reports aren’t open yet in this preview. Browsing stays free, no account needed.",
+    "reviewTitle": "We’re checking this version.",
+    "reviewText": "The details below haven’t been confirmed with the manufacturer’s source yet. Until then, this record won’t take reports, and nothing here should be read as a specification.",
+    "reviewFields": "Details under review",
+    "seeVerified": "See verified models"
+  },
+  "footer": {
+    "tagline": "How products hold up in use, version by version.",
+    "navLabel": "Footer",
+    "rules": "Rules",
+    "privacy": "Privacy"
+  },
+  "catalogMobile": {
+    "title": "Washing machine catalog",
+    "sub": "20 candidate models sold in Brazil. Catalog order, not ranked.",
+    "searchLabel": "Brand, model or barcode",
+    "placeholder": "e.g. CWH13AB",
+    "searchBtn": "Search",
+    "filtersBtn": "Filters",
+    "clearShort": "Clear",
+    "clear": "Clear search and filters",
+    "clearFiltersOnly": "Remove filters only",
+    "applied": "Applied filters",
+    "removeFilter": "Remove filter",
+    "closeFilters": "Close filters",
+    "brand": "Brand",
+    "capacity": "Capacity",
+    "all": "All brands",
+    "allCap": "Any capacity",
+    "c1": "Up to 10 kg",
+    "c2": "Over 10, up to 13 kg",
+    "c3": "Over 13 kg",
+    "colModel": "Model",
+    "colBrand": "Brand",
+    "colCap": "Capacity",
+    "colReports": "Reports",
+    "colAction": "Action",
+    "none": "none yet",
+    "open": "View record",
+    "one": "model found",
+    "many": "models found",
+    "forQ": "for",
+    "showOne": "Show 1 model",
+    "showMany": "Show {n} models",
+    "showNone": "No models",
+    "emptyTitleQ": "No models found for “{q}”.",
+    "emptyTitleF": "No models match this combination of filters.",
+    "emptyText": "Check the model name as it appears on the product label, or search by brand only.",
+    "emptyCode": "This code isn’t one of the 40 documented in this preview. That doesn’t mean the product doesn’t exist — it just isn’t in the catalog yet.",
+    "emptyFilters": "There are no {brand} washers {cap} in the preview catalog. Change one of the filters.",
+    "emptyScan": "Scan the barcode",
+    "emptyScope": "In this preview, the catalog only includes Brastemp, Consul and Electrolux washers sold in Brazil."
+  },
+  "scannerStates": {
+    "deniedTitle": "Camera access wasn’t allowed",
+    "deniedText": "Access was denied or is blocked in your browser settings. To scan with the camera, allow access for this site and try again. You can also type the numbers.",
+    "retryCamera": "Try opening the camera again",
+    "typeLabel": "Type the barcode numbers",
+    "typePh": "13 digits",
+    "typeHint": "The numbers right under the bars (EAN/GTIN): 8, 12, 13 or 14 digits.",
+    "check": "Look up",
+    "byName": "Search by brand or model",
+    "focusNote": "Focus moves straight to the input field.",
+    "noCamTitle": "We couldn’t find a camera",
+    "noCamText": "This device has no available camera, or another app is using it. Type the barcode numbers below.",
+    "typeTitle": "Look up by number",
+    "errEmpty": "Type the barcode numbers.",
+    "errChars": "Use numbers only — no letters, spaces or dashes.",
+    "errLength": "The code must have 8, 12, 13 or 14 digits. You typed {n}.",
+    "errCheck": "These numbers don’t form a valid barcode. Check that no digit was swapped or left out.",
+    "typedFound": "Code found in the catalog",
+    "openRecord": "Open model record",
+    "notInCatTag": "Valid code, not in the catalog",
+    "typedNotInCat": "This code isn’t one of the 40 documented in this preview. That doesn’t mean the product doesn’t exist — it just hasn’t been added to the catalog yet.",
+    "checking": "Looking up…",
+    "checkingText": "Looking up code 7891129614529 in the catalog.",
+    "checkingNote": "The button stays busy to prevent double submissions. With no answer within the timeout (suggested: 10 s), the temporary failure appears.",
+    "failTag": "Temporary failure",
+    "failTitle": "We couldn’t complete the lookup.",
+    "failText": "The problem was on Duraverso’s side, not with the code. Your numbers were kept so you can try again.",
+    "retry": "Try again",
+    "editCode": "Edit the numbers",
+    "failNote": "If it keeps failing, searching by brand or model uses the same catalog."
+  },
+  "support": {
+    "ui": {
+      "home": "Home",
+      "crumbs": "Breadcrumb",
+      "onPage": "On this page",
+      "explore": "Browse the models",
+      "notOpen": "Contributions aren’t open yet in this preview.",
+      "pending": "Not defined yet",
+      "access": "Access",
+      "market": "Catalog of products sold in Brazil.",
+      "footNav": "Footer",
+      "links": [
+        "How it works",
+        "Community rules",
+        "Privacy",
+        "My account"
+      ]
+    },
+    "pages": {
+      "como": {
+        "crumb": "How it works",
+        "eyebrow": "Information that gains value over time",
+        "title": "Owners have a lot to tell.",
+        "intro": "Duraverso brings together usage experiences with products that work well, needed repairs or stopped working.",
+        "sections": [
+          {
+            "title": "Find the right model",
+            "text": "Browsing is public: search by brand and model or by barcode. Before contributing, you’ll need to confirm the variant, including its voltage."
+          },
+          {
+            "title": "Satisfaction and durability are different",
+            "text": "The Community Score reflects satisfaction, from 1 to 5 stars. The performance and repair history describes experiences over time. A high score doesn’t guarantee a long lifespan."
+          },
+          {
+            "title": "When does an average appear?",
+            "text": "With fewer than 20 eligible ratings from different owners per variant, only individual reports and the number of contributions are shown. From that threshold on, the average is labeled preliminary — and that number doesn’t guarantee statistical representativeness."
+          },
+          {
+            "title": "An experience can change",
+            "text": "Each person will have one active rating per model. Updates replace the previous vote. Repairs add events to the history, not new votes."
+          },
+          {
+            "title": "Working fine matters too",
+            "text": "You don’t need a complaint to take part: an owner can report that the product is still working. If they don’t come back, we won’t assume the product is still in use — the date of the last confirmation stays visible."
+          },
+          {
+            "title": "Transparency about the pilot",
+            "text": "This preview lets you explore 20 candidate models and try the search. Login, publishing experiences and administrative review aren’t active yet. There are no fictitious reviews and no collection of receipts."
+          }
+        ]
+      },
+      "regras": {
+        "crumb": "Community rules",
+        "eyebrow": "Respect for everyone’s experience",
+        "title": "An honest story is worth more.",
+        "intro": "These are the rules planned for the pilot.",
+        "previewFlag": true,
+        "sections": [
+          {
+            "title": "Share your experience",
+            "text": "Contribute about a product you use or have used, identify the model correctly, and keep in mind that other people may have different experiences."
+          },
+          {
+            "title": "Describe what happened",
+            "text": "Report the symptom and the repair separately — for example, “It stopped spinning” and “The control board had to be replaced”. If you don’t know the cause, say so."
+          },
+          {
+            "title": "Protect personal data",
+            "text": "Don’t include phone numbers, addresses, documents, serial numbers or other people’s data. Photos and receipts are not part of the first phase."
+          },
+          {
+            "title": "Equal review criteria",
+            "text": "Positive and negative reports follow the same criteria. Review may ask for corrections but won’t change your rating or opinion. Advertising, personal attacks, copied reports and vote manipulation aren’t accepted."
+          },
+          {
+            "title": "Right to correct and appeal",
+            "text": "You’ll be able to update or withdraw a contribution. Decisions not to publish will give the reason and let you ask for reconsideration."
+          },
+          {
+            "title": "A declared report isn’t proof",
+            "text": "Signing in with Google will give access to your account, but it doesn’t prove ownership, repairs or a person’s unique identity. Manual review doesn’t turn a report into documentary evidence."
+          }
+        ]
+      },
+      "privacidade": {
+        "crumb": "Privacy",
+        "eyebrow": "Catalog preview",
+        "title": "Clarity about your data.",
+        "intro": "In this preview you can browse the catalog. Accounts, reviews and file uploads aren’t open yet.",
+        "sections": [
+          {
+            "title": "Search and site access",
+            "text": "Search covers the project’s models. What you search for appears in the page address and may stay in your browser history, so avoid personal information in searches. On the Vercel-hosted version, requests go through the hosting infrastructure, which may create technical access logs (IP address, time, requested page). No advertising or visitor-analytics tool is built in."
+          },
+          {
+            "title": "Camera under your control",
+            "text": "The camera is only requested when you tap “Open camera”. Barcode reading happens on your device and images aren’t sent to Duraverso. You can stop reading with the on-screen button."
+          },
+          {
+            "title": "Accounts and contributions disabled",
+            "text": "The preview doesn’t start Google sign-in, doesn’t create accounts and doesn’t accept reports. There is no owner database or reviews in use at this stage."
+          },
+          {
+            "title": "Before participation opens",
+            "text": "This notice will be expanded before accounts open, which depends on this preparation:",
+            "items": [
+              "Service operator",
+              "Contact channel",
+              "Suppliers",
+              "Retention periods",
+              "Deletion procedure"
+            ]
+          }
+        ]
+      },
+      "conta": {
+        "crumb": "My account",
+        "eyebrow": "Your experience matters",
+        "title": "Your stories, all in one place.",
+        "intro": "Once the pilot opens, you’ll be able to register products, share experiences and follow the review of your contributions.",
+        "isAccount": true,
+        "statusTitle": "Access isn’t available yet in this preview.",
+        "statusText": "No account will be created. Browsing the catalog stays free, with no sign-up.",
+        "loginLabel": "Sign in with Google",
+        "loginWhy": "Button disabled: sign-in isn’t active yet.",
+        "cta": "Browse without an account"
+      }
+    }
+  }
+}

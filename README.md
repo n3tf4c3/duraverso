@@ -1,6 +1,6 @@
 # Duraverso
 
-Histórias reais. Escolhas que duram.
+Experiências de uso de produtos, por versão.
 
 Base web do catálogo comunitário de lavadoras. A prévia do catálogo pode ser hospedada
 na Vercel, com contas e contribuições desativadas. Nenhum banco é necessário nessa fase.
@@ -17,6 +17,25 @@ pnpm web
 Abra http://127.0.0.1:3107. O desenvolvimento funciona sem credenciais.
 Para testar o build: `pnpm web:build`, depois `pnpm web:start`.
 Não executar desenvolvimento e produção na mesma porta ao mesmo tempo.
+
+## Interface e idiomas
+
+O visual segue a direção “Arquivo de uso”: busca, índice por marca, lista de modelos,
+fichas com fontes e estados explícitos de conferência. Fotos só entram quando houver
+uma imagem licenciada do modelo. As contagens da interface vêm do catálogo.
+
+A prévia pública está disponível em português (URLs originais), inglês (`/en`) e
+espanhol (`/es`). O seletor com bandeiras preserva caminho, busca, filtros e seção;
+guarda a preferência no cookie `duraverso_locale` por até um ano. Idioma não altera
+o mercado brasileiro nem traduz referências de produtos ou relatos de usuários.
+Dicionários: `apps/web/src/messages`. A interface operacional do piloto conectado
+(administração, avaliação e conta autenticada) permanece em português.
+
+As páginas públicas ficam em `app/[locale]`; os fluxos privados em `app/(operations)`.
+O `proxy.ts` compõe idioma e CSP: detalhes, conta, avaliação e administração mantêm
+nonce por requisição. APIs permanecem em `/api`, sem prefixo de idioma.
+Após mover rotas, iniciar `pnpm web` uma vez regenera também os tipos de desenvolvimento
+do Next, evitando referências antigas em `.next/dev/types` durante o build.
 
 ## Prévia na Vercel
 
@@ -41,6 +60,11 @@ pnpm typecheck
 pnpm test
 pnpm test:integration
 ```
+
+Com `pnpm web:start` rodando, `node apps/web/scripts/smoke-preview.mjs` verifica por
+HTTP as páginas nos três idiomas, filtros, todos os códigos documentados, conta
+desativada, preferência de idioma e nonce correspondente no HTML. Esse teste não
+substitui a revisão visual e a leitura com câmera real.
 
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.

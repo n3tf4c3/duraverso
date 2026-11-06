@@ -1,0 +1,399 @@
+{
+  "meta": {
+    "title": "Duraverso — cómo se comporta cada lavadora en el día a día",
+    "description": "Experiencias de propietarios sobre funcionamiento, problemas, reparaciones y satisfacción, según la versión exacta del producto. Vista previa del catálogo de lavadoras vendidas en Brasil."
+  },
+  "header": {
+    "skip": "Saltar al contenido",
+    "home": "inicio",
+    "navLabel": "Principal",
+    "catalog": "Catálogo",
+    "scan": "Leer código",
+    "how": "Cómo funciona",
+    "preview": "Vista previa · acceso libre",
+    "langButton": "Idioma",
+    "menuTitle": "Idioma de la interfaz",
+    "menuNote": "El catálogo incluye productos vendidos en Brasil. Cambiar el idioma solo cambia los textos del sitio."
+  },
+  "common": {
+    "market": "Catálogo de productos vendidos en Brasil.",
+    "verified": "Verificado",
+    "toConfirm": "Por confirmar",
+    "inReview": "En verificación",
+    "noReportsYet": "Ninguna experiencia aún",
+    "viewRecord": "Ver ficha",
+    "washer": "Lavadora",
+    "washingMachine": "Lavadora",
+    "topLoad": "Carga superior",
+    "models": "modelos",
+    "ofThreshold": "{n} de 20",
+    "originalReport": "Experiencia original en {language}"
+  },
+  "home": {
+    "eyebrow": "Lavadoras · vista previa del catálogo",
+    "title": "Encuentra tu modelo.",
+    "lead": "Cómo se comporta cada lavadora en el día a día de quien la usa: funcionamiento, problemas, reparaciones y satisfacción, siempre según la versión exacta del producto.",
+    "searchLabel": "Buscar en el catálogo",
+    "searchPlaceholder": "Marca, modelo o código de barras",
+    "searchButton": "Buscar",
+    "scanLink": "Escanear código de barras con la cámara",
+    "statusTitle": "Estado del archivo",
+    "statusModels": "Modelos candidatos",
+    "statusCodes": "Códigos de barras documentados",
+    "statusReports": "Experiencias publicadas",
+    "statusSubmissions": "Envío de experiencias",
+    "statusSubmissionsValue": "Aún no disponible",
+    "statusNote": "Esto es una vista previa. No hay valoraciones ficticias: lo que ves aquí es lo que ya se ha verificado.",
+    "catalogTitle": "Catálogo de lavadoras",
+    "catalogSub": "20 modelos candidatos, por marca. En orden de catálogo, sin ranking.",
+    "catalogAll": "Ver catálogo con filtros",
+    "catalogNoReports": "Ningún modelo tiene experiencias publicadas todavía.",
+    "howTitle": "Qué reúne cada ficha",
+    "how": [
+      {
+        "title": "Versión exacta",
+        "text": "Modelo, referencia, tensión y GTIN. Cada dato indica su fuente y la fecha de verificación. Las variantes no se mezclan."
+      },
+      {
+        "title": "Tiempo de uso",
+        "text": "Experiencias ordenadas según cuánto tiempo lleva en uso la lavadora, con la fecha de la última confirmación del propietario."
+      },
+      {
+        "title": "Mantenimiento y reparaciones",
+        "text": "Qué falló, cuándo y cómo se resolvió. Las reparaciones se suman al historial; no cuentan como votos."
+      },
+      {
+        "title": "Satisfacción",
+        "text": "Una nota de 1 a 5, separada de la durabilidad. La media solo aparece con 20 valoraciones válidas de propietarios distintos por variante."
+      }
+    ],
+    "ownersTitle": "¿Ya tienes una de estas lavadoras?",
+    "ownersText": "El envío de experiencias aún no está disponible en esta vista previa. Cuando se abra, cada persona tendrá una valoración activa por modelo, que podrá actualizar con el tiempo.",
+    "ownersLink": "Leer las normas de participación"
+  },
+  "catalog": {
+    "title": "Catálogo de lavadoras",
+    "sub": "20 modelos candidatos de Brastemp, Consul y Electrolux vendidos en Brasil.",
+    "searchLabel": "Buscar por marca, modelo o código de barras",
+    "searchPlaceholder": "Ej.: CWH13AB o 7891129614529",
+    "searchButton": "Buscar",
+    "filters": "Filtros",
+    "brand": "Marca",
+    "allBrands": "Todas",
+    "capacity": "Capacidad",
+    "allCapacities": "Todas las capacidades",
+    "capUpTo10": "Hasta 10 kg",
+    "cap10to13": "Más de 10 y hasta 13 kg",
+    "capOver13": "Más de 13 kg",
+    "clear": "Borrar búsqueda y filtros",
+    "order": "Orden del catálogo · sin ranking",
+    "colModel": "Modelo",
+    "colBrand": "Marca",
+    "colCapacity": "Capacidad",
+    "colReports": "Experiencias",
+    "colAction": "Acción",
+    "footnote": "La tensión y las variantes se verifican en cada ficha.",
+    "countOne": "{n} modelo encontrado",
+    "countMany": "{n} modelos encontrados",
+    "countFor": "para «{q}»",
+    "emptyQueryTitle": "No encontramos modelos para «{q}».",
+    "emptyFiltersTitle": "Ningún modelo coincide con estos filtros.",
+    "emptyCodeText": "Este código no está entre los 40 documentados en esta vista previa. No significa que el producto no exista ni que la cámara haya fallado: simplemente aún no está en el catálogo. Revisa los números en la caja.",
+    "emptyQueryText": "Revisa el modelo tal como aparece en la etiqueta del producto o busca solo por la marca.",
+    "emptyFiltersText": "Prueba otro rango de capacidad o vuelve a mostrar todas las marcas.",
+    "emptyScan": "Escanear el código de barras con la cámara",
+    "emptyScope": "En esta vista previa, el catálogo solo incluye lavadoras de Brastemp, Consul y Electrolux vendidas en Brasil."
+  },
+  "scanner": {
+    "title": "Escanear código de barras",
+    "intro": "Usa el código con números debajo de las barras, en la caja o en la etiqueta de la lavadora.",
+    "openCamera": "Abrir cámara",
+    "privacy": "La cámara solo se abre si lo permites. La lectura se hace en tu dispositivo; no se envía ninguna imagen a Duraverso.",
+    "or": "o",
+    "typeLabel": "Escribe los números del código",
+    "typePlaceholder": "13 dígitos",
+    "typeHint": "Los números que aparecen justo debajo de las barras (EAN/GTIN).",
+    "lookUp": "Consultar",
+    "byName": "Buscar por marca o modelo",
+    "cameraView": "Imagen de la cámara",
+    "looking": "Buscando un código…",
+    "aim": "Encuadra las barras en el marco. Aquí no se leen códigos QR ni nombres de modelo.",
+    "typeInstead": "Escribir números",
+    "closeCamera": "Cerrar cámara",
+    "found": "Código reconocido",
+    "codeForModel": "Código de este modelo",
+    "voltage": "Tensión",
+    "labelTip": "Antes de comprar, revisa la tensión (127 V o 220 V) en la etiqueta del producto.",
+    "openRecord": "Abrir ficha del modelo",
+    "scanAnother": "Escanear otro código",
+    "notFoundTag": "No está en el catálogo",
+    "notFoundTitle": "Todavía no tenemos este código.",
+    "notFoundText": "No está entre los 40 códigos documentados en esta vista previa. La cámara funcionó bien: el producto aún no se ha añadido al catálogo.",
+    "retype": "Revisar y escribir los números",
+    "invalidLength": "El código debe tener 8, 12, 13 o 14 dígitos.",
+    "permissionDenied": "No se ha permitido el uso de la cámara. Puedes escribir los números del código aquí abajo.",
+    "cameraUnavailable": "No se pudo abrir la cámara en este dispositivo. Escribe los números del código.",
+    "scope": "En esta vista previa, el catálogo solo incluye lavadoras de Brastemp, Consul y Electrolux vendidas en Brasil."
+  },
+  "product": {
+    "breadcrumb": "Ruta",
+    "photoPlaceholder": "Espacio para foto del fabricante: aún sin imagen con licencia",
+    "summaryId": "Identificación del modelo",
+    "summaryVoltage": "Tensión por código",
+    "summaryReports": "Experiencias de propietarios",
+    "noneYet": "Ninguna publicada",
+    "checkedOn": "Fuente del fabricante consultada el {date}.",
+    "knownTitle": "Lo que ya sabemos de esta lavadora",
+    "field": "Dato",
+    "value": "Valor",
+    "status": "Estado",
+    "brand": "Marca",
+    "reference": "Modelo de referencia",
+    "capacity": "Capacidad nominal",
+    "type": "Tipo",
+    "voltage": "Tensión",
+    "voltageNote": "No confirmada por código. Revisa la etiqueta.",
+    "sourceMaker": "Ver fuente del fabricante",
+    "sourceCodes": "Ver fuente de los códigos",
+    "variantsTitle": "Variantes conocidas",
+    "variantsSub": "Cada código de barras puede corresponder a una versión distinta. Las experiencias y las medias nunca se mezclan entre variantes.",
+    "colReports": "Experiencias",
+    "colRatings": "Valoraciones para la media",
+    "experienceTitle": "Experiencias de uso",
+    "experienceEmpty": "Todavía no hay experiencias publicadas.",
+    "experienceEmptySub": "Cuando las haya, cada una aparecerá en esta escala según el tiempo de uso de la lavadora, con la fecha de la última confirmación del propietario.",
+    "oneYear": "1 año",
+    "slots": [
+      {
+        "title": "Funcionamiento",
+        "text": "Cómo se comporta la lavadora en el día a día: ruido, consumo, resultado del lavado."
+      },
+      {
+        "title": "Problemas y reparaciones",
+        "text": "Qué falló, después de cuánto tiempo y cómo se resolvió. No cuenta para la media."
+      },
+      {
+        "title": "Satisfacción",
+        "text": "Nota de 1 a 5. La media solo aparece con 20 valoraciones válidas de propietarios distintos de la misma variante."
+      }
+    ],
+    "zeroReports": "0 experiencias",
+    "nextTitle": "Próximos pasos",
+    "nextSimilar": "Ver otras lavadoras de 10 a 13 kg",
+    "voltageHowTitle": "Cómo comprobar la tensión",
+    "voltageHowText": "La tensión (127 V o 220 V) figura en la etiqueta del producto y en la caja. Revísala antes de comprar.",
+    "ownersTitle": "¿Tienes esta lavadora?",
+    "ownersText": "El envío de experiencias aún no está disponible en esta vista previa. La consulta sigue siendo libre, sin cuenta.",
+    "reviewTitle": "Estamos verificando esta versión.",
+    "reviewText": "Los datos de abajo aún no se han confirmado con la fuente del fabricante. Mientras tanto, la ficha no admite experiencias y nada de lo que aparece aquí debe tomarse como especificación.",
+    "reviewFields": "Datos en verificación",
+    "seeVerified": "Ver modelos ya verificados"
+  },
+  "footer": {
+    "tagline": "Experiencias de uso de productos, versión por versión.",
+    "navLabel": "Pie de página",
+    "rules": "Normas",
+    "privacy": "Privacidad"
+  },
+  "catalogMobile": {
+    "title": "Catálogo de lavadoras",
+    "sub": "20 modelos candidatos vendidos en Brasil. En orden de catálogo, sin ranking.",
+    "searchLabel": "Marca, modelo o código de barras",
+    "placeholder": "Ej.: CWH13AB",
+    "searchBtn": "Buscar",
+    "filtersBtn": "Filtros",
+    "clearShort": "Borrar",
+    "clear": "Borrar búsqueda y filtros",
+    "clearFiltersOnly": "Quitar solo los filtros",
+    "applied": "Filtros aplicados",
+    "removeFilter": "Quitar filtro",
+    "closeFilters": "Cerrar filtros",
+    "brand": "Marca",
+    "capacity": "Capacidad",
+    "all": "Todas las marcas",
+    "allCap": "Todas las capacidades",
+    "c1": "Hasta 10 kg",
+    "c2": "Más de 10 y hasta 13 kg",
+    "c3": "Más de 13 kg",
+    "colModel": "Modelo",
+    "colBrand": "Marca",
+    "colCap": "Capacidad",
+    "colReports": "Experiencias",
+    "colAction": "Acción",
+    "none": "ninguna aún",
+    "open": "Ver ficha",
+    "one": "modelo encontrado",
+    "many": "modelos encontrados",
+    "forQ": "para",
+    "showOne": "Ver 1 modelo",
+    "showMany": "Ver {n} modelos",
+    "showNone": "Ningún modelo",
+    "emptyTitleQ": "No encontramos modelos para «{q}».",
+    "emptyTitleF": "Ningún modelo coincide con esta combinación de filtros.",
+    "emptyText": "Revisa el modelo tal como aparece en la etiqueta del producto o busca solo por la marca.",
+    "emptyCode": "Este código no está entre los 40 documentados en esta vista previa. No significa que el producto no exista: simplemente aún no está en el catálogo.",
+    "emptyFilters": "No hay lavadoras {brand} de {cap} en el catálogo de la vista previa. Cambia uno de los filtros.",
+    "emptyScan": "Escanear el código de barras",
+    "emptyScope": "En esta vista previa, el catálogo solo incluye lavadoras de Brastemp, Consul y Electrolux vendidas en Brasil."
+  },
+  "scannerStates": {
+    "deniedTitle": "No se permitió usar la cámara",
+    "deniedText": "El acceso se denegó o está bloqueado en la configuración del navegador. Para escanear con la cámara, permite el acceso a este sitio y vuelve a intentarlo. También puedes escribir los números.",
+    "retryCamera": "Volver a abrir la cámara",
+    "typeLabel": "Escribe los números del código",
+    "typePh": "13 dígitos",
+    "typeHint": "Los números justo debajo de las barras (EAN/GTIN): 8, 12, 13 o 14 dígitos.",
+    "check": "Consultar",
+    "byName": "Buscar por marca o modelo",
+    "focusNote": "El foco pasa directamente al campo de texto.",
+    "noCamTitle": "No encontramos ninguna cámara",
+    "noCamText": "Este dispositivo no tiene cámara disponible o la está usando otra aplicación. Escribe los números del código abajo.",
+    "typeTitle": "Consultar por número",
+    "errEmpty": "Escribe los números del código de barras.",
+    "errChars": "Usa solo números, sin letras, espacios ni guiones.",
+    "errLength": "El código debe tener 8, 12, 13 o 14 dígitos. Has escrito {n}.",
+    "errCheck": "Estos números no forman un código de barras válido. Comprueba que no falte ni se haya cambiado ningún dígito.",
+    "typedFound": "Código encontrado en el catálogo",
+    "openRecord": "Abrir ficha del modelo",
+    "notInCatTag": "Código válido, fuera del catálogo",
+    "typedNotInCat": "Este código no está entre los 40 documentados en esta vista previa. No significa que el producto no exista: simplemente aún no se ha añadido al catálogo.",
+    "checking": "Consultando…",
+    "checkingText": "Consultando el código 7891129614529 en el catálogo.",
+    "checkingNote": "El botón queda ocupado para evitar envíos dobles. Si no hay respuesta en el tiempo límite (sugerencia: 10 s), aparece el fallo temporal.",
+    "failTag": "Fallo temporal",
+    "failTitle": "No pudimos hacer la consulta.",
+    "failText": "El problema fue del servicio de Duraverso, no del código. Hemos guardado tus números para que vuelvas a intentarlo.",
+    "retry": "Reintentar",
+    "editCode": "Corregir los números",
+    "failNote": "Si el fallo continúa, la búsqueda por marca o modelo usa el mismo catálogo."
+  },
+  "support": {
+    "ui": {
+      "home": "Inicio",
+      "crumbs": "Ruta",
+      "onPage": "En esta página",
+      "explore": "Explorar los modelos",
+      "notOpen": "Las contribuciones aún no están abiertas en esta vista previa.",
+      "pending": "Aún sin definir",
+      "access": "Acceso",
+      "market": "Catálogo de productos vendidos en Brasil.",
+      "footNav": "Pie de página",
+      "links": [
+        "Cómo funciona",
+        "Normas de la comunidad",
+        "Privacidad",
+        "Mi cuenta"
+      ]
+    },
+    "pages": {
+      "como": {
+        "crumb": "Cómo funciona",
+        "eyebrow": "Información que gana valor con el tiempo",
+        "title": "Quien lo usa tiene mucho que contar.",
+        "intro": "Duraverso reúne experiencias de uso de productos que funcionan bien, que necesitaron reparación o que dejaron de funcionar.",
+        "sections": [
+          {
+            "title": "Encuentra el modelo correcto",
+            "text": "La consulta es pública: busca por marca y modelo o por código de barras. Antes de contribuir, habrá que confirmar la variante, incluida la tensión."
+          },
+          {
+            "title": "Satisfacción y durabilidad son distintas",
+            "text": "La Nota de la Comunidad representa la satisfacción, de 1 a 5 estrellas. El historial de funcionamiento y reparaciones describe experiencias a lo largo del tiempo. Una nota alta no garantiza una larga vida útil."
+          },
+          {
+            "title": "¿Cuándo aparece una media?",
+            "text": "Con menos de 20 valoraciones válidas de propietarios distintos por variante, solo se muestran las experiencias individuales y el número de contribuciones. A partir de ese límite, la media se indica como preliminar, y ese número no garantiza representatividad estadística."
+          },
+          {
+            "title": "Una experiencia puede cambiar",
+            "text": "Cada persona tendrá una valoración activa por modelo. Las actualizaciones sustituyen el voto anterior. Las reparaciones añaden eventos al historial, no votos nuevos."
+          },
+          {
+            "title": "Que funcione bien también importa",
+            "text": "No hace falta tener una queja para participar: el propietario puede indicar que el producto sigue funcionando. Si no vuelve, no supondremos que el producto sigue en uso: la fecha de la última confirmación quedará visible."
+          },
+          {
+            "title": "Transparencia sobre el piloto",
+            "text": "Esta vista previa permite explorar 20 modelos candidatos y probar la búsqueda. El inicio de sesión, la publicación de experiencias y la revisión administrativa aún no están activos. No hay valoraciones ficticias ni recogida de comprobantes."
+          }
+        ]
+      },
+      "regras": {
+        "crumb": "Normas de la comunidad",
+        "eyebrow": "Respeto por la experiencia de cada uno",
+        "title": "Una historia honesta vale más.",
+        "intro": "Estas son las normas previstas para el piloto.",
+        "previewFlag": true,
+        "sections": [
+          {
+            "title": "Cuenta tu experiencia",
+            "text": "Contribuye sobre un producto que usas o has usado, identifica bien el modelo y recuerda que otras personas pueden tener experiencias distintas."
+          },
+          {
+            "title": "Describe lo que pasó",
+            "text": "Indica el síntoma y la reparación por separado; por ejemplo, «Dejó de centrifugar» y «Hubo que cambiar la placa». Si no sabes la causa, dilo."
+          },
+          {
+            "title": "Protege los datos personales",
+            "text": "No incluyas teléfonos, direcciones, documentos, números de serie ni datos de otras personas. Las fotos y los comprobantes no forman parte de la primera fase."
+          },
+          {
+            "title": "Revisión con los mismos criterios",
+            "text": "Las experiencias positivas y negativas siguen los mismos criterios. La revisión puede pedir correcciones, pero no cambia tu nota ni tu opinión. No se aceptan publicidad, ataques personales, experiencias copiadas ni manipulación de votos."
+          },
+          {
+            "title": "Derecho a corregir y a pedir revisión",
+            "text": "Podrás actualizar o retirar una contribución. Las decisiones de no publicar indicarán el motivo y permitirán solicitar una nueva revisión."
+          },
+          {
+            "title": "Lo declarado no es una prueba",
+            "text": "Iniciar sesión con Google dará acceso a la cuenta, pero no demuestra la propiedad, las reparaciones ni la identidad única de una persona. La revisión manual no convierte una experiencia en prueba documental."
+          }
+        ]
+      },
+      "privacidade": {
+        "crumb": "Privacidad",
+        "eyebrow": "Vista previa del catálogo",
+        "title": "Claridad sobre tus datos.",
+        "intro": "En esta vista previa puedes consultar el catálogo. Las cuentas, las valoraciones y el envío de archivos aún no están abiertos.",
+        "sections": [
+          {
+            "title": "Búsqueda y acceso al sitio",
+            "text": "La búsqueda abarca los modelos del proyecto. El texto buscado aparece en la dirección de la página y puede quedar en el historial del navegador, así que evita incluir información personal. En la versión alojada en Vercel, las solicitudes pasan por la infraestructura de alojamiento, que puede generar registros técnicos de acceso (dirección IP, hora, página solicitada). No hay ninguna herramienta de publicidad ni de análisis de visitantes integrada."
+          },
+          {
+            "title": "La cámara, bajo tu control",
+            "text": "La cámara solo se solicita cuando tocas «Abrir cámara». La lectura del código se hace en el dispositivo y las imágenes no se envían a Duraverso. Puedes detener la lectura con el botón en pantalla."
+          },
+          {
+            "title": "Cuentas y contribuciones desactivadas",
+            "text": "La vista previa no inicia sesión con Google, no crea cuentas ni acepta experiencias. En esta fase no hay base de propietarios ni valoraciones en uso."
+          },
+          {
+            "title": "Antes de abrir la participación",
+            "text": "Este aviso se ampliará antes de abrir las cuentas, que dependen de esta preparación:",
+            "items": [
+              "Responsable del servicio",
+              "Canal de contacto",
+              "Proveedores",
+              "Plazos de conservación",
+              "Procedimiento de eliminación"
+            ]
+          }
+        ]
+      },
+      "conta": {
+        "crumb": "Mi cuenta",
+        "eyebrow": "Tu experiencia tiene valor",
+        "title": "Tus historias, en un solo lugar.",
+        "intro": "Cuando se abra el piloto, podrás registrar productos, compartir experiencias y seguir la revisión de tus contribuciones.",
+        "isAccount": true,
+        "statusTitle": "El acceso aún no está disponible en esta vista previa.",
+        "statusText": "No se creará ninguna cuenta. La consulta del catálogo sigue siendo libre, sin registro.",
+        "loginLabel": "Iniciar sesión con Google",
+        "loginWhy": "Botón desactivado: el inicio de sesión aún no está activo.",
+        "cta": "Explorar sin crear cuenta"
+      }
+    }
+  }
+}

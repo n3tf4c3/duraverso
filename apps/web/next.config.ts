@@ -1,5 +1,9 @@
 import type { NextConfig } from 'next';
 const config: NextConfig = {
+  experimental: { globalNotFound: true },
+  // Keep the original loopback origin: normalizing 127.0.0.1 to localhost
+  // makes a locale rewrite look external to the local production server.
+  skipProxyUrlNormalize: true,
   transpilePackages: ['@duraverso/core'],
   poweredByHeader: false,
   async headers() {
