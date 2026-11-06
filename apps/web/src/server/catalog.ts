@@ -11,6 +11,7 @@ export class PublicCatalogService {
       const rows = await this.db.query(`SELECT p.slug AS id,p.slug,p.brand,p.model,p.category,p.capacity_kg::float AS "capacityKg",
         p.capacity_liters::float AS "capacityLiters",p.burner_count AS "burnerCount",
         p.place_settings AS "placeSettings",p.power_watts::float AS "powerWatts",
+        p.cooling_capacity_btu_h::float AS "coolingCapacityBtuH",
         p.source_url AS "sourceUrl",to_char(p.source_checked_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS "sourceCheckedAt",
         'verified' AS identification,
         COALESCE(array_agg(DISTINCT g.code ORDER BY g.code) FILTER (WHERE g.code IS NOT NULL),ARRAY[]::varchar[]) AS "confirmedGtins"

@@ -1,0 +1,1141 @@
+{
+  "id": "f8e16239-86d7-404e-b609-1e368401f43f",
+  "prevId": "8019ecd8-54c2-4b12-9a76-8338e753e3f5",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.catalog_decisions": {
+      "name": "catalog_decisions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "administrator_id": {
+          "name": "administrator_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "variant_id": {
+          "name": "variant_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "before_verified": {
+          "name": "before_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "after_verified": {
+          "name": "after_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "snapshot": {
+          "name": "snapshot",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "catalog_decisions_administrator_id_users_id_fk": {
+          "name": "catalog_decisions_administrator_id_users_id_fk",
+          "tableFrom": "catalog_decisions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "administrator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "catalog_decisions_product_id_products_id_fk": {
+          "name": "catalog_decisions_product_id_products_id_fk",
+          "tableFrom": "catalog_decisions",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "catalog_decisions_variant_id_product_id_variants_id_product_id_fk": {
+          "name": "catalog_decisions_variant_id_product_id_variants_id_product_id_fk",
+          "tableFrom": "catalog_decisions",
+          "tableTo": "variants",
+          "columnsFrom": [
+            "variant_id",
+            "product_id"
+          ],
+          "columnsTo": [
+            "id",
+            "product_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "catalog_decision_reason_required": {
+          "name": "catalog_decision_reason_required",
+          "value": "length(trim(\"catalog_decisions\".\"reason\")) > 0"
+        },
+        "catalog_decision_changes_state": {
+          "name": "catalog_decision_changes_state",
+          "value": "\"catalog_decisions\".\"before_verified\" <> \"catalog_decisions\".\"after_verified\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.catalog_variant_evidence": {
+      "name": "catalog_variant_evidence",
+      "schema": "",
+      "columns": {
+        "gtin_code": {
+          "name": "gtin_code",
+          "type": "varchar(14)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "voltage_source_url": {
+          "name": "voltage_source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "checked_at": {
+          "name": "checked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "catalog_variant_evidence_gtin_code_gtins_code_fk": {
+          "name": "catalog_variant_evidence_gtin_code_gtins_code_fk",
+          "tableFrom": "catalog_variant_evidence",
+          "tableTo": "gtins",
+          "columnsFrom": [
+            "gtin_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "catalog_evidence_note_required": {
+          "name": "catalog_evidence_note_required",
+          "value": "length(trim(\"catalog_variant_evidence\".\"note\")) > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.gtins": {
+      "name": "gtins",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "varchar(14)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "variant_id": {
+          "name": "variant_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "gtins_variant_id_variants_id_fk": {
+          "name": "gtins_variant_id_variants_id_fk",
+          "tableFrom": "gtins",
+          "tableTo": "variants",
+          "columnsFrom": [
+            "variant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "gtin_format": {
+          "name": "gtin_format",
+          "value": "\"gtins\".\"code\" ~ '^([0-9]{8}|[0-9]{12}|[0-9]{13}|[0-9]{14})$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.moderation_actions": {
+      "name": "moderation_actions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "moderator_id": {
+          "name": "moderator_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_type": {
+          "name": "target_type",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_id": {
+          "name": "target_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "moderation_actions_moderator_id_users_id_fk": {
+          "name": "moderation_actions_moderator_id_users_id_fk",
+          "tableFrom": "moderation_actions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "moderator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "moderation_reason_required": {
+          "name": "moderation_reason_required",
+          "value": "length(trim(\"moderation_actions\".\"reason\")) > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.ownerships": {
+      "name": "ownerships",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "variant_id": {
+          "name": "variant_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "started_using": {
+          "name": "started_using",
+          "type": "varchar(7)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "acquired_used": {
+          "name": "acquired_used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "functioning": {
+          "name": "functioning",
+          "type": "functioning_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_confirmed_at": {
+          "name": "last_confirmed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ended_at": {
+          "name": "ended_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ownerships_owner_id_users_id_fk": {
+          "name": "ownerships_owner_id_users_id_fk",
+          "tableFrom": "ownerships",
+          "tableTo": "users",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ownerships_product_id_products_id_fk": {
+          "name": "ownerships_product_id_products_id_fk",
+          "tableFrom": "ownerships",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ownerships_variant_id_product_id_variants_id_product_id_fk": {
+          "name": "ownerships_variant_id_product_id_variants_id_product_id_fk",
+          "tableFrom": "ownerships",
+          "tableTo": "variants",
+          "columnsFrom": [
+            "variant_id",
+            "product_id"
+          ],
+          "columnsTo": [
+            "id",
+            "product_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "owner_one_model": {
+          "name": "owner_one_model",
+          "nullsNotDistinct": false,
+          "columns": [
+            "owner_id",
+            "product_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "ownership_month_format": {
+          "name": "ownership_month_format",
+          "value": "\"ownerships\".\"started_using\" ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.products": {
+      "name": "products",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "brand": {
+          "name": "brand",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "model": {
+          "name": "model",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'washing_machine'"
+        },
+        "capacity_kg": {
+          "name": "capacity_kg",
+          "type": "numeric(4, 1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capacity_liters": {
+          "name": "capacity_liters",
+          "type": "numeric(7, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "burner_count": {
+          "name": "burner_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "place_settings": {
+          "name": "place_settings",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "power_watts": {
+          "name": "power_watts",
+          "type": "numeric(8, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cooling_capacity_btu_h": {
+          "name": "cooling_capacity_btu_h",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_checked_at": {
+          "name": "source_checked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verified": {
+          "name": "verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "catalog_revision": {
+          "name": "catalog_revision",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "products_slug_unique": {
+          "name": "products_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        },
+        "product_brand_model_unique": {
+          "name": "product_brand_model_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "brand",
+            "model"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "capacity_positive": {
+          "name": "capacity_positive",
+          "value": "\"products\".\"capacity_kg\" > 0"
+        },
+        "product_category_supported": {
+          "name": "product_category_supported",
+          "value": "\"products\".\"category\" IN ('washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven', 'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker', 'air_conditioner')"
+        },
+        "capacity_liters_positive": {
+          "name": "capacity_liters_positive",
+          "value": "\"products\".\"capacity_liters\" > 0"
+        },
+        "burner_count_positive": {
+          "name": "burner_count_positive",
+          "value": "\"products\".\"burner_count\" > 0"
+        },
+        "place_settings_positive": {
+          "name": "place_settings_positive",
+          "value": "\"products\".\"place_settings\" > 0"
+        },
+        "power_watts_positive": {
+          "name": "power_watts_positive",
+          "value": "\"products\".\"power_watts\" > 0"
+        },
+        "cooling_capacity_btu_h_positive": {
+          "name": "cooling_capacity_btu_h_positive",
+          "value": "\"products\".\"cooling_capacity_btu_h\" > 0 AND \"products\".\"cooling_capacity_btu_h\" <> 'NaN'::numeric"
+        },
+        "product_category_measures": {
+          "name": "product_category_measures",
+          "value": "(\n    (\"products\".\"category\" <> 'washing_machine' OR \"products\".\"capacity_kg\" IS NOT NULL) AND\n    (\"products\".\"capacity_kg\" IS NULL OR \"products\".\"category\" = 'washing_machine') AND\n    (\"products\".\"capacity_liters\" IS NULL OR \"products\".\"category\" IN ('refrigerator', 'microwave', 'freezer', 'oven', 'air_fryer', 'blender', 'coffee_maker')) AND\n    (\"products\".\"burner_count\" IS NULL OR \"products\".\"category\" IN ('stove', 'cooktop')) AND\n    (\"products\".\"place_settings\" IS NULL OR \"products\".\"category\" = 'dishwasher') AND\n    (\"products\".\"power_watts\" IS NULL OR \"products\".\"category\" = 'vacuum_cleaner') AND\n    (\"products\".\"cooling_capacity_btu_h\" IS NULL OR \"products\".\"category\" = 'air_conditioner')\n  )"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.repairs": {
+      "name": "repairs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "ownership_id": {
+          "name": "ownership_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occurred_month": {
+          "name": "occurred_month",
+          "type": "varchar(7)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "symptom": {
+          "name": "symptom",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repaired": {
+          "name": "repaired",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resulting_status": {
+          "name": "resulting_status",
+          "type": "functioning_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cost_cents": {
+          "name": "cost_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "comment": {
+          "name": "comment",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "status": {
+          "name": "status",
+          "type": "review_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "repairs_ownership_id_ownerships_id_fk": {
+          "name": "repairs_ownership_id_ownerships_id_fk",
+          "tableFrom": "repairs",
+          "tableTo": "ownerships",
+          "columnsFrom": [
+            "ownership_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "repair_cost_nonnegative": {
+          "name": "repair_cost_nonnegative",
+          "value": "\"repairs\".\"cost_cents\" IS NULL OR \"repairs\".\"cost_cents\" >= 0"
+        },
+        "repair_month_format": {
+          "name": "repair_month_format",
+          "value": "\"repairs\".\"occurred_month\" ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.review_revisions": {
+      "name": "review_revisions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "review_id": {
+          "name": "review_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "submission_id": {
+          "name": "submission_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "started_using": {
+          "name": "started_using",
+          "type": "varchar(7)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acquired_used": {
+          "name": "acquired_used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "functioning": {
+          "name": "functioning",
+          "type": "functioning_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "buy_again": {
+          "name": "buy_again",
+          "type": "buy_again",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "had_repair": {
+          "name": "had_repair",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comment": {
+          "name": "comment",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "status": {
+          "name": "status",
+          "type": "review_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "review_revisions_review_id_reviews_id_fk": {
+          "name": "review_revisions_review_id_reviews_id_fk",
+          "tableFrom": "review_revisions",
+          "tableTo": "reviews",
+          "columnsFrom": [
+            "review_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "review_revisions_submission_id_unique": {
+          "name": "review_revisions_submission_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "submission_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "revision_rating_range": {
+          "name": "revision_rating_range",
+          "value": "\"review_revisions\".\"rating\" BETWEEN 1 AND 5"
+        },
+        "revision_month_format": {
+          "name": "revision_month_format",
+          "value": "\"review_revisions\".\"started_using\" IS NULL OR \"review_revisions\".\"started_using\" ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.reviews": {
+      "name": "reviews",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "ownership_id": {
+          "name": "ownership_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "buy_again": {
+          "name": "buy_again",
+          "type": "buy_again",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "had_repair": {
+          "name": "had_repair",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comment": {
+          "name": "comment",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "status": {
+          "name": "status",
+          "type": "review_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reviews_ownership_id_ownerships_id_fk": {
+          "name": "reviews_ownership_id_ownerships_id_fk",
+          "tableFrom": "reviews",
+          "tableTo": "ownerships",
+          "columnsFrom": [
+            "ownership_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "reviews_ownership_id_unique": {
+          "name": "reviews_ownership_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ownership_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "review_rating_range": {
+          "name": "review_rating_range",
+          "value": "\"reviews\".\"rating\" BETWEEN 1 AND 5"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "google_subject": {
+          "name": "google_subject",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "account_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'member'"
+        },
+        "session_version": {
+          "name": "session_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "disabled_at": {
+          "name": "disabled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_google_subject_unique": {
+          "name": "users_google_subject_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "google_subject"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.variants": {
+      "name": "variants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "manufacturer_code": {
+          "name": "manufacturer_code",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "voltage": {
+          "name": "voltage",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code_kind": {
+          "name": "code_kind",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verified": {
+          "name": "verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "variants_product_id_products_id_fk": {
+          "name": "variants_product_id_products_id_fk",
+          "tableFrom": "variants",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "variant_product_identity": {
+          "name": "variant_product_identity",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "product_id"
+          ]
+        },
+        "variant_manufacturer_voltage": {
+          "name": "variant_manufacturer_voltage",
+          "nullsNotDistinct": false,
+          "columns": [
+            "product_id",
+            "manufacturer_code",
+            "voltage"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "voltage_supported": {
+          "name": "voltage_supported",
+          "value": "\"variants\".\"voltage\" IN (127, 220)"
+        },
+        "variant_code_kind_supported": {
+          "name": "variant_code_kind_supported",
+          "value": "\"variants\".\"code_kind\" IS NULL OR \"variants\".\"code_kind\" IN ('manufacturer_reference', 'catalog_reference')"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.buy_again": {
+      "name": "buy_again",
+      "schema": "public",
+      "values": [
+        "yes",
+        "no",
+        "unsure"
+      ]
+    },
+    "public.functioning_status": {
+      "name": "functioning_status",
+      "schema": "public",
+      "values": [
+        "working",
+        "with_problem",
+        "not_working"
+      ]
+    },
+    "public.review_status": {
+      "name": "review_status",
+      "schema": "public",
+      "values": [
+        "pending",
+        "changes_requested",
+        "published",
+        "rejected",
+        "withdrawn"
+      ]
+    },
+    "public.account_role": {
+      "name": "account_role",
+      "schema": "public",
+      "values": [
+        "member",
+        "moderator",
+        "admin"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

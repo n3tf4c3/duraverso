@@ -90,13 +90,15 @@ describe.sequential('importação persistente do catálogo', () => {
     ['coffee_maker', 'Philips Walita', 'capacityLiters', 1.25],
     ['dishwasher', 'Midea', 'placeSettings', 14],
     ['vacuum_cleaner', 'WAP', 'powerWatts', 1500],
+    ['air_conditioner', 'LG', 'coolingCapacityBtuH', 12000],
   ] as const)('importa %s com precisão e não sobrescreve a medida existente', async (category, brand, field, amount) => {
     const plan = fixture();
     plan.products[0] = { ...plan.products[0], brand, category, capacityKg: undefined, [field]: amount };
     expect((await run(plan, true)).applied).toBe(true);
     expect(await run(plan, true)).toMatchObject({ applied: true, insertions: { products: 0, variants: 0, gtins: 0, evidence: 0 } });
     const row = (await pool.query(`SELECT category,brand,capacity_kg,capacity_liters::float AS "capacityLiters",
-      place_settings AS "placeSettings",power_watts::float AS "powerWatts" FROM products WHERE slug=$1`, [plan.products[0].slug])).rows[0];
+      place_settings AS "placeSettings",power_watts::float AS "powerWatts",cooling_capacity_btu_h::float AS "coolingCapacityBtuH"
+      FROM products WHERE slug=$1`, [plan.products[0].slug])).rows[0];
     expect(row).toMatchObject({ category, brand, capacity_kg: null, [field]: amount });
     expect(await run({ ...plan, products: [{ ...plan.products[0], [field]: amount + 1 }] }, true)).toMatchObject({ applied: false,
       conflicts: [{ entity: 'product', key: plan.products[0].slug }] });

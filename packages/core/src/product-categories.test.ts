@@ -98,4 +98,36 @@ describe('categorias e medidas do catálogo', () => {
     expect(searchProducts([fryer, coffee], '1,25 litros')).toEqual([coffee]);
     expect(searchProducts([fryer, coffee], '3,3 L')).toEqual([]);
   });
+  it('separa refrigeração em BTU/h de potência elétrica e outras medidas', () => {
+    const air: Product = { ...identity, brand: 'LG', category: 'air_conditioner', coolingCapacityBtuH: 12000 };
+    expect(productSchema.parse(air)).toEqual(air);
+    expect(productMeasurementField(air)).toBe('coolingCapacityBtuH');
+    expect(productSchema.safeParse({ ...identity, category: 'air_conditioner' }).success).toBe(true);
+    for (const product of [{ ...air, powerWatts: 1200 }, { ...air, capacityLiters: 12 },
+      { ...air, coolingCapacityBtuH: 0 }, { ...air, coolingCapacityBtuH: -12000 },
+      { ...washer, coolingCapacityBtuH: 12000 },
+      { ...identity, category: 'vacuum_cleaner', coolingCapacityBtuH: 12000 }]) {
+      expect(productSchema.safeParse(product).success).toBe(false);
+    }
+    for (const brand of ['LG', 'Samsung', 'Gree']) {
+      expect(productSchema.safeParse({ ...air, brand }).success).toBe(true);
+      expect(catalogQuerySchema.safeParse({ brand }).success).toBe(true);
+    }
+  });
+  it('busca ar-condicionado e BTU em três idiomas com separadores locais sem alterar GTIN', () => {
+    const air: Product = { ...identity, category: 'air_conditioner', coolingCapacityBtuH: 12000,
+      confirmedGtins: ['7891129615250'] };
+    const other: Product = { ...air, id: 'other', model: 'Other', coolingCapacityBtuH: 120000, confirmedGtins: [] };
+    for (const query of ['ar-condicionado', 'ar condicionado', 'air conditioner', 'aire acondicionado']) {
+      expect(searchProducts([air], query)).toEqual([air]);
+    }
+    for (const query of ['12000 BTU', '12.000 BTU/h', '12,000 BTU/h', 'ar condicionado 12.000 BTU']) {
+      expect(searchProducts([air, other], query)).toEqual([air]);
+    }
+    expect(searchProducts([air, other], '', '', 'large')).toEqual([]);
+    expect(searchProducts([air], '7891129615250')).toEqual([air]);
+    expect(searchProducts([air], '7.891.129.615.250')).toEqual([]);
+    expect(searchProducts([air], '7,891,129,615,250')).toEqual([]);
+    expect(searchProducts([air], '9000 BTU')).toEqual([]);
+  });
 });

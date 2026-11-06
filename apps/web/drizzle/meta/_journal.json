@@ -50,6 +50,13 @@
       "when": 1794001069850,
       "tag": "0006_catalog-expansion",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794003061465,
+      "tag": "0007_air-conditioning",
+      "breakpoints": true
     }
   ]
 }

@@ -35,7 +35,7 @@ describe('schema de categorias no PostgreSQL descartável', () => {
       await client.query('BEGIN');
       expect((await client.query(connectedSchemaReadinessSql)).rows[0].ready).toBe(true);
       await client.query('SAVEPOINT complete_schema');
-      await client.query('CREATE OR REPLACE FUNCTION duraverso_catalog_categories_version() RETURNS integer LANGUAGE sql IMMUTABLE AS $$ SELECT 1 $$');
+      await client.query('CREATE OR REPLACE FUNCTION duraverso_catalog_categories_version() RETURNS integer LANGUAGE sql IMMUTABLE AS $$ SELECT 2 $$');
       expect((await client.query(connectedSchemaReadinessSql)).rows[0].ready).toBe(false);
       await client.query('ROLLBACK TO SAVEPOINT complete_schema');
       await client.query('DROP FUNCTION duraverso_catalog_categories_version()');
@@ -68,6 +68,22 @@ describe('schema de categorias no PostgreSQL descartável', () => {
       await expect(pool.query(`INSERT INTO products(slug,brand,model,category,capacity_liters,burner_count,place_settings,power_watts,source_url,source_checked_at)
         VALUES($1,'Electrolux',$1,$2,$3,$4,$5,$6,'https://example.test/model','2026-11-06')`,
       [slug, category, liters, burners, settings, watts])).rejects.toMatchObject({ code: '23514' });
+    }
+  });
+  it('preserva BTU/h nominal e rejeita potência elétrica, unidades incompatíveis e valores inválidos', async () => {
+    const slug = `air-${randomUUID()}`;
+    const result = await pool.query(`INSERT INTO products(slug,brand,model,category,cooling_capacity_btu_h,source_url,source_checked_at)
+      VALUES($1,'LG',$1,'air_conditioner',1000000,'https://example.test/model','2026-11-06')
+      RETURNING cooling_capacity_btu_h::float AS cooling,capacity_kg,power_watts`, [slug]);
+    expect(result.rows[0]).toEqual({ cooling: 1000000, capacity_kg: null, power_watts: null });
+    for (const [category, cooling, watts] of [
+      ['air_conditioner', 0, null], ['air_conditioner', -12000, null], ['air_conditioner', 'NaN', null],
+      ['air_conditioner', 12000, 1200], ['vacuum_cleaner', 12000, 1200], ['refrigerator', 12000, null],
+    ]) {
+      const invalid = `air-invalid-${randomUUID()}`;
+      await expect(pool.query(`INSERT INTO products(slug,brand,model,category,cooling_capacity_btu_h,power_watts,source_url,source_checked_at)
+        VALUES($1,'LG',$1,$2,$3,$4,'https://example.test/model','2026-11-06')`,
+      [invalid, category, cooling, watts])).rejects.toMatchObject({ code: '23514' });
     }
   });
 });

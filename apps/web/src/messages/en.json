@@ -103,7 +103,7 @@
     "emptyQueryText": "Check the model name as it appears on the product label, or try searching by brand only.",
     "emptyFiltersText": "Try another category, brand or washing capacity range.",
     "emptyScan": "Scan the barcode with your camera",
-    "emptyScope": "This preview includes kitchen, laundry and floor-care appliances sold in Brazil.",
+    "emptyScope": "This preview includes kitchen, laundry, floor-care and air-conditioning appliances sold in Brazil.",
     "category": "Category",
     "allCategories": "All categories",
     "capacityHint": "Ranges in kg filter washing machines only."
@@ -238,7 +238,7 @@
     "emptyCode": "This code is not documented in the catalog yet. Check the digits or search by brand and model.",
     "emptyFilters": "There are no {brand} models {cap} in the preview catalog. Change one of the filters.",
     "emptyScan": "Scan the barcode",
-    "emptyScope": "This preview includes kitchen, laundry and floor-care appliances sold in Brazil."
+    "emptyScope": "This preview includes kitchen, laundry, floor-care and air-conditioning appliances sold in Brazil."
   },
   "scannerStates": {
     "deniedTitle": "Camera access wasn’t allowed",

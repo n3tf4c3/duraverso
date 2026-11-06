@@ -36,4 +36,12 @@ describe('product presentation by category', () => {
       expect(new Set(labels).size).toBe(productCategories.length);
     }
   });
+  it('shows cooling capacity in BTU/h without treating electrical power as cooling', () => {
+    expect(formatProductMeasure({ category: 'air_conditioner', coolingCapacityBtuH: 12000 }, 'pt')).toBe('12.000 BTU/h');
+    expect(formatProductMeasure({ category: 'air_conditioner', coolingCapacityBtuH: 12000 }, 'en')).toBe('12,000 BTU/h');
+    expect(productMeasureLabel({ category: 'air_conditioner' }, 'pt')).toBe('Capacidade de refrigeração');
+    expect(productMeasureLabel({ category: 'air_conditioner' }, 'es')).toBe('Capacidad de refrigeración');
+    expect(formatProductMeasure({ category: 'air_conditioner', powerWatts: 1200 }, 'pt')).toBe('A confirmar');
+    expect(formatProductMeasure({ category: 'vacuum_cleaner', coolingCapacityBtuH: 12000 }, 'en')).toBe('To be confirmed');
+  });
 });

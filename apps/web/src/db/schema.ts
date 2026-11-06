@@ -22,20 +22,23 @@ export const products = pgTable('products', {
   capacityKg: numeric('capacity_kg', { precision: 4, scale: 1 }),
   capacityLiters: numeric('capacity_liters', { precision: 7, scale: 2 }), burnerCount: integer('burner_count'),
   placeSettings: integer('place_settings'), powerWatts: numeric('power_watts', { precision: 8, scale: 2 }),
+  coolingCapacityBtuH: numeric('cooling_capacity_btu_h', { precision: 10, scale: 2 }),
   sourceUrl: text('source_url').notNull(),
   sourceCheckedAt: timestamp('source_checked_at', { withTimezone: true }).notNull(), verified: boolean('verified').notNull().default(false),
   catalogRevision: integer('catalog_revision').notNull().default(0),
 }, (t) => [unique('product_brand_model_unique').on(t.brand, t.model), check('capacity_positive', sql`${t.capacityKg} > 0`),
-  check('product_category_supported', sql`${t.category} IN ('washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven', 'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker')`),
+  check('product_category_supported', sql`${t.category} IN ('washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven', 'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker', 'air_conditioner')`),
   check('capacity_liters_positive', sql`${t.capacityLiters} > 0`), check('burner_count_positive', sql`${t.burnerCount} > 0`),
   check('place_settings_positive', sql`${t.placeSettings} > 0`), check('power_watts_positive', sql`${t.powerWatts} > 0`),
+  check('cooling_capacity_btu_h_positive', sql`${t.coolingCapacityBtuH} > 0 AND ${t.coolingCapacityBtuH} <> 'NaN'::numeric`),
   check('product_category_measures', sql`(
     (${t.category} <> 'washing_machine' OR ${t.capacityKg} IS NOT NULL) AND
     (${t.capacityKg} IS NULL OR ${t.category} = 'washing_machine') AND
     (${t.capacityLiters} IS NULL OR ${t.category} IN ('refrigerator', 'microwave', 'freezer', 'oven', 'air_fryer', 'blender', 'coffee_maker')) AND
     (${t.burnerCount} IS NULL OR ${t.category} IN ('stove', 'cooktop')) AND
     (${t.placeSettings} IS NULL OR ${t.category} = 'dishwasher') AND
-    (${t.powerWatts} IS NULL OR ${t.category} = 'vacuum_cleaner')
+    (${t.powerWatts} IS NULL OR ${t.category} = 'vacuum_cleaner') AND
+    (${t.coolingCapacityBtuH} IS NULL OR ${t.category} = 'air_conditioner')
   )`),
 ]);
 export const variants = pgTable('variants', {

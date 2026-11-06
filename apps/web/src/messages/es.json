@@ -103,7 +103,7 @@
     "emptyQueryText": "Revisa el modelo tal como aparece en la etiqueta del producto o busca solo por la marca.",
     "emptyFiltersText": "Prueba otra categoría, marca o rango de capacidad de lavado.",
     "emptyScan": "Escanear el código de barras con la cámara",
-    "emptyScope": "Esta vista previa reúne electrodomésticos de cocina, lavandería y limpieza vendidos en Brasil.",
+    "emptyScope": "Esta vista previa reúne electrodomésticos de cocina, lavandería, limpieza y climatización vendidos en Brasil.",
     "category": "Categoría",
     "allCategories": "Todas las categorías",
     "capacityHint": "Los rangos en kg filtran solo lavadoras."
@@ -238,7 +238,7 @@
     "emptyCode": "Este código todavía no está documentado en el catálogo. Revisa los números o busca por marca y modelo.",
     "emptyFilters": "No hay modelos {brand} de {cap} en el catálogo de la vista previa. Cambia uno de los filtros.",
     "emptyScan": "Escanear el código de barras",
-    "emptyScope": "Esta vista previa reúne electrodomésticos de cocina, lavandería y limpieza vendidos en Brasil."
+    "emptyScope": "Esta vista previa reúne electrodomésticos de cocina, lavandería, limpieza y climatización vendidos en Brasil."
   },
   "scannerStates": {
     "deniedTitle": "No se permitió usar la cámara",

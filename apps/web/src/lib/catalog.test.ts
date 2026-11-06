@@ -7,7 +7,7 @@ import { GET } from '../app/api/v1/products/route';
 
 describe('catálogo e contrato público', () => {
   it('amplia o catálogo com modelos distintos, preservando as 20 lavadoras e sem liberar avaliações', () => {
-    expect(catalog.length).toBeGreaterThanOrEqual(80);
+    expect(catalog.length).toBeGreaterThanOrEqual(157);
     expect(washingMachineCatalog).toHaveLength(20);
     expect(new Set(catalog.map((p) => p.slug)).size).toBe(catalog.length);
     expect(new Set(catalog.map((p) => `${p.brand}:${p.model}`)).size).toBe(catalog.length);
@@ -33,7 +33,8 @@ describe('catálogo e contrato público', () => {
   it('inclui fontes oficiais e medidas próprias para cada categoria', () => {
     const officialHosts = ['www.brastemp.com.br', 'www.consul.com.br', 'loja.electrolux.com.br',
       'www.midea.com.br', 'www.midea.com', 'conteudo.midea.com.br', 'www.panasonic.com', 'loja.panasonic.com.br', 'parceiros.panasonic.com.br',
-      'www.philips.com.br', 'www.walita.com.br', 'www.philips.com', 'www.wap.ind.br', 'wap.ind.br', 'loja.wap.ind.br'];
+      'www.philips.com.br', 'www.walita.com.br', 'www.philips.com', 'www.wap.ind.br', 'wap.ind.br', 'loja.wap.ind.br',
+      'www.lg.com', 'www.samsung.com', 'gree.com.br'];
     for (const category of productCategories.filter((value) => value !== 'washing_machine')) {
       const products = catalogResponse('', '', '', category).data;
       expect(products.length).toBeGreaterThanOrEqual(2);
@@ -60,6 +61,18 @@ describe('catálogo e contrato público', () => {
         expect(result.data[0]?.slug).toBe(product.slug);
       }
     }
+  });
+  it('busca capacidade de refrigeração e referências completas sem misturar unidades', async () => {
+    const expected = catalog.filter((product) => product.category === 'air_conditioner' && product.coolingCapacityBtuH === 12000);
+    expect(expected.length).toBeGreaterThan(0);
+    for (const q of ['12000 BTU', '12.000 BTU/h', '12,000 BTU/h']) {
+      const response = await GET(new Request(`http://localhost/api/v1/products?${new URLSearchParams({ q, category: 'air_conditioner' })}`));
+      expect(response.status).toBe(200);
+      expect((await response.json()).data.map((product: { slug: string }) => product.slug)).toEqual(expected.map((product) => product.slug));
+    }
+    expect(catalogResponse('JI12F/JE12F').data.map((product) => product.model)).toEqual(['JI12F/JE12F']);
+    expect(catalogResponse('12000 BTU', '', '', 'vacuum_cleaner').total).toBe(0);
+    expect(catalogResponse('', '', 'large', 'air_conditioner').total).toBe(0);
   });
   it('não aproxima código desconhecido, parcial ou digitado incorretamente', () => {
     expect(catalogResponse('7896584072144').total).toBe(0);

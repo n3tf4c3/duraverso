@@ -9,7 +9,7 @@ assert.equal(catalog.mode, 'local_catalog', 'Run this check only against preview
 const product = catalog.data.find((p) => p.confirmedGtins.length);
 assert.ok(product);
 const categories = ['washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven',
-  'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker'];
+  'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker', 'air_conditioner'];
 const categoryOf = (item) => item.category ?? 'washing_machine';
 assert.deepEqual([...new Set(catalog.data.map(categoryOf))].sort(), [...categories].sort());
 let checked = 1;
@@ -38,6 +38,15 @@ for (const category of categories) {
 const invalidCategory = await fetch(`${origin}/api/v1/products?category=unsupported`);
 assert.equal(invalidCategory.status, 400);
 checked += 1;
+for (const q of ['12000 BTU', '12.000 BTU/h', '12,000 BTU/h']) {
+  const response = await fetch(`${origin}/api/v1/products?${new URLSearchParams({ q, category: 'air_conditioner' })}`);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  const expected = catalog.data.filter((item) => item.category === 'air_conditioner' && item.coolingCapacityBtuH === 12000);
+  assert.ok(expected.length > 0);
+  assert.deepEqual(body.data.map((item) => item.slug).sort(), expected.map((item) => item.slug).sort());
+  checked += 1;
+}
 const brands = [...new Set(catalog.data.map((item) => item.brand))];
 for (const brand of brands) {
   const response = await fetch(`${origin}/api/v1/products?${new URLSearchParams({ brand })}`);
@@ -113,6 +122,7 @@ for (const [prefix, language] of [['', 'pt-BR'], ['/en', 'en-US'], ['/es', 'es-E
     const format = (value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value);
     if (example.capacityLiters) assert.ok(detailHtml.includes(`${format(example.capacityLiters)} L`), 'Volume is rendered in localized liters.');
     if (example.powerWatts) assert.ok(detailHtml.includes(`${format(example.powerWatts)} W`), 'Electrical power is rendered in watts.');
+    if (example.coolingCapacityBtuH) assert.ok(detailHtml.includes(`${format(example.coolingCapacityBtuH)} BTU/h`), 'Cooling capacity is rendered in BTU/h.');
     if (example.placeSettings) assert.ok(detailHtml.includes(`${example.placeSettings} ${language === 'pt-BR' ? 'serviços' : language === 'en-US' ? 'place settings' : 'servicios'}`), 'Dishwashers show place settings.');
     checked += 2;
   }

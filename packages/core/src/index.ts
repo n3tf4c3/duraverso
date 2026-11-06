@@ -4,16 +4,18 @@ export { reconcileCatalog, type StoredCatalog, type CatalogImportConflict } from
 
 export const MIN_COMMUNITY_REVIEWS = 20;
 export const MAX_REVIEW_LENGTH = 2000;
-export const brands = ['Brastemp', 'Consul', 'Electrolux', 'Midea', 'Panasonic', 'Philips Walita', 'WAP'] as const;
+export const brands = ['Brastemp', 'Consul', 'Electrolux', 'Midea', 'Panasonic', 'Philips Walita', 'WAP',
+  'LG', 'Samsung', 'Gree'] as const;
 export const productCategories = ['washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven',
-  'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker'] as const;
+  'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker', 'air_conditioner'] as const;
 export type ProductCategory = typeof productCategories[number];
-export const productMeasurementFields = ['capacityKg', 'capacityLiters', 'burnerCount', 'placeSettings', 'powerWatts'] as const;
+export const productMeasurementFields = ['capacityKg', 'capacityLiters', 'burnerCount', 'placeSettings', 'powerWatts', 'coolingCapacityBtuH'] as const;
 export type ProductMeasurementField = typeof productMeasurementFields[number];
 const measurementByCategory: Record<ProductCategory, ProductMeasurementField> = {
   washing_machine: 'capacityKg', refrigerator: 'capacityLiters', microwave: 'capacityLiters', stove: 'burnerCount',
   freezer: 'capacityLiters', oven: 'capacityLiters', cooktop: 'burnerCount', dishwasher: 'placeSettings',
   air_fryer: 'capacityLiters', blender: 'capacityLiters', vacuum_cleaner: 'powerWatts', coffee_maker: 'capacityLiters',
+  air_conditioner: 'coolingCapacityBtuH',
 };
 export function productCategory(product: { category?: ProductCategory }): ProductCategory {
   return product.category ?? 'washing_machine';
@@ -29,7 +31,8 @@ const productBaseSchema = z.object({
   category: z.enum(productCategories).optional(),
   capacityKg: z.number().positive().optional(), capacityLiters: z.number().positive().optional(),
   burnerCount: z.number().int().positive().optional(), placeSettings: z.number().int().positive().optional(),
-  powerWatts: z.number().positive().optional(), sourceUrl: z.url(), sourceCheckedAt: z.iso.date(),
+  powerWatts: z.number().positive().optional(), coolingCapacityBtuH: z.number().positive().optional(),
+  sourceUrl: z.url(), sourceCheckedAt: z.iso.date(),
   identification: z.enum(['candidate', 'verified']), confirmedGtins: z.array(z.string().refine(isValidGtin, 'GTIN inválido.')),
 }).superRefine((product, context) => {
   const category = productCategory(product);
@@ -130,29 +133,38 @@ const categorySearchTerms: Record<ProductCategory, string> = {
   blender: 'liquidificador liquidificadores blender licuadora batidora',
   vacuum_cleaner: 'aspirador aspiradores vacuum cleaner aspiradora',
   coffee_maker: 'cafeteira cafeteiras coffee maker cafetera',
+  air_conditioner: 'ar-condicionado ar condicionado air conditioner air conditioning aire acondicionado',
 };
 const measurementSearchUnits: Record<ProductMeasurementField, string> = {
   capacityKg: 'kg', capacityLiters: 'litros liters litres l', burnerCount: 'bocas burners quemadores',
   placeSettings: 'serviços servicos place settings cubiertos', powerWatts: 'w watts vatios',
+  coolingCapacityBtuH: 'btu btu/h',
 };
+function normalizeMeasurementSearch(value: string) {
+  // Separadores de milhar somente junto de BTU; 3,2 L continua decimal.
+  return value.replace(/\b(\d{1,3}(?:[.,]\d{3})+)(?=\s*btu\b)/g, (number) => number.replace(/[.,]/g, ''))
+    .replace(/(\d),(?=\d)/g, '$1.');
+}
 export function searchProducts<T extends PublicProduct>(products: readonly T[], query = '', brand = '', capacity = '', category = '') {
   const normalized = normalizeSearch(query).slice(0, 120);
   // Vírgula decimal vale para texto e medidas; GTIN continua com comparação exata.
-  const textQuery = normalized.replace(/(\d),(?=\d)/g, '$1.');
+  const textQuery = normalizeMeasurementSearch(normalized);
+  const coolingQuery = textQuery.match(/\b(\d+(?:\.\d+)?)\s*btu\b/)?.[1];
   const compact = normalized.replace(/[\s-]/g, '');
   const compactModelQuery = normalized.replace(/[\s/-]/g, '');
   return products.filter((p) => {
     const productKind = productCategory(p);
     const field = productMeasurementField(p);
     const measure = p[field] === undefined ? '' : `${p[field]} ${measurementSearchUnits[field]}`;
-    const text = normalizeSearch(`${p.brand} ${p.model} ${categorySearchTerms[productKind]} ${measure}`).replace(/(\d),(?=\d)/g, '$1.');
+    const text = normalizeMeasurementSearch(normalizeSearch(`${p.brand} ${p.model} ${categorySearchTerms[productKind]} ${measure}`));
     const textMatch = textQuery.split(' ').every((token) => text.includes(token));
     const codeMatch = p.confirmedGtins.includes(compact);
     const modelMatch = compactModelQuery.length > 0 && normalizeSearch(p.model).replace(/[\s/-]/g, '').includes(compactModelQuery);
     const capacityMatch = !capacity || (productKind === 'washing_machine' && p.capacityKg !== undefined && (
       (capacity === 'small' && p.capacityKg <= 10) ||
       (capacity === 'medium' && p.capacityKg > 10 && p.capacityKg <= 13) || (capacity === 'large' && p.capacityKg > 13)));
-    return (!category || productKind === category) && (!brand || p.brand === brand) && capacityMatch && (textMatch || codeMatch || modelMatch);
+    const coolingMatch = coolingQuery === undefined || (productKind === 'air_conditioner' && p.coolingCapacityBtuH === Number(coolingQuery));
+    return (!category || productKind === category) && (!brand || p.brand === brand) && capacityMatch && coolingMatch && (textMatch || codeMatch || modelMatch);
   });
 }
 
@@ -201,6 +213,7 @@ export const adminCatalogProductSchema = z.object({
   id: z.uuid(), slug: z.string(), brand: z.string(), model: z.string(), category: z.enum(productCategories).optional(),
   capacityKg: z.number().optional(), capacityLiters: z.number().optional(), burnerCount: z.number().optional(),
   placeSettings: z.number().optional(), powerWatts: z.number().optional(),
+  coolingCapacityBtuH: z.number().optional(),
   sourceUrl: z.string(), sourceCheckedAt: z.string(), verified: z.boolean(), revision: z.number().int(),
   variants: z.array(z.object({
     id: z.uuid(), manufacturerCode: z.string(), codeKind: z.string().nullable(), voltage: z.number(), verified: z.boolean(),

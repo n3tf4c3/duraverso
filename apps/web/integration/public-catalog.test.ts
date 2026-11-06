@@ -73,4 +73,20 @@ describe('visibilidade do catálogo persistente', () => {
     const response = await get(new Request(`http://localhost/api/v1/products?q=${prefix}&capacity=large`));
     expect((await response.json()).total).toBe(0);
   });
+  it('consulta ar-condicionado por categoria e BTU/h sem confundir potência ou criar códigos', async () => {
+    const slug = `air-public-${randomUUID()}`;
+    await pool.query(`INSERT INTO products(slug,brand,model,category,cooling_capacity_btu_h,source_url,source_checked_at,verified)
+      VALUES($1,'Samsung',$1,'air_conditioner',12000,'https://example.test/model','2026-11-06',true)`, [slug]);
+    for (const measure of ['12000 BTU', '12.000 BTU/h', '12,000 BTU/h']) {
+      const query = encodeURIComponent(`${slug} ${measure}`);
+      const response = await get(new Request(`http://localhost/api/v1/products?category=air_conditioner&brand=Samsung&q=${query}`));
+      const result = catalogResponseSchema.parse(await response.json());
+      expect(result.total).toBe(1);
+      expect(result.data[0]).toMatchObject({ category: 'air_conditioner', coolingCapacityBtuH: 12000, confirmedGtins: [] });
+      expect(result.data[0]).not.toHaveProperty('powerWatts');
+      expect(result.data[0]).not.toHaveProperty('capacityKg');
+    }
+    const response = await get(new Request(`http://localhost/api/v1/products?q=${slug}&capacity=large`));
+    expect((await response.json()).total).toBe(0);
+  });
 });

@@ -1,7 +1,7 @@
 import { prepareCatalog, productCategory, productMeasurementFields, type CatalogVariantEvidence, type Product } from './index';
 
 export type StoredCatalog = {
-  products: (Pick<Product, 'slug' | 'brand' | 'model' | 'category' | 'capacityKg' | 'capacityLiters' | 'burnerCount' | 'placeSettings' | 'powerWatts' | 'sourceUrl' | 'sourceCheckedAt'> & { id: string })[];
+  products: (Pick<Product, 'slug' | 'brand' | 'model' | 'category' | 'capacityKg' | 'capacityLiters' | 'burnerCount' | 'placeSettings' | 'powerWatts' | 'coolingCapacityBtuH' | 'sourceUrl' | 'sourceCheckedAt'> & { id: string })[];
   variants: { id: string; productId: string; manufacturerCode: string; voltage: number; codeKind: string | null }[];
   gtins: { code: string; variantId: string; sourceUrl: string }[];
   evidence: { gtinCode: string; voltageSourceUrl: string; checkedAt: string; note: string }[];

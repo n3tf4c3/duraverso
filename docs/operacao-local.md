@@ -3,7 +3,7 @@
 ## Escopo da entrega
 
 Esta é a base local, não o piloto público completo. Em preview, catálogo e API usam
-91 modelos candidatos embutidos em 12 categorias e sete marcas. Os 40 GTINs
+157 modelos candidatos embutidos em 13 categorias e dez marcas. Os 40 GTINs
 documentados continuam associados somente às 20 lavadoras.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
 Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
@@ -28,17 +28,25 @@ O campo EAN-13 truncado da LED13 foi descartado; os campos individuais fornecem 
 códigos completos. Para LDA13, o manual sustenta 13 kg apesar do campo 13,1 kg na loja.
 GTIN ausente não impede busca por marca/modelo; nunca adivinhar a correspondência.
 As fontes oficiais das outras categorias estão em `catalog-appliances.ts`,
-`catalog-large-appliances.ts` e `catalog-small-appliances.ts`, com data de conferência,
+`catalog-large-appliances.ts`, `catalog-small-appliances.ts`,
+`catalog-air-conditioning-existing.ts` e `catalog-air-conditioning-new.ts`, com data de conferência,
 modelo e medida nominal. Nenhuma tensão, variante ou código novo foi inferido.
 As fichas distinguem kg (lavadoras), litros (geladeiras, micro-ondas, freezers, fornos,
 air fryers, liquidificadores e cafeteiras), bocas (fogões/cooktops), serviços (lava-louças)
-e watts elétricos (aspiradores). O mapa canônico é `productMeasurementField` no core.
-As marcas são Brastemp, Consul, Electrolux, Midea, Panasonic, Philips Walita e WAP.
+watts elétricos (aspiradores) e capacidade nominal de refrigeração em BTU/h
+(ar-condicionado). O mapa canônico é `productMeasurementField` no core.
+As marcas são Brastemp, Consul, Electrolux, Midea, Panasonic, Philips Walita, WAP,
+LG, Samsung e Gree.
 Seis produtos ficam sem medida: HR2270/91 tem divergência na fonte; cinco cafeteiras
 informam xícaras sem volume em litros conferido. A interface mostra “a confirmar”,
 sem marcar esses valores como documentados. Watts não significam poder de sucção.
 As famílias Midea DWA08/DWA14 estão nomeadas expressamente no manual oficial; os
 sufixos elétricos/de cor não são inferidos nem publicados como variantes.
+O lote de ar-condicionado tem 66 referências: Electrolux 19, Consul 9, Midea 8,
+LG 10, Samsung 10 e Gree 10, entre 7.000 e 30.000 BTU/h. Inclui janela, portátil e
+conjuntos split documentados. Nos LG S3-Q18KL33B/S3-Q24K233B e Samsung
+F-AR60H24C1AWN, a capacidade nominal de refrigeração da ficha prevalece sobre
+o título comercial: 19.000, 22.000 e 23.000 BTU/h, respectivamente.
 O filtro `category` funciona na busca e em `/api/v1/products`, combinado com marca e texto.
 As faixas `capacity=small|medium|large` continuam restritas às lavadoras, mesmo sem filtro
 de categoria; litros e bocas nunca são comparados com kg.
@@ -90,9 +98,16 @@ só compreendem lavadoras. Nenhuma migration foi aplicada a banco permanente.
 A migration 0006 amplia a whitelist para 12 categorias, acrescenta `place_settings`
 e `power_watts` e preserva duas casas decimais em `capacity_liters`. Snapshot, comparação
 do importador e token de concorrência incluem as novas medidas. O preflight exige
-versão de catálogo >= 2, colunas e constraints validadas. As versões 0005 e anteriores
+versão de catálogo >= 3, colunas e constraints validadas. As versões 0006 e anteriores
 permanecem inalteradas. Aplicar somente ao banco autorizado; atualizar os consumidores
 antes de liberar categorias que eles ainda não reconheçam.
+
+A migration 0007 adiciona `air_conditioner` e `cooling_capacity_btu_h`, amplia as
+marcas aceitas pela revisão e inclui a capacidade no snapshot e token de concorrência.
+A capacidade em BTU/h não deriva de watts elétricos nem da capacidade de aquecimento.
+Em splits, cada referência corresponde a um conjunto documentado pelo fabricante;
+unidades avulsas e pares deduzidos não entram. A busca reconhece `12000 BTU`,
+`12.000 BTU/h` e `12,000 BTU/h`, preservando volumes decimais e GTINs exatos.
 
 ### Importação administrativa do catálogo
 
