@@ -7,7 +7,7 @@ import { GET } from '../app/api/v1/products/route';
 
 describe('catálogo e contrato público', () => {
   it('amplia o catálogo com modelos distintos, preservando as 20 lavadoras e sem liberar avaliações', () => {
-    expect(catalog.length).toBeGreaterThanOrEqual(205);
+    expect(catalog.length).toBeGreaterThanOrEqual(259);
     expect(washingMachineCatalog).toHaveLength(20);
     expect(new Set(catalog.map((p) => p.slug)).size).toBe(catalog.length);
     expect(new Set(catalog.map((p) => `${p.brand}:${p.model}`)).size).toBe(catalog.length);
@@ -34,7 +34,8 @@ describe('catálogo e contrato público', () => {
     const officialHosts = ['www.brastemp.com.br', 'www.consul.com.br', 'loja.electrolux.com.br',
       'www.midea.com.br', 'www.midea.com', 'conteudo.midea.com.br', 'www.panasonic.com', 'loja.panasonic.com.br', 'parceiros.panasonic.com.br',
       'www.philips.com.br', 'www.walita.com.br', 'www.philips.com', 'www.wap.ind.br', 'wap.ind.br', 'loja.wap.ind.br',
-      'www.lg.com', 'www.samsung.com', 'gree.com.br', 'www.generalww.com', 'registro.inmetro.gov.br'];
+      'www.lg.com', 'www.samsung.com', 'gree.com.br', 'www.generalww.com', 'registro.inmetro.gov.br',
+      'sac.philco.com.br', 'www.hisense.com.br', 'www.tcl.com'];
     for (const category of productCategories.filter((value) => value !== 'washing_machine')) {
       const products = catalogResponse('', '', '', category).data;
       expect(products.length).toBeGreaterThanOrEqual(2);
@@ -62,9 +63,10 @@ describe('catálogo e contrato público', () => {
       }
     }
   });
-  it('encontra conjuntos Daikin e Fujitsu completos com marca e categoria combinadas', async () => {
-    for (const brand of ['Daikin', 'Fujitsu']) {
-      const products = catalog.filter((product) => product.brand === brand);
+  it('encontra conjuntos completos com marca e categoria combinadas', async () => {
+    const airConditioners = catalog.filter((product) => product.category === 'air_conditioner');
+    for (const brand of new Set(airConditioners.map((product) => product.brand))) {
+      const products = airConditioners.filter((product) => product.brand === brand);
       expect(products.length).toBeGreaterThan(0);
       for (const product of products) {
         expect(product.category).toBe('air_conditioner');

@@ -68,14 +68,16 @@ substitui a revisão visual e a leitura com câmera real.
 
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.
-No modo preview, a consulta reúne 205 candidatos de 12 marcas em 13 categorias:
+No modo preview, a consulta reúne 259 candidatos de 19 marcas em 13 categorias:
 20 lavadoras, sete geladeiras, sete micro-ondas, sete fogões, cinco freezers, cinco fornos,
 cinco cooktops, cinco lava-louças, dez air fryers, seis liquidificadores, oito aspiradores
-e seis cafeteiras, além de 114 aparelhos de ar-condicionado (Consul, Electrolux, Midea,
-LG, Samsung, Gree, Daikin e Fujitsu). Fontes oficiais e datas em `apps/web/src/lib/catalog-appliances.ts`,
+e seis cafeteiras, além de 168 aparelhos de ar-condicionado (Consul, Electrolux, Midea,
+LG, Samsung, Gree, Daikin, Fujitsu, Carrier, Springer Midea, Elgin, TCL, Hisense,
+Philco e Agratto). Fontes oficiais e datas em `apps/web/src/lib/catalog-appliances.ts`,
 `catalog-large-appliances.ts`, `catalog-small-appliances.ts`,
 `catalog-air-conditioning-existing.ts`, `catalog-air-conditioning-new.ts`,
-`catalog-air-conditioning-daikin.ts` e `catalog-air-conditioning-fujitsu.ts`. Os 185 modelos além das
+`catalog-air-conditioning-daikin.ts`, `catalog-air-conditioning-fujitsu.ts`,
+`catalog-air-conditioning-carrier-elgin.ts` e `catalog-air-conditioning-additional.ts`. Os 239 modelos além das
 lavadoras ainda não possuem GTINs ou variantes documentadas; são encontrados pelo nome.
 Daikin usa pares explícitos do histórico oficial Inmetro; Fujitsu usa os catálogos
 do fabricante no portal GENERAL. Referências históricas não comprovam certificação
@@ -103,7 +105,7 @@ a busca pública continua retornando somente o modelo.
 O importador `pnpm catalog:import` compara esse plano com um PostgreSQL autorizado e
 somente lê por padrão. A gravação explícita insere modelos, variantes, GTINs e evidências
 em uma transação, preservando registros existentes e mantendo novos itens não verificados.
-Exige as migrations até 0008 e conexão direta. Consulte os argumentos e limites em
+Exige as migrations até 0009 e conexão direta. Consulte os argumentos e limites em
 `docs/operacao-local.md` antes de usar um banco permanente.
 
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração

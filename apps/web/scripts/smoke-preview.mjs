@@ -48,6 +48,7 @@ for (const q of ['12000 BTU', '12.000 BTU/h', '12,000 BTU/h']) {
   checked += 1;
 }
 const brands = [...new Set(catalog.data.map((item) => item.brand))];
+const airConditionerBrands = [...new Set(catalog.data.filter((item) => item.category === 'air_conditioner').map((item) => item.brand))];
 for (const brand of brands) {
   const response = await fetch(`${origin}/api/v1/products?${new URLSearchParams({ brand })}`);
   assert.equal(response.status, 200);
@@ -66,8 +67,8 @@ assert.equal(decimalQuery.status, 200);
 assert.ok((await decimalQuery.json()).data.some((item) => item.model === 'EAF10'));
 checked += 1;
 for (const [prefix, language] of [['', 'pt-BR'], ['/en', 'en-US'], ['/es', 'es-ES']]) {
-  for (const brand of ['Daikin', 'Fujitsu']) {
-    const expected = catalog.data.filter((item) => item.brand === brand);
+  for (const brand of airConditionerBrands) {
+    const expected = catalog.data.filter((item) => item.brand === brand && item.category === 'air_conditioner');
     assert.ok(expected.length > 0, `Documented brand: ${brand}`);
     const listing = await fetch(`${origin}${prefix}/produtos?${new URLSearchParams({ brand, category: 'air_conditioner' })}`);
     assert.equal(listing.status, 200);

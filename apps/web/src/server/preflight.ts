@@ -7,7 +7,7 @@ export const connectedSchemaReadinessSql = `SELECT to_regprocedure('duraverso_su
   AND to_regprocedure('duraverso_catalog_admin_read(uuid,integer)') IS NOT NULL
   AND to_regprocedure('duraverso_decide_catalog(uuid,integer,jsonb)') IS NOT NULL
   AND to_regprocedure('duraverso_catalog_categories_version()') IS NOT NULL
-  AND duraverso_catalog_categories_version() >= 4
+  AND duraverso_catalog_categories_version() >= 5
   AND (SELECT count(*)=6 FROM pg_attribute WHERE attrelid=to_regclass('public.products')
     AND attname IN ('category','capacity_liters','burner_count','place_settings','power_watts','cooling_capacity_btu_h') AND NOT attisdropped)
   AND (SELECT count(*)=8 FROM pg_constraint WHERE conrelid=to_regclass('public.products') AND convalidated

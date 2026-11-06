@@ -109,7 +109,7 @@ describe('categorias e medidas do catálogo', () => {
       { ...identity, category: 'vacuum_cleaner', coolingCapacityBtuH: 12000 }]) {
       expect(productSchema.safeParse(product).success).toBe(false);
     }
-    for (const brand of ['LG', 'Samsung', 'Gree', 'Daikin', 'Fujitsu']) {
+    for (const brand of ['LG', 'Samsung', 'Gree', 'Daikin', 'Fujitsu', 'Carrier', 'Springer Midea', 'Elgin', 'TCL', 'Hisense', 'Philco', 'Agratto']) {
       expect(productSchema.safeParse({ ...air, brand }).success).toBe(true);
       expect(catalogQuerySchema.safeParse({ brand }).success).toBe(true);
     }
@@ -129,5 +129,13 @@ describe('categorias e medidas do catálogo', () => {
     expect(searchProducts([air], '7.891.129.615.250')).toEqual([]);
     expect(searchProducts([air], '7,891,129,615,250')).toEqual([]);
     expect(searchProducts([air], '9000 BTU')).toEqual([]);
+  });
+  it('mantém Midea e Springer Midea distintas no filtro de marca', () => {
+    const midea: Product = { ...identity, brand: 'Midea', category: 'air_conditioner', coolingCapacityBtuH: 12000 };
+    const springer: Product = { ...midea, id: 'springer', slug: 'springer', brand: 'Springer Midea' };
+    const snapshot = { mode: 'local_catalog' as const, data: [midea, springer], total: 2 };
+    expect(filterCatalog(snapshot, '', 'Midea').data).toEqual([midea]);
+    expect(filterCatalog(snapshot, '', 'Springer Midea').data).toEqual([springer]);
+    expect(searchProducts(snapshot.data, 'Springer Midea')).toEqual([springer]);
   });
 });
