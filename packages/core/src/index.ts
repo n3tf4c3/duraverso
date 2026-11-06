@@ -5,7 +5,7 @@ export { reconcileCatalog, type StoredCatalog, type CatalogImportConflict } from
 export const MIN_COMMUNITY_REVIEWS = 20;
 export const MAX_REVIEW_LENGTH = 2000;
 export const brands = ['Brastemp', 'Consul', 'Electrolux', 'Midea', 'Panasonic', 'Philips Walita', 'WAP',
-  'LG', 'Samsung', 'Gree'] as const;
+  'LG', 'Samsung', 'Gree', 'Daikin', 'Fujitsu'] as const;
 export const productCategories = ['washing_machine', 'refrigerator', 'microwave', 'stove', 'freezer', 'oven',
   'cooktop', 'dishwasher', 'air_fryer', 'blender', 'vacuum_cleaner', 'coffee_maker', 'air_conditioner'] as const;
 export type ProductCategory = typeof productCategories[number];

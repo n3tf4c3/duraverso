@@ -3,7 +3,7 @@
 ## Escopo da entrega
 
 Esta é a base local, não o piloto público completo. Em preview, catálogo e API usam
-157 modelos candidatos embutidos em 13 categorias e dez marcas. Os 40 GTINs
+205 modelos candidatos embutidos em 13 categorias e 12 marcas. Os 40 GTINs
 documentados continuam associados somente às 20 lavadoras.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
 Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
@@ -29,24 +29,33 @@ códigos completos. Para LDA13, o manual sustenta 13 kg apesar do campo 13,1 kg 
 GTIN ausente não impede busca por marca/modelo; nunca adivinhar a correspondência.
 As fontes oficiais das outras categorias estão em `catalog-appliances.ts`,
 `catalog-large-appliances.ts`, `catalog-small-appliances.ts`,
-`catalog-air-conditioning-existing.ts` e `catalog-air-conditioning-new.ts`, com data de conferência,
+`catalog-air-conditioning-existing.ts`, `catalog-air-conditioning-new.ts`,
+`catalog-air-conditioning-daikin.ts` e `catalog-air-conditioning-fujitsu.ts`, com data de conferência,
 modelo e medida nominal. Nenhuma tensão, variante ou código novo foi inferido.
 As fichas distinguem kg (lavadoras), litros (geladeiras, micro-ondas, freezers, fornos,
-air fryers, liquidificadores e cafeteiras), bocas (fogões/cooktops), serviços (lava-louças)
+air fryers, liquidificadores e cafeteiras), bocas (fogões/cooktops), serviços (lava-louças),
 watts elétricos (aspiradores) e capacidade nominal de refrigeração em BTU/h
 (ar-condicionado). O mapa canônico é `productMeasurementField` no core.
 As marcas são Brastemp, Consul, Electrolux, Midea, Panasonic, Philips Walita, WAP,
-LG, Samsung e Gree.
+LG, Samsung, Gree, Daikin e Fujitsu.
 Seis produtos ficam sem medida: HR2270/91 tem divergência na fonte; cinco cafeteiras
 informam xícaras sem volume em litros conferido. A interface mostra “a confirmar”,
 sem marcar esses valores como documentados. Watts não significam poder de sucção.
 As famílias Midea DWA08/DWA14 estão nomeadas expressamente no manual oficial; os
 sufixos elétricos/de cor não são inferidos nem publicados como variantes.
-O lote de ar-condicionado tem 66 referências: Electrolux 19, Consul 9, Midea 8,
-LG 10, Samsung 10 e Gree 10, entre 7.000 e 30.000 BTU/h. Inclui janela, portátil e
+O lote de ar-condicionado tem 114 referências: Electrolux 19, Consul 9, Midea 8,
+LG 10, Samsung 10, Gree 10, Daikin 24 e Fujitsu 24, entre 7.000 e 36.000 BTU/h. Inclui janela, portátil e
 conjuntos split documentados. Nos LG S3-Q18KL33B/S3-Q24K233B e Samsung
 F-AR60H24C1AWN, a capacidade nominal de refrigeração da ficha prevalece sobre
 o título comercial: 19.000, 22.000 e 23.000 BTU/h, respectivamente.
+Daikin: oito Full Inverter, oito EcoSwing Gold e oito EcoSwing legados, com pares
+e BTU/h explícitos nas páginas 1–2 do registro Inmetro 001167/2021. Exclusões no
+histórico não apagam a identidade; não se afirma certificação vigente ou disponibilidade.
+Fujitsu: 12 Premium R32 e 12 Essencial R32, em catálogos Fujitsu General do Brasil
+mantidos no portal GENERAL. Cada referência preserva as unidades interna/externa da
+mesma coluna. Não foram corrigidos nem usados os códigos comerciais -Z inconsistentes
+da linha Essencial 24 mil; os pares de unidades estão explícitos. A capacidade de frio
+do ASKA18KPBA é 18.000 BTU/h, distinta do aquecimento de 18.430 BTU/h.
 O filtro `category` funciona na busca e em `/api/v1/products`, combinado com marca e texto.
 As faixas `capacity=small|medium|large` continuam restritas às lavadoras, mesmo sem filtro
 de categoria; litros e bocas nunca são comparados com kg.
@@ -57,7 +66,7 @@ lacunas; `pnpm catalog:plan --json` exibe o plano com fontes. É uma operação 
 local, sem carregar credenciais, conectar ao banco, aplicar SQL ou atribuir `verified`.
 As regras de validação ficam no core. Erros de associação/duplicidade são recusados;
 lacunas deixam a cobertura incompleta e o comando retorna código de saída diferente de zero.
-`pnpm catalog:plan --all` confere todo o catálogo público e expõe os 71 modelos
+`pnpm catalog:plan --all` confere todo o catálogo público e expõe os 185 modelos
 sem variantes, com cobertura incompleta e saída não zero. `--json` funciona nos dois
 escopos. O importador padrão mantém o lote preparado; acrescentar modelos à consulta
 pública não os inclui silenciosamente na importação nem contorna lacunas de evidência.
@@ -98,7 +107,7 @@ só compreendem lavadoras. Nenhuma migration foi aplicada a banco permanente.
 A migration 0006 amplia a whitelist para 12 categorias, acrescenta `place_settings`
 e `power_watts` e preserva duas casas decimais em `capacity_liters`. Snapshot, comparação
 do importador e token de concorrência incluem as novas medidas. O preflight exige
-versão de catálogo >= 3, colunas e constraints validadas. As versões 0006 e anteriores
+versão de catálogo >= 4, colunas e constraints validadas. As versões 0007 e anteriores
 permanecem inalteradas. Aplicar somente ao banco autorizado; atualizar os consumidores
 antes de liberar categorias que eles ainda não reconheçam.
 
@@ -108,6 +117,10 @@ A capacidade em BTU/h não deriva de watts elétricos nem da capacidade de aquec
 Em splits, cada referência corresponde a um conjunto documentado pelo fabricante;
 unidades avulsas e pares deduzidos não entram. A busca reconhece `12000 BTU`,
 `12.000 BTU/h` e `12,000 BTU/h`, preservando volumes decimais e GTINs exatos.
+
+A migration 0008 amplia as marcas aceitas pela decisão administrativa para Daikin e
+Fujitsu, preservando permissões, evidências, locks e auditoria. O preflight exige essa
+versão para não iniciar com uma whitelist antiga. Não há alteração nas unidades de medida.
 
 ### Importação administrativa do catálogo
 

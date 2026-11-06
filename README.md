@@ -68,14 +68,18 @@ substitui a revisão visual e a leitura com câmera real.
 
 A CI está preparada para repetir esses comandos. A integração exige Docker e cria seu
 próprio PostgreSQL descartável, sem credenciais externas nem volumes do host. Não implica publicação.
-No modo preview, a consulta reúne 157 candidatos de dez marcas em 13 categorias:
+No modo preview, a consulta reúne 205 candidatos de 12 marcas em 13 categorias:
 20 lavadoras, sete geladeiras, sete micro-ondas, sete fogões, cinco freezers, cinco fornos,
 cinco cooktops, cinco lava-louças, dez air fryers, seis liquidificadores, oito aspiradores
-e seis cafeteiras, além de 66 aparelhos de ar-condicionado (Consul, Electrolux, Midea,
-LG, Samsung e Gree). Fontes oficiais e datas em `apps/web/src/lib/catalog-appliances.ts`,
+e seis cafeteiras, além de 114 aparelhos de ar-condicionado (Consul, Electrolux, Midea,
+LG, Samsung, Gree, Daikin e Fujitsu). Fontes oficiais e datas em `apps/web/src/lib/catalog-appliances.ts`,
 `catalog-large-appliances.ts`, `catalog-small-appliances.ts`,
-`catalog-air-conditioning-existing.ts` e `catalog-air-conditioning-new.ts`. Os 137 modelos além das
+`catalog-air-conditioning-existing.ts`, `catalog-air-conditioning-new.ts`,
+`catalog-air-conditioning-daikin.ts` e `catalog-air-conditioning-fujitsu.ts`. Os 185 modelos além das
 lavadoras ainda não possuem GTINs ou variantes documentadas; são encontrados pelo nome.
+Daikin usa pares explícitos do histórico oficial Inmetro; Fujitsu usa os catálogos
+do fabricante no portal GENERAL. Referências históricas não comprovam certificação
+vigente nem disponibilidade comercial.
 O filtro `category` aceita as chaves canônicas de `productCategories` no core, tanto na
 API quanto nas páginas. A home mostra uma amostra por marca, com acesso à lista completa.
 O filtro em kg vale somente para lavadoras. As demais fichas distinguem litros nominais,
@@ -99,7 +103,7 @@ a busca pública continua retornando somente o modelo.
 O importador `pnpm catalog:import` compara esse plano com um PostgreSQL autorizado e
 somente lê por padrão. A gravação explícita insere modelos, variantes, GTINs e evidências
 em uma transação, preservando registros existentes e mantendo novos itens não verificados.
-Exige as migrations até 0007 e conexão direta. Consulte os argumentos e limites em
+Exige as migrations até 0008 e conexão direta. Consulte os argumentos e limites em
 `docs/operacao-local.md` antes de usar um banco permanente.
 
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração

@@ -109,7 +109,7 @@ describe('categorias e medidas do catálogo', () => {
       { ...identity, category: 'vacuum_cleaner', coolingCapacityBtuH: 12000 }]) {
       expect(productSchema.safeParse(product).success).toBe(false);
     }
-    for (const brand of ['LG', 'Samsung', 'Gree']) {
+    for (const brand of ['LG', 'Samsung', 'Gree', 'Daikin', 'Fujitsu']) {
       expect(productSchema.safeParse({ ...air, brand }).success).toBe(true);
       expect(catalogQuerySchema.safeParse({ brand }).success).toBe(true);
     }

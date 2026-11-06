@@ -5,6 +5,8 @@ import { largeApplianceCatalog } from './catalog-large-appliances';
 import { smallApplianceCatalog } from './catalog-small-appliances';
 import { existingBrandAirConditionerCatalog } from './catalog-air-conditioning-existing';
 import { newBrandAirConditionerCatalog } from './catalog-air-conditioning-new';
+import { daikinAirConditionerCatalog } from './catalog-air-conditioning-daikin';
+import { fujitsuAirConditionerCatalog } from './catalog-air-conditioning-fujitsu';
 
 const { brastempManual } = modelSources;
 const candidates: [Product['brand'], string, number, string][] = [
@@ -29,7 +31,8 @@ export const washingMachineCatalog: Product[] = candidates.map(([brand, model, c
 }));
 
 export const catalog: Product[] = [...washingMachineCatalog, ...applianceCatalog, ...largeApplianceCatalog, ...smallApplianceCatalog,
-  ...existingBrandAirConditionerCatalog, ...newBrandAirConditionerCatalog];
+  ...existingBrandAirConditionerCatalog, ...newBrandAirConditionerCatalog,
+  ...daikinAirConditionerCatalog, ...fujitsuAirConditionerCatalog];
 
 export function catalogResponse(query = '', brand = '', capacity = '', category = '') {
   const data = searchProducts(catalog, query, brand, capacity, category);

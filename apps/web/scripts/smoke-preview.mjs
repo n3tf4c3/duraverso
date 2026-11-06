@@ -66,6 +66,22 @@ assert.equal(decimalQuery.status, 200);
 assert.ok((await decimalQuery.json()).data.some((item) => item.model === 'EAF10'));
 checked += 1;
 for (const [prefix, language] of [['', 'pt-BR'], ['/en', 'en-US'], ['/es', 'es-ES']]) {
+  for (const brand of ['Daikin', 'Fujitsu']) {
+    const expected = catalog.data.filter((item) => item.brand === brand);
+    assert.ok(expected.length > 0, `Documented brand: ${brand}`);
+    const listing = await fetch(`${origin}${prefix}/produtos?${new URLSearchParams({ brand, category: 'air_conditioner' })}`);
+    assert.equal(listing.status, 200);
+    const html = await listing.text();
+    for (const item of expected) assert.ok(html.includes(`href="${prefix}/produtos/${item.slug}"`));
+    const example = expected[0];
+    const detail = await fetch(`${origin}${prefix}/produtos/${example.slug}`);
+    assert.equal(detail.status, 200);
+    const detailHtml = await detail.text();
+    assert.ok(detailHtml.includes(example.model));
+    assert.ok(detailHtml.includes(`${new Intl.NumberFormat(language).format(example.coolingCapacityBtuH)} BTU/h`));
+    assert.ok(detailHtml.includes(example.sourceUrl.replaceAll('&', '&amp;')));
+    checked += 2;
+  }
   for (const path of ['', '/produtos', '/scanner', '/como-funciona', '/regras', '/privacidade', '/conta', `/produtos/${product.slug}`]) {
     const response = await fetch(`${origin}${prefix}${path || '/'}`);
     assert.equal(response.status, 200, `${prefix}${path}`);

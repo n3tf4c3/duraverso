@@ -35,7 +35,7 @@ describe('schema de categorias no PostgreSQL descartável', () => {
       await client.query('BEGIN');
       expect((await client.query(connectedSchemaReadinessSql)).rows[0].ready).toBe(true);
       await client.query('SAVEPOINT complete_schema');
-      await client.query('CREATE OR REPLACE FUNCTION duraverso_catalog_categories_version() RETURNS integer LANGUAGE sql IMMUTABLE AS $$ SELECT 2 $$');
+      await client.query('CREATE OR REPLACE FUNCTION duraverso_catalog_categories_version() RETURNS integer LANGUAGE sql IMMUTABLE AS $$ SELECT 3 $$');
       expect((await client.query(connectedSchemaReadinessSql)).rows[0].ready).toBe(false);
       await client.query('ROLLBACK TO SAVEPOINT complete_schema');
       await client.query('DROP FUNCTION duraverso_catalog_categories_version()');

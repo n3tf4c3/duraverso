@@ -101,7 +101,7 @@ describe('administração auditável do catálogo', () => {
     expect(results.find((r) => r.status === 'rejected')).toMatchObject({ reason: { status: 409 } });
     expect((await f.read()).history).toHaveLength(1);
   });
-  it.each(['LG', 'Samsung', 'Gree'] as const)('audita BTU/h de %s e recusa decisão desatualizada', async (brand) => {
+  it.each(['LG', 'Samsung', 'Gree', 'Daikin', 'Fujitsu'] as const)('audita BTU/h de %s e recusa decisão desatualizada', async (brand) => {
     const f = await fixture();
     await pool.query(`UPDATE products SET category='air_conditioner',brand=$2,capacity_kg=NULL,cooling_capacity_btu_h=12000 WHERE id=$1`,
       [f.productId, brand]);

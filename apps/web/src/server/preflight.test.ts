@@ -18,7 +18,7 @@ it('exige a versão atual da migration, colunas e constraints antes de abrir mod
   await preflight();
   expect(mocks.query).toHaveBeenCalledWith(connectedSchemaReadinessSql);
   expect(connectedSchemaReadinessSql).toContain('duraverso_catalog_categories_version()');
-  expect(connectedSchemaReadinessSql).toContain('duraverso_catalog_categories_version() >= 3');
+  expect(connectedSchemaReadinessSql).toContain('duraverso_catalog_categories_version() >= 4');
   expect(connectedSchemaReadinessSql).toContain('pg_attribute');
   expect(connectedSchemaReadinessSql).toContain('product_category_measures');
   mocks.query.mockResolvedValueOnce([{ ready: false }]);

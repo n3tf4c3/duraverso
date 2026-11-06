@@ -57,6 +57,13 @@
       "when": 1794003061465,
       "tag": "0007_air-conditioning",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794003771557,
+      "tag": "0008_air-conditioning-brands",
+      "breakpoints": true
     }
   ]
 }
