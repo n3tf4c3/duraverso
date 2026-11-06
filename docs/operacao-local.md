@@ -20,22 +20,76 @@ Nenhuma captura da câmera é enviada. A biblioteca de leitura só carrega ao so
 
 As fontes e evidências estão em `apps/web/src/lib/catalog-evidence.ts`, consumidas pelo
 catálogo em `apps/web/src/lib/catalog.ts`. Modelo e capacidade foram conferidos nos 20
-candidatos. Os 40 GTINs identificam apenas modelos; código completo e voltagem ainda
-precisam de conferência antes da criação de uma variante para avaliações.
+candidatos. Os 40 GTINs identificam apenas modelos na consulta pública. A preparação
+documental local das variantes está em `catalog-variants.ts`, conferida em 06/11/2026.
 Não deduzir tensão pela ordem dos códigos ou por um seletor comercial 110V/127V.
 O campo EAN-13 truncado da LED13 foi descartado; os campos individuais fornecem os
 códigos completos. Para LDA13, o manual sustenta 13 kg apesar do campo 13,1 kg na loja.
 GTIN ausente não impede busca por marca/modelo; nunca adivinhar a correspondência.
 
+`pnpm catalog:plan` valida as 40 associações de GTIN, identificador e tensão e indica
+lacunas; `pnpm catalog:plan --json` exibe o plano com fontes. É uma operação inteiramente
+local, sem carregar credenciais, conectar ao banco, aplicar SQL ou atribuir `verified`.
+As regras de validação ficam no core. Erros de associação/duplicidade são recusados;
+lacunas deixam a cobertura incompleta e o comando retorna código de saída diferente de zero.
+
+Brastemp/Consul: GTIN e código completo vêm do mesmo item da API oficial; tensão nominal
+vem da linha desse código no histórico do registro Inmetro 000727/2023. O histórico inclui
+exclusões e alterações: é evidência de identidade/tensão, não uma alegação de certificação
+vigente. Na Electrolux, EAN, referência `RefId` e tensão vêm do mesmo item da API, filtrando
+`productReference` exato. A referência de catálogo fica distinguida do código comercial;
+não foram inferidos os sufixos de revisão de PNC da etiqueta física.
+
+A cobertura se limita aos 40 códigos escolhidos. Não comprova cobertura de todas as cores,
+revisões e versões. Cada variante importada representa o item documentado do catálogo;
+uma referência Electrolux não implica uma revisão física específica. Identificadores
+guardam seu tipo (`manufacturer_reference` ou `catalog_reference`). Registros antigos
+sem tipo permanecem com `code_kind` nulo e exigem revisão se colidirem com a importação.
+Nenhuma revisão física é inferida, fundida ou habilitada para avaliações automaticamente.
+
 ## Banco e migrations
 
-`db:generate` gera arquivos locais e não acessa o banco. As migrations 0000, 0001 e 0002
+`db:generate` gera arquivos locais e não acessa o banco. As migrations 0000 até 0003
 foram aplicadas e testadas em PostgreSQL descartável. As funções da migration 0002
 executam cada submissão/decisão/retirada em uma única transação PostgreSQL; Neon HTTP
 não oferece transações interativas. Os locks seguem a ordem posse, avaliação e revisão.
 `db:migrate` exige DATABASE_URL_DIRECT em apps/web/.env.local, conexão direta e banco autorizado.
 O migrador usa advisory lock na mesma sessão. Não imprimir a connection string.
-Não há seed que crie administrador ou escreva candidatos em produção.
+O build não importa catálogo nem cria administrador.
+
+### Importação administrativa do catálogo
+
+A migration 0003 é aditiva: acrescenta o tipo opcional de identificador às variantes e
+a tabela de evidências por GTIN. Preserva o funcionamento da versão anterior e seus
+registros sem classificação. Foi aplicada apenas ao PostgreSQL descartável dos testes.
+
+Após autorização para o banco de destino e aplicação das migrations, configure
+`DATABASE_URL_DIRECT` em `apps/web/.env.local`. O importador usa uma sessão PostgreSQL
+direta (`pg`), não Neon HTTP, e recusa endereços Neon com `-pooler`. Ele não aplica migrations.
+
+1. `pnpm catalog:plan`: valida somente os arquivos locais, sem conexão.
+2. `pnpm catalog:import`: consulta o banco em transação somente de leitura e apresenta
+   destino `host:porta/banco`, contagens de inserção e conflitos. Não grava sequer para simular.
+3. Depois de conferir o destino e obter autorização para a gravação:
+   `pnpm catalog:import --apply --expect-target=host:porta/banco`, substituindo pelo destino
+   exato do relatório, sem usuário/senha. Não colocar connection string na linha de comando.
+
+A aplicação refaz a comparação sob lock. Insere o lote inteiro em uma transação ou
+reverte tudo; advisory lock compartilhado com o migrador e locks das quatro tabelas
+serializam importações e protegem a comparação contra outras escritas. Há timeout de
+lock de 10 segundos e de instrução de 30 segundos. Não executar dentro de outra transação.
+
+Repetir o mesmo lote mantém IDs, flags de verificação e evidências existentes. O importador
+só insere: nunca atualiza, apaga, reassocia GTIN ou concede papel. Divergência de modelo,
+capacidade, tensão, tipo de identificador, fonte, data ou nota interrompe o lote para
+reconciliação explícita. A data nova de uma reconferência não sobrescreve a anterior.
+Conflitos retornam código de saída não zero. Parâmetros de conexão que podem alterar o
+destino são recusados; credenciais e detalhes brutos de erros não são impressos.
+
+Novos produtos e variantes entram com `verified=false`. A importação não abre avaliações,
+não decide equivalência de revisões físicas e não substitui a ativação administrativa
+posterior. A API pública continua no catálogo estático. O comando é administrativo,
+recusado na hospedagem Vercel e não é chamado pelo build nem por rotas HTTP.
 
 Migrations não rodam automaticamente no build. A prévia funciona sem segredos tanto
 localmente quanto na Vercel. Build e inicialização recusam connected na Vercel. A futura

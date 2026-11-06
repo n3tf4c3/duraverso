@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export { reconcileCatalog, type StoredCatalog, type CatalogImportConflict } from './catalog-import';
+
 export const MIN_COMMUNITY_REVIEWS = 20;
 export const MAX_REVIEW_LENGTH = 2000;
 export const brands = ['Brastemp', 'Consul', 'Electrolux'] as const;
@@ -101,4 +103,54 @@ const transitions: Record<typeof reviewStatuses[number], readonly typeof reviewS
 };
 export function canTransitionReview(from: typeof reviewStatuses[number], to: typeof reviewStatuses[number], reason = '') {
   return transitions[from].includes(to) && (!['changes_requested', 'rejected'].includes(to) || reason.trim().length > 0);
+}
+
+const evidenceUrl = z.url().refine((value) => new URL(value).protocol === 'https:', 'A evidência deve usar HTTPS.');
+
+// Identidade documental para preparação do banco, sem atribuir verified ou IDs persistentes.
+export const catalogVariantEvidenceSchema = z.strictObject({
+  productSlug: z.string().min(1),
+  gtin: z.string().refine(isValidGtin, 'GTIN inválido.'),
+  manufacturerCode: z.string().trim().min(1).max(100),
+  codeKind: z.enum(['manufacturer_reference', 'catalog_reference']),
+  voltage: z.union([z.literal(127), z.literal(220)]),
+  sourceUrl: evidenceUrl,
+  voltageSourceUrl: evidenceUrl,
+  checkedAt: z.iso.date(),
+  note: z.string().trim().min(1),
+});
+export type CatalogVariantEvidence = z.infer<typeof catalogVariantEvidenceSchema>;
+
+export function prepareCatalog(productsInput: unknown, evidenceInput: unknown) {
+  const products = z.array(productSchema).min(1).parse(productsInput);
+  const variants = z.array(catalogVariantEvidenceSchema).parse(evidenceInput);
+  const bySlug = new Map(products.map((product) => [product.slug, product]));
+  if (bySlug.size !== products.length) throw new Error('Modelo duplicado no catálogo.');
+  const names = products.map((product) => JSON.stringify([product.brand, product.model]));
+  if (new Set(names).size !== names.length) throw new Error('Marca/modelo duplicado no catálogo.');
+
+  const catalogGtins = products.flatMap((product) => product.confirmedGtins);
+  if (new Set(catalogGtins).size !== catalogGtins.length) throw new Error('GTIN duplicado no catálogo.');
+  const seenGtins = new Set<string>();
+  const identities = new Set<string>();
+  for (const variant of variants) {
+    const product = bySlug.get(variant.productSlug);
+    if (!product?.confirmedGtins.includes(variant.gtin)) {
+      throw new Error('A evidência deve associar o GTIN ao mesmo modelo do catálogo.');
+    }
+    if (seenGtins.has(variant.gtin)) throw new Error('GTIN duplicado nas evidências.');
+    seenGtins.add(variant.gtin);
+    const identity = JSON.stringify([variant.productSlug, variant.manufacturerCode]);
+    if (identities.has(identity)) throw new Error('Identificador de variante duplicado nas evidências.');
+    identities.add(identity);
+  }
+  const unresolvedGtins = products.flatMap((product) => product.confirmedGtins
+    .filter((gtin) => !seenGtins.has(gtin)).map((gtin) => ({ productSlug: product.slug, gtin })));
+  const productsWithoutVariants = products.filter((product) => !variants.some((variant) => variant.productSlug === product.slug))
+    .map((product) => product.slug);
+  return {
+    mode: 'dry_run' as const, products, variants, unresolvedGtins, productsWithoutVariants,
+    // Apenas cobertura dos códigos já selecionados; não significa todas as versões do mercado.
+    selectedCatalogCovered: unresolvedGtins.length === 0 && productsWithoutVariants.length === 0,
+  };
 }

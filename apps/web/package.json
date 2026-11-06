@@ -12,6 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:integration": "node scripts/test-integration.mjs --falsify",
+    "catalog:plan": "tsx src/db/catalog-plan.ts",
+    "catalog:import": "tsx src/db/catalog-import.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts"
   },

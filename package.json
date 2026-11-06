@@ -5,6 +5,8 @@
     "web": "pnpm --filter @duraverso/web dev",
     "web:build": "pnpm --filter @duraverso/web build",
     "web:start": "pnpm --filter @duraverso/web start",
+    "catalog:plan": "pnpm --filter @duraverso/web catalog:plan",
+    "catalog:import": "pnpm --filter @duraverso/web catalog:import",
     "lint": "pnpm -r lint", "typecheck": "pnpm -r typecheck", "test": "pnpm -r test",
     "test:integration": "pnpm --filter @duraverso/web test:integration"
   }

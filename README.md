@@ -49,6 +49,19 @@ As fontes dos 20 modelos foram conferidas. A busca reconhece 40 GTINs oficiais d
 modelos Brastemp, Consul e Electrolux; a cobertura de versões continua parcial. Códigos identificam o modelo, sem selecionar
 voltagem nem criar variantes para avaliações. Evidências em `apps/web/src/lib/catalog-evidence.ts`.
 Por padrão, contas e administração apresentam seu estado de preparação sem simular gravação.
+
+`pnpm catalog:plan` confere localmente a preparação dos 20 modelos e 40 associações
+entre GTIN, identificador do fabricante e tensão nominal. `pnpm catalog:plan --json`
+exibe os dados e suas fontes para revisão. O comando não acessa banco, não grava dados
+nem habilita avaliações. Evidências separadas em `apps/web/src/lib/catalog-variants.ts`;
+a busca pública continua retornando somente o modelo.
+
+O importador `pnpm catalog:import` compara esse plano com um PostgreSQL autorizado e
+somente lê por padrão. A gravação explícita insere modelos, variantes, GTINs e evidências
+em uma transação, preservando registros existentes e mantendo novos itens não verificados.
+Exige a migration 0003 e conexão direta. Consulte os argumentos e limites em
+`docs/operacao-local.md` antes de usar um banco permanente.
+
 O modo conectado tem envio, atualização, retirada e revisão de avaliações; a configuração
 externa e o login real ainda não foram executados. Veja `docs/operacao-local.md`.
 

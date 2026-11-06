@@ -24,12 +24,20 @@ export const products = pgTable('products', {
 export const variants = pgTable('variants', {
   id: uuid('id').primaryKey().defaultRandom(), productId: uuid('product_id').notNull().references(() => products.id),
   manufacturerCode: varchar('manufacturer_code', { length: 100 }).notNull(), voltage: integer('voltage').notNull(),
+  // NULL preserva registros anteriores sem presumir a natureza do identificador.
+  codeKind: varchar('code_kind', { length: 30 }),
   verified: boolean('verified').notNull().default(false),
-}, (t) => [unique('variant_product_identity').on(t.id, t.productId), unique('variant_manufacturer_voltage').on(t.productId, t.manufacturerCode, t.voltage), check('voltage_supported', sql`${t.voltage} IN (127, 220)`)]);
+}, (t) => [unique('variant_product_identity').on(t.id, t.productId), unique('variant_manufacturer_voltage').on(t.productId, t.manufacturerCode, t.voltage), check('voltage_supported', sql`${t.voltage} IN (127, 220)`), check('variant_code_kind_supported', sql`${t.codeKind} IS NULL OR ${t.codeKind} IN ('manufacturer_reference', 'catalog_reference')`)]);
 export const gtins = pgTable('gtins', {
   code: varchar('code', { length: 14 }).primaryKey(), variantId: uuid('variant_id').notNull().references(() => variants.id),
   sourceUrl: text('source_url').notNull(),
 }, (t) => [check('gtin_format', sql`${t.code} ~ '^([0-9]{8}|[0-9]{12}|[0-9]{13}|[0-9]{14})$'`)]);
+export const catalogVariantEvidence = pgTable('catalog_variant_evidence', {
+  gtinCode: varchar('gtin_code', { length: 14 }).primaryKey().references(() => gtins.code),
+  voltageSourceUrl: text('voltage_source_url').notNull(),
+  checkedAt: timestamp('checked_at', { withTimezone: true }).notNull(),
+  note: text('note').notNull(), createdAt: createdAt(),
+}, (t) => [check('catalog_evidence_note_required', sql`length(trim(${t.note})) > 0`)]);
 export const ownerships = pgTable('ownerships', {
   id: uuid('id').primaryKey().defaultRandom(), ownerId: uuid('owner_id').notNull().references(() => users.id),
   productId: uuid('product_id').notNull().references(() => products.id), variantId: uuid('variant_id').notNull(),
