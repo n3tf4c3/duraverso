@@ -1,0 +1,3 @@
+# Commits só de formatação; git blame --ignore-revs-file .git-blame-ignore-revs
+# style: adota Prettier e formata o código
+2ab8e47b92fc56a067cf8c2300cf3123df66e52b
