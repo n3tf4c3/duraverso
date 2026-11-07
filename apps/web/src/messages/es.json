@@ -282,12 +282,7 @@
       "access": "Acceso",
       "market": "Catálogo de productos vendidos en Brasil.",
       "footNav": "Pie de página",
-      "links": [
-        "Cómo funciona",
-        "Normas de la comunidad",
-        "Privacidad",
-        "Mi cuenta"
-      ]
+      "links": ["Cómo funciona", "Normas de la comunidad", "Privacidad", "Mi cuenta"]
     },
     "pages": {
       "como": {

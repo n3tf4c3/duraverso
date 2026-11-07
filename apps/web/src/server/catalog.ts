@@ -8,7 +8,8 @@ export class PublicCatalogService {
     try {
       // Uma consulta fornece um retrato consistente. Apenas campos públicos;
       // importar não publica, e códigos de variantes pendentes ficam ocultos.
-      const rows = await this.db.query(`SELECT p.slug AS id,p.slug,p.brand,p.model,p.category,p.capacity_kg::float AS "capacityKg",
+      const rows = await this.db
+        .query(`SELECT p.slug AS id,p.slug,p.brand,p.model,p.category,p.capacity_kg::float AS "capacityKg",
         p.capacity_liters::float AS "capacityLiters",p.burner_count AS "burnerCount",
         p.place_settings AS "placeSettings",p.power_watts::float AS "powerWatts",
         p.cooling_capacity_btu_h::float AS "coolingCapacityBtuH",
@@ -19,8 +20,13 @@ export class PublicCatalogService {
         LEFT JOIN gtins g ON g.variant_id=v.id
         WHERE p.verified GROUP BY p.id ORDER BY p.brand,p.model,p.slug`);
       // Ausência de uma medida não é zero nem uma medida de outra categoria.
-      const data = rows.map((row) => Object.fromEntries(Object.entries(row)
-        .filter(([key, value]) => value !== null || !productMeasurementFields.some((field) => field === key))));
+      const data = rows.map((row) =>
+        Object.fromEntries(
+          Object.entries(row).filter(
+            ([key, value]) => value !== null || !productMeasurementFields.some((field) => field === key),
+          ),
+        ),
+      );
       return catalogResponseSchema.parse({ mode: 'database_catalog', data, total: data.length });
     } catch {
       // Não expor detalhes do driver/credenciais nem substituir por candidatos locais.

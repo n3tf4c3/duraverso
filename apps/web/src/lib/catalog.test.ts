@@ -1,7 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { catalog, catalogResponse, washingMachineCatalog } from './catalog';
 import { applianceCatalog } from './catalog-appliances';
-import { brands, catalogResponseSchema, isValidGtin, productCategories, productCategory, productSchema } from '@duraverso/core';
+import {
+  brands,
+  catalogResponseSchema,
+  isValidGtin,
+  productCategories,
+  productCategory,
+  productSchema,
+} from '@duraverso/core';
 import { barcodeEvidence } from './catalog-evidence';
 import { GET } from '../app/api/v1/products/route';
 
@@ -24,18 +31,40 @@ describe('catálogo e contrato público', () => {
     expect(gtins.every(isValidGtin)).toBe(true);
     for (const [slug, evidence] of Object.entries(barcodeEvidence)) {
       expect(catalog.some((p) => p.slug === slug)).toBe(true);
-      expect(evidence?.sourceUrl).toMatch(/^https:\/\/(loja\.electrolux\.com\.br|api\.electrolux-medialibrary\.com|www\.brastemp\.com\.br|www\.consul\.com\.br|www\.compracerta\.com\.br)\//);
+      expect(evidence?.sourceUrl).toMatch(
+        /^https:\/\/(loja\.electrolux\.com\.br|api\.electrolux-medialibrary\.com|www\.brastemp\.com\.br|www\.consul\.com\.br|www\.compracerta\.com\.br)\//,
+      );
       expect(evidence?.checkedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
     expect(washingMachineCatalog.every((p) => p.confirmedGtins.length === 2)).toBe(true);
     expect(applianceCatalog.every((p) => p.confirmedGtins.length === 0)).toBe(true);
   });
   it('inclui fontes oficiais e medidas próprias para cada categoria', () => {
-    const officialHosts = ['www.brastemp.com.br', 'www.consul.com.br', 'loja.electrolux.com.br',
-      'www.midea.com.br', 'www.midea.com', 'conteudo.midea.com.br', 'www.panasonic.com', 'loja.panasonic.com.br', 'parceiros.panasonic.com.br',
-      'www.philips.com.br', 'www.walita.com.br', 'www.philips.com', 'www.wap.ind.br', 'wap.ind.br', 'loja.wap.ind.br',
-      'www.lg.com', 'www.samsung.com', 'gree.com.br', 'www.generalww.com', 'registro.inmetro.gov.br',
-      'sac.philco.com.br', 'www.hisense.com.br', 'www.tcl.com'];
+    const officialHosts = [
+      'www.brastemp.com.br',
+      'www.consul.com.br',
+      'loja.electrolux.com.br',
+      'www.midea.com.br',
+      'www.midea.com',
+      'conteudo.midea.com.br',
+      'www.panasonic.com',
+      'loja.panasonic.com.br',
+      'parceiros.panasonic.com.br',
+      'www.philips.com.br',
+      'www.walita.com.br',
+      'www.philips.com',
+      'www.wap.ind.br',
+      'wap.ind.br',
+      'loja.wap.ind.br',
+      'www.lg.com',
+      'www.samsung.com',
+      'gree.com.br',
+      'www.generalww.com',
+      'registro.inmetro.gov.br',
+      'sac.philco.com.br',
+      'www.hisense.com.br',
+      'www.tcl.com',
+    ];
     for (const category of productCategories.filter((value) => value !== 'washing_machine')) {
       const products = catalogResponse('', '', '', category).data;
       expect(products.length).toBeGreaterThanOrEqual(2);
@@ -72,7 +101,11 @@ describe('catálogo e contrato público', () => {
         expect(product.category).toBe('air_conditioner');
         expect(product.coolingCapacityBtuH).toBeGreaterThan(0);
         for (const q of [product.model, product.model.replaceAll('/', ' ')]) {
-          const response = await GET(new Request(`http://localhost/api/v1/products?${new URLSearchParams({ q, brand, category: 'air_conditioner' })}`));
+          const response = await GET(
+            new Request(
+              `http://localhost/api/v1/products?${new URLSearchParams({ q, brand, category: 'air_conditioner' })}`,
+            ),
+          );
           expect(response.status).toBe(200);
           const result = catalogResponseSchema.parse(await response.json());
           expect(result.data.map((item) => item.slug)).toEqual([product.slug]);
@@ -81,12 +114,18 @@ describe('catálogo e contrato público', () => {
     }
   });
   it('busca capacidade de refrigeração e referências completas sem misturar unidades', async () => {
-    const expected = catalog.filter((product) => product.category === 'air_conditioner' && product.coolingCapacityBtuH === 12000);
+    const expected = catalog.filter(
+      (product) => product.category === 'air_conditioner' && product.coolingCapacityBtuH === 12000,
+    );
     expect(expected.length).toBeGreaterThan(0);
     for (const q of ['12000 BTU', '12.000 BTU/h', '12,000 BTU/h']) {
-      const response = await GET(new Request(`http://localhost/api/v1/products?${new URLSearchParams({ q, category: 'air_conditioner' })}`));
+      const response = await GET(
+        new Request(`http://localhost/api/v1/products?${new URLSearchParams({ q, category: 'air_conditioner' })}`),
+      );
       expect(response.status).toBe(200);
-      expect((await response.json()).data.map((product: { slug: string }) => product.slug)).toEqual(expected.map((product) => product.slug));
+      expect((await response.json()).data.map((product: { slug: string }) => product.slug)).toEqual(
+        expected.map((product) => product.slug),
+      );
     }
     expect(catalogResponse('JI12F/JE12F').data.map((product) => product.model)).toEqual(['JI12F/JE12F']);
     expect(catalogResponse('12000 BTU', '', '', 'vacuum_cleaner').total).toBe(0);
@@ -114,16 +153,20 @@ describe('catálogo e contrato público', () => {
   });
   it('retorna somente o modelo pesquisado', () => {
     const result = catalogResponse('lac12');
-    expect(result.total).toBe(1); expect(result.data[0]?.model).toBe('LAC12');
+    expect(result.total).toBe(1);
+    expect(result.data[0]?.model).toBe('LAC12');
   });
   it('a rota HTTP respeita o contrato compartilhado', async () => {
     const response = await GET(new Request('http://localhost/api/v1/products?brand=Consul'));
     expect(response.status).toBe(200);
     const parsed = catalogResponseSchema.parse(await response.json());
-    expect(parsed.total).toBe(catalog.filter((p) => p.brand === 'Consul').length); expect(parsed.data.every((p) => p.brand === 'Consul')).toBe(true);
+    expect(parsed.total).toBe(catalog.filter((p) => p.brand === 'Consul').length);
+    expect(parsed.data.every((p) => p.brand === 'Consul')).toBe(true);
   });
   it('a API combina categoria, marca e busca sem converter unidades em kg', async () => {
-    const response = await GET(new Request('http://localhost/api/v1/products?category=refrigerator&brand=Consul&q=342'));
+    const response = await GET(
+      new Request('http://localhost/api/v1/products?category=refrigerator&brand=Consul&q=342'),
+    );
     expect(response.status).toBe(200);
     const result = catalogResponseSchema.parse(await response.json());
     expect(result.total).toBe(1);

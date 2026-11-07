@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/i18n";
+import type { Locale } from '@/lib/i18n';
 
 // Bandeiras simplificadas em SVG (sem emoji). São decorativas: o nome do
 // idioma está sempre escrito ao lado, por isso aria-hidden.
@@ -8,7 +8,7 @@ export function Flag({ locale, width = 24 }: { locale: Locale; width?: number })
 
   return (
     <svg width={width} height={height} viewBox="0 0 30 20" aria-hidden="true" focusable="false" className="shrink-0">
-      {locale === "pt" && (
+      {locale === 'pt' && (
         <>
           <rect width="30" height="20" fill="#009739" />
           <path d="M15 2.2L27.6 10 15 17.8 2.4 10Z" fill="#FEDD00" />
@@ -16,7 +16,7 @@ export function Flag({ locale, width = 24 }: { locale: Locale; width?: number })
           <path d="M10.8 9.1Q15 7.7 19.3 10.7" stroke="#FFFFFF" strokeWidth="0.9" fill="none" />
         </>
       )}
-      {locale === "en" && (
+      {locale === 'en' && (
         <>
           <rect width="30" height="20" fill="#FFFFFF" />
           <path
@@ -24,10 +24,13 @@ export function Flag({ locale, width = 24 }: { locale: Locale; width?: number })
             fill="#B31942"
           />
           <rect width="12" height="10.77" fill="#0A3161" />
-          <path d="M2 2h1v1H2zM5.5 2h1v1h-1zM9 2h1v1H9zM3.7 4.9h1v1h-1zM7.2 4.9h1v1h-1zM2 7.8h1v1H2zM5.5 7.8h1v1h-1zM9 7.8h1v1H9z" fill="#FFFFFF" />
+          <path
+            d="M2 2h1v1H2zM5.5 2h1v1h-1zM9 2h1v1H9zM3.7 4.9h1v1h-1zM7.2 4.9h1v1h-1zM2 7.8h1v1H2zM5.5 7.8h1v1h-1zM9 7.8h1v1H9z"
+            fill="#FFFFFF"
+          />
         </>
       )}
-      {locale === "es" && (
+      {locale === 'es' && (
         <>
           <rect width="30" height="20" fill="#AA151B" />
           <rect y="5" width="30" height="10" fill="#F1BF00" />

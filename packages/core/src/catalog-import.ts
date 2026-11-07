@@ -1,7 +1,27 @@
-import { prepareCatalog, productCategory, productMeasurementFields, type CatalogVariantEvidence, type Product } from './index';
+import {
+  prepareCatalog,
+  productCategory,
+  productMeasurementFields,
+  type CatalogVariantEvidence,
+  type Product,
+} from './index';
 
 export type StoredCatalog = {
-  products: (Pick<Product, 'slug' | 'brand' | 'model' | 'category' | 'capacityKg' | 'capacityLiters' | 'burnerCount' | 'placeSettings' | 'powerWatts' | 'coolingCapacityBtuH' | 'sourceUrl' | 'sourceCheckedAt'> & { id: string })[];
+  products: (Pick<
+    Product,
+    | 'slug'
+    | 'brand'
+    | 'model'
+    | 'category'
+    | 'capacityKg'
+    | 'capacityLiters'
+    | 'burnerCount'
+    | 'placeSettings'
+    | 'powerWatts'
+    | 'coolingCapacityBtuH'
+    | 'sourceUrl'
+    | 'sourceCheckedAt'
+  > & { id: string })[];
   variants: { id: string; productId: string; manufacturerCode: string; voltage: number; codeKind: string | null }[];
   gtins: { code: string; variantId: string; sourceUrl: string }[];
   evidence: { gtinCode: string; voltageSourceUrl: string; checkedAt: string; note: string }[];
@@ -21,16 +41,24 @@ export function reconcileCatalog(productsInput: unknown, evidenceInput: unknown,
   for (const product of plan.products) {
     const row = stored.products.find((entry) => entry.slug === product.slug);
     const sameName = stored.products.find((entry) => entry.brand === product.brand && entry.model === product.model);
-    if ((sameName && sameName.slug !== product.slug) || (row &&
-      (row.brand !== product.brand || row.model !== product.model || productCategory(row) !== productCategory(product) ||
-       productMeasurementFields.some((field) => row[field] !== product[field]) ||
-       row.sourceUrl !== product.sourceUrl || row.sourceCheckedAt !== product.sourceCheckedAt))) {
+    if (
+      (sameName && sameName.slug !== product.slug) ||
+      (row &&
+        (row.brand !== product.brand ||
+          row.model !== product.model ||
+          productCategory(row) !== productCategory(product) ||
+          productMeasurementFields.some((field) => row[field] !== product[field]) ||
+          row.sourceUrl !== product.sourceUrl ||
+          row.sourceCheckedAt !== product.sourceCheckedAt))
+    ) {
       conflicts.push({ entity: 'product', key: product.slug });
     } else if (!row) productsToInsert.push(product);
   }
   for (const variant of plan.variants) {
     const product = stored.products.find((entry) => entry.slug === variant.productSlug);
-    const matches = stored.variants.filter((entry) => entry.productId === product?.id && entry.manufacturerCode === variant.manufacturerCode);
+    const matches = stored.variants.filter(
+      (entry) => entry.productId === product?.id && entry.manufacturerCode === variant.manufacturerCode,
+    );
     const row = matches[0];
     if (matches.length > 1 || (row && (row.voltage !== variant.voltage || row.codeKind !== variant.codeKind))) {
       conflicts.push({ entity: 'variant', key: variant.gtin });
@@ -41,7 +69,12 @@ export function reconcileCatalog(productsInput: unknown, evidenceInput: unknown,
       conflicts.push({ entity: 'gtin', key: variant.gtin });
     } else if (!gtin) gtinsToInsert.push(variant);
     const evidence = stored.evidence.find((entry) => entry.gtinCode === variant.gtin);
-    if (evidence && (evidence.voltageSourceUrl !== variant.voltageSourceUrl || evidence.checkedAt !== variant.checkedAt || evidence.note !== variant.note)) {
+    if (
+      evidence &&
+      (evidence.voltageSourceUrl !== variant.voltageSourceUrl ||
+        evidence.checkedAt !== variant.checkedAt ||
+        evidence.note !== variant.note)
+    ) {
       conflicts.push({ entity: 'evidence', key: variant.gtin });
     } else if (!evidence) evidenceToInsert.push(variant);
   }

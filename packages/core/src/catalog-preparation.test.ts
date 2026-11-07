@@ -2,14 +2,26 @@ import { describe, expect, it } from 'vitest';
 import { prepareCatalog, type CatalogVariantEvidence, type Product } from './index';
 
 const product: Product = {
-  id: 'fixture', slug: 'fixture', brand: 'Consul', model: 'Fixture', capacityKg: 9,
-  sourceUrl: 'https://example.test/model', sourceCheckedAt: '2026-11-06',
-  identification: 'candidate', confirmedGtins: ['7891129615250', '7891129616219'],
+  id: 'fixture',
+  slug: 'fixture',
+  brand: 'Consul',
+  model: 'Fixture',
+  capacityKg: 9,
+  sourceUrl: 'https://example.test/model',
+  sourceCheckedAt: '2026-11-06',
+  identification: 'candidate',
+  confirmedGtins: ['7891129615250', '7891129616219'],
 };
 const evidence: CatalogVariantEvidence = {
-  productSlug: 'fixture', gtin: '7891129615250', manufacturerCode: 'TEST-A',
-  codeKind: 'manufacturer_reference', voltage: 127, sourceUrl: 'https://example.test/gtin',
-  voltageSourceUrl: 'https://example.test/voltage', checkedAt: '2026-11-06', note: 'Fixture de teste.',
+  productSlug: 'fixture',
+  gtin: '7891129615250',
+  manufacturerCode: 'TEST-A',
+  codeKind: 'manufacturer_reference',
+  voltage: 127,
+  sourceUrl: 'https://example.test/gtin',
+  voltageSourceUrl: 'https://example.test/voltage',
+  checkedAt: '2026-11-06',
+  note: 'Fixture de teste.',
 };
 
 describe('preparação documental do catálogo', () => {
@@ -33,8 +45,13 @@ describe('preparação documental do catálogo', () => {
     expect(() => prepareCatalog([product, product], [])).toThrow();
   });
   it('recusa 110V, GTIN inválido, fonte insegura e marcação de ativação', () => {
-    for (const changed of [{ voltage: 110 }, { gtin: '7891129615251' },
-      { voltageSourceUrl: 'http://example.test' }, { verified: true }, { manufacturerCode: '' }]) {
+    for (const changed of [
+      { voltage: 110 },
+      { gtin: '7891129615251' },
+      { voltageSourceUrl: 'http://example.test' },
+      { verified: true },
+      { manufacturerCode: '' },
+    ]) {
       expect(() => prepareCatalog([product], [{ ...evidence, ...changed }])).toThrow();
     }
   });

@@ -21,5 +21,9 @@ export async function preflight() {
       enforceLimit('auth', 'preflight'),
     ]);
     if (!rows[0]?.ready) throw new Error('schema_missing');
-  } catch { throw new Error('Modo conectado indisponível: confira a configuração, as migrações e o limitador compartilhado. Nenhuma credencial é exibida.'); }
+  } catch {
+    throw new Error(
+      'Modo conectado indisponível: confira a configuração, as migrações e o limitador compartilhado. Nenhuma credencial é exibida.',
+    );
+  }
 }

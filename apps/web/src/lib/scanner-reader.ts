@@ -1,5 +1,12 @@
 import { BrowserMultiFormatOneDReader } from '@zxing/browser';
-import { BarcodeFormat, ChecksumException, DecodeHintType, FormatException, NotFoundException, type Result } from '@zxing/library';
+import {
+  BarcodeFormat,
+  ChecksumException,
+  DecodeHintType,
+  FormatException,
+  NotFoundException,
+  type Result,
+} from '@zxing/library';
 import { isValidGtin } from '@duraverso/core';
 
 const productFormats = [BarcodeFormat.EAN_13, BarcodeFormat.EAN_8, BarcodeFormat.UPC_A, BarcodeFormat.ITF];

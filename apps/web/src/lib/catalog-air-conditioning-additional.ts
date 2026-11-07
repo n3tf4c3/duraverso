@@ -39,9 +39,24 @@ const models: Pick<Product, 'brand' | 'model' | 'coolingCapacityBtuH' | 'sourceU
   // Fichas técnicas oficiais: os splits descrevem ambas as unidades sob uma
   // referência comercial; o AP é portátil completo. Seletores sem ficha própria
   // não foram usados para deduzir outros códigos/capacidades.
-  { brand: 'Hisense', model: 'AS-09TW2RLDTT00E', coolingCapacityBtuH: 9000, sourceUrl: 'https://www.hisense.com.br/ar-condicionado/split-hi-connect/' },
-  { brand: 'Hisense', model: 'AS-12UW5RXV00A', coolingCapacityBtuH: 12000, sourceUrl: 'https://www.hisense.com.br/ar-condicionado/split-hi-smart/' },
-  { brand: 'Hisense', model: 'AP-12CWBRNPS01', coolingCapacityBtuH: 12000, sourceUrl: 'https://www.hisense.com.br/ar-condicionado/portateis-portatil/' },
+  {
+    brand: 'Hisense',
+    model: 'AS-09TW2RLDTT00E',
+    coolingCapacityBtuH: 9000,
+    sourceUrl: 'https://www.hisense.com.br/ar-condicionado/split-hi-connect/',
+  },
+  {
+    brand: 'Hisense',
+    model: 'AS-12UW5RXV00A',
+    coolingCapacityBtuH: 12000,
+    sourceUrl: 'https://www.hisense.com.br/ar-condicionado/split-hi-smart/',
+  },
+  {
+    brand: 'Hisense',
+    model: 'AP-12CWBRNPS01',
+    coolingCapacityBtuH: 12000,
+    sourceUrl: 'https://www.hisense.com.br/ar-condicionado/portateis-portatil/',
+  },
   // Elite GV: a página informa capacidades de resfriamento de 9.000/12.000.
   // A identidade de 12.000 também foi conferida na listagem oficial específica:
   // https://www.tcl.com/br/pt/air-conditioners/ac-12000-btu
@@ -50,9 +65,17 @@ const models: Pick<Product, 'brand' | 'model' | 'coolingCapacityBtuH' | 'sourceU
 ];
 
 export const additionalAirConditionerCatalog: Product[] = models.map((product) => {
-  const slug = `${product.brand}-${product.model}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = `${product.brand}-${product.model}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
   return {
-    ...product, id: slug, slug, category: 'air_conditioner', sourceCheckedAt: checkedAt,
-    identification: 'candidate', confirmedGtins: [],
+    ...product,
+    id: slug,
+    slug,
+    category: 'air_conditioner',
+    sourceCheckedAt: checkedAt,
+    identification: 'candidate',
+    confirmedGtins: [],
   };
 });

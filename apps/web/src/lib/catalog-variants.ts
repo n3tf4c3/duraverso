@@ -2,7 +2,8 @@ import type { CatalogVariantEvidence } from '@duraverso/core';
 import { barcodeEvidence } from './catalog-evidence';
 
 const checkedAt = '2026-11-06';
-const inmetro = (page: number) => `https://registro.inmetro.gov.br/consulta/detalhe.aspx?NumeroRegistro=000727/2023&pag=${page}`;
+const inmetro = (page: number) =>
+  `https://registro.inmetro.gov.br/consulta/detalhe.aspx?NumeroRegistro=000727/2023&pag=${page}`;
 
 // Tuplas explícitas: nunca converter 110 em 127 nem deduzir tensão pela ordem dos GTINs.
 // O Inmetro é usado como evidência da identidade/tensão, não como selo de certificação atual.
@@ -62,16 +63,28 @@ export const catalogVariantEvidence: CatalogVariantEvidence[] = [
     const sourceUrl = barcodeEvidence[productSlug]?.dataUrl;
     if (!sourceUrl) throw new Error(`Falta fonte de GTIN para ${productSlug}.`);
     return {
-      productSlug, gtin, manufacturerCode, voltage, codeKind: 'manufacturer_reference' as const,
-      sourceUrl, voltageSourceUrl: inmetro(page), checkedAt,
+      productSlug,
+      gtin,
+      manufacturerCode,
+      voltage,
+      codeKind: 'manufacturer_reference' as const,
+      sourceUrl,
+      voltageSourceUrl: inmetro(page),
+      checkedAt,
       note: 'GTIN e RefId do mesmo item da API oficial, reconferidos nesta data. Tensão nominal pelo código completo no histórico do Inmetro; o rótulo comercial 110V não foi convertido automaticamente. Não declara certificação vigente.',
     };
   }),
   ...electrolux.map(([model, gtin, manufacturerCode, voltage]) => {
     const sourceUrl = `https://loja.electrolux.com.br/api/catalog_system/pub/products/search?ft=${model}`;
     return {
-      productSlug: `electrolux-${model.toLowerCase()}`, gtin, manufacturerCode, voltage, codeKind: 'catalog_reference' as const,
-      sourceUrl, voltageSourceUrl: sourceUrl, checkedAt,
+      productSlug: `electrolux-${model.toLowerCase()}`,
+      gtin,
+      manufacturerCode,
+      voltage,
+      codeKind: 'catalog_reference' as const,
+      sourceUrl,
+      voltageSourceUrl: sourceUrl,
+      checkedAt,
       note: 'Produto com productReference exato; EAN, referência de catálogo (RefId) e tensão explícitos no mesmo item da API oficial. Não usa ordem de listas nem preenche código comercial ausente/truncado ou revisão de etiqueta.',
     };
   }),

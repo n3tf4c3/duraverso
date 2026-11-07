@@ -1,12 +1,35 @@
 import { describe, expect, it } from 'vitest';
 import { BrowserMultiFormatOneDReader } from '@zxing/browser';
-import { BarcodeFormat, BinaryBitmap, ChecksumException, FormatException, HybridBinarizer, NotFoundException, Result, RGBLuminanceSource } from '@zxing/library';
+import {
+  BarcodeFormat,
+  BinaryBitmap,
+  ChecksumException,
+  FormatException,
+  HybridBinarizer,
+  NotFoundException,
+  Result,
+  RGBLuminanceSource,
+} from '@zxing/library';
 import { createProductReader, isExpectedScanMiss, readProductGtin } from './scanner-reader';
 
 // EAN-13 7896584072143: paridade LGLGLG do prefixo 7, com margens brancas.
 // A imagem é construída sem usar o codificador da biblioteca sob teste.
-const bars = '101' + '0110111' + '0010111' + '0101111' + '0111001' + '0110111' + '0011101'
-  + '01010' + '1110010' + '1000100' + '1101100' + '1100110' + '1011100' + '1000010' + '101';
+const bars =
+  '101' +
+  '0110111' +
+  '0010111' +
+  '0101111' +
+  '0111001' +
+  '0110111' +
+  '0011101' +
+  '01010' +
+  '1110010' +
+  '1000100' +
+  '1101100' +
+  '1100110' +
+  '1011100' +
+  '1000010' +
+  '101';
 
 function barcodeFrame(top = 310, height = 100, pattern = bars) {
   const width = 351;
@@ -28,11 +51,17 @@ describe('leitura de códigos de produto', () => {
     expect(readProductGtin(createProductReader().decodeBitmap(barcodeFrame(20, 40)))).toBe('7896584072143');
   });
   it('lê o mesmo código de ponta-cabeça', () => {
-    expect(readProductGtin(createProductReader().decodeBitmap(barcodeFrame(310, 100, [...bars].reverse().join(''))))).toBe('7896584072143');
+    expect(
+      readProductGtin(createProductReader().decodeBitmap(barcodeFrame(310, 100, [...bars].reverse().join('')))),
+    ).toBe('7896584072143');
   });
   it('trata quadro sem código como tentativa sem leitura, sem aceitar um produto', () => {
     let error: unknown;
-    try { createProductReader().decodeBitmap(barcodeFrame(0, 0)); } catch (caught) { error = caught; }
+    try {
+      createProductReader().decodeBitmap(barcodeFrame(0, 0));
+    } catch (caught) {
+      error = caught;
+    }
     expect(error).toBeInstanceOf(NotFoundException);
     expect(isExpectedScanMiss(error)).toBe(true);
     expect(isExpectedScanMiss(new ChecksumException())).toBe(true);

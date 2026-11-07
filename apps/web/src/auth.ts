@@ -9,11 +9,25 @@ import type { Actor } from '@duraverso/core';
 const nextAuth = NextAuth(() => {
   const env = readServerEnv();
   return {
-    providers: env.DURAVERSO_MODE === 'connected' ? [Google({ clientId: env.AUTH_GOOGLE_ID!, clientSecret: env.AUTH_GOOGLE_SECRET!, authorization: { params: { scope: 'openid email profile' } } })] : [],
-    secret: env.AUTH_SECRET, trustHost: env.DURAVERSO_MODE === 'connected',
+    providers:
+      env.DURAVERSO_MODE === 'connected'
+        ? [
+            Google({
+              clientId: env.AUTH_GOOGLE_ID!,
+              clientSecret: env.AUTH_GOOGLE_SECRET!,
+              authorization: { params: { scope: 'openid email profile' } },
+            }),
+          ]
+        : [],
+    secret: env.AUTH_SECRET,
+    trustHost: env.DURAVERSO_MODE === 'connected',
     session: { strategy: 'jwt' as const, maxAge: 60 * 60 * 24 },
     pages: { signIn: '/conta', error: '/conta' },
-    logger: { error(error: Error) { console.error('Falha de autenticação:', error.name); } },
+    logger: {
+      error(error: Error) {
+        console.error('Falha de autenticação:', error.name);
+      },
+    },
     callbacks: {
       async signIn({ account, profile }) {
         return isConnected() && account?.provider === 'google' && verifiedGoogleProfile.safeParse(profile).success;
@@ -34,12 +48,21 @@ const nextAuth = NextAuth(() => {
         return { ...token, name: actor.displayName, role: actor.role };
       },
       async session({ session, token }) {
-        Object.assign(session.user, { id: token.sub!, name: token.name ?? 'Proprietário', version: token.version as number, role: token.role as Actor['role'] });
+        Object.assign(session.user, {
+          id: token.sub!,
+          name: token.name ?? 'Proprietário',
+          version: token.version as number,
+          role: token.role as Actor['role'],
+        });
         return session;
       },
       async redirect({ url }) {
-        try { const target = new URL(url, env.APP_ORIGIN); return target.origin === env.APP_ORIGIN ? target.href : `${env.APP_ORIGIN}/conta`; }
-        catch { return `${env.APP_ORIGIN}/conta`; }
+        try {
+          const target = new URL(url, env.APP_ORIGIN);
+          return target.origin === env.APP_ORIGIN ? target.href : `${env.APP_ORIGIN}/conta`;
+        } catch {
+          return `${env.APP_ORIGIN}/conta`;
+        }
       },
     },
   };
@@ -49,5 +72,10 @@ export async function currentActor(): Promise<Actor | null> {
   if (!isConnected()) return null;
   const session = await nextAuth.auth();
   if (!session?.user?.id) return null;
-  return { id: session.user.id, displayName: session.user.name ?? 'Proprietário', role: session.user.role, sessionVersion: session.user.version };
+  return {
+    id: session.user.id,
+    displayName: session.user.name ?? 'Proprietário',
+    role: session.user.role,
+    sessionVersion: session.user.version,
+  };
 }

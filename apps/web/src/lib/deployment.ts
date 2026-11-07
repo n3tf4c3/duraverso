@@ -3,6 +3,8 @@ export function assertDeploymentMode(env: Record<string, string | undefined> = p
   if (!env.VERCEL_ENV && env.VERCEL !== '1') return;
   const mode = env.DURAVERSO_MODE ?? 'preview';
   if (mode !== 'preview') {
-    throw new Error('A Vercel permite somente DURAVERSO_MODE=preview nesta etapa. Contas e contribuições ainda não foram liberadas para publicação.');
+    throw new Error(
+      'A Vercel permite somente DURAVERSO_MODE=preview nesta etapa. Contas e contribuições ainda não foram liberadas para publicação.',
+    );
   }
 }

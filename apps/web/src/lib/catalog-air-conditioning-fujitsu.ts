@@ -43,9 +43,18 @@ const models: Pick<Product, 'model' | 'coolingCapacityBtuH' | 'sourceUrl'>[] = [
 ];
 
 export const fujitsuAirConditionerCatalog: Product[] = models.map((product) => {
-  const slug = `fujitsu-${product.model}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = `fujitsu-${product.model}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
   return {
-    ...product, id: slug, slug, brand: 'Fujitsu', category: 'air_conditioner',
-    sourceCheckedAt: checkedAt, identification: 'candidate', confirmedGtins: [],
+    ...product,
+    id: slug,
+    slug,
+    brand: 'Fujitsu',
+    category: 'air_conditioner',
+    sourceCheckedAt: checkedAt,
+    identification: 'candidate',
+    confirmedGtins: [],
   };
 });

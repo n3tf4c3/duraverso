@@ -282,12 +282,7 @@
       "access": "Access",
       "market": "Catalog of products sold in Brazil.",
       "footNav": "Footer",
-      "links": [
-        "How it works",
-        "Community rules",
-        "Privacy",
-        "My account"
-      ]
+      "links": ["How it works", "Community rules", "Privacy", "My account"]
     },
     "pages": {
       "como": {
@@ -376,13 +371,7 @@
           {
             "title": "Before participation opens",
             "text": "This notice will be expanded before accounts open, which depends on this preparation:",
-            "items": [
-              "Service operator",
-              "Contact channel",
-              "Suppliers",
-              "Retention periods",
-              "Deletion procedure"
-            ]
+            "items": ["Service operator", "Contact channel", "Suppliers", "Retention periods", "Deletion procedure"]
           }
         ]
       },

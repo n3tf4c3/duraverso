@@ -1,0 +1,9 @@
+# Gerados ou mantidos por ferramentas.
+pnpm-lock.yaml
+apps/web/drizzle/
+apps/web/next-env.d.ts
+.cache/
+.next/
+coverage/
+# Documentação é escrita à mão; não reformatar.
+*.md

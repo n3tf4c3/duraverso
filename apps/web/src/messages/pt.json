@@ -282,12 +282,7 @@
       "access": "Acesso",
       "market": "Catálogo de produtos vendidos no Brasil.",
       "footNav": "Rodapé",
-      "links": [
-        "Como funciona",
-        "Regras da comunidade",
-        "Privacidade",
-        "Minha conta"
-      ]
+      "links": ["Como funciona", "Regras da comunidade", "Privacidade", "Minha conta"]
     },
     "pages": {
       "como": {
