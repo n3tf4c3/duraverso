@@ -14,8 +14,15 @@ it('inicia a prévia na Vercel e mantém a verificação de configuração', asy
   await register();
   expect(mocks.preflight).toHaveBeenCalledOnce();
 });
-it('recusa habilitar contas antes de consultar serviços externos', async () => {
+it('recusa habilitar contas fora do piloto antes de consultar serviços externos', async () => {
   vi.stubEnv('DURAVERSO_MODE', 'connected');
-  await expect(register()).rejects.toThrow('somente DURAVERSO_MODE=preview');
+  await expect(register()).rejects.toThrow('projeto do piloto');
   expect(mocks.preflight).not.toHaveBeenCalled();
+});
+it('na produção do piloto, só inicia depois do preflight', async () => {
+  vi.stubEnv('DURAVERSO_MODE', 'connected');
+  vi.stubEnv('DURAVERSO_CONNECTED_HOST', 'vercel-pilot');
+  mocks.preflight.mockRejectedValueOnce(new Error('Modo conectado indisponível'));
+  await expect(register()).rejects.toThrow('Modo conectado indisponível');
+  expect(mocks.preflight).toHaveBeenCalledOnce();
 });

@@ -15,8 +15,6 @@ it('modo conectado exige todos os recursos e origem exata', () => {
     AUTH_GOOGLE_SECRET: 'synthetic',
     APP_ORIGIN: 'http://localhost:3107',
     AUTH_URL: 'http://localhost:3107',
-    UPSTASH_REDIS_REST_URL: 'https://redis.invalid',
-    UPSTASH_REDIS_REST_TOKEN: 'synthetic',
   };
   expect(serverEnvSchema.safeParse(valid).success).toBe(true);
   expect(serverEnvSchema.safeParse({ ...valid, AUTH_URL: 'https://other.invalid' }).success).toBe(false);
@@ -24,6 +22,6 @@ it('modo conectado exige todos os recursos e origem exata', () => {
     serverEnvSchema.safeParse({ ...valid, APP_ORIGIN: 'http://remote.invalid', AUTH_URL: 'http://remote.invalid' })
       .success,
   ).toBe(false);
-  expect(serverEnvSchema.safeParse({ ...valid, UPSTASH_REDIS_REST_URL: 'http://redis.invalid' }).success).toBe(false);
+  expect(serverEnvSchema.safeParse({ ...valid, DURAVERSO_CONNECTED_HOST: 'other' }).success).toBe(false);
   expect(serverEnvSchema.safeParse({ ...valid, APP_ORIGIN: 'invalid' }).success).toBe(false);
 });

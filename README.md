@@ -42,8 +42,9 @@ do Next, evitando referências antigas em `.next/dev/types` durante o build.
 Projeto `duraverso`, Root Directory `apps/web`, preset Next.js, Node 24.x.
 Build `pnpm run build`, instalação `pnpm install --frozen-lockfile`, saída padrão.
 Defina `DURAVERSO_MODE=preview` e `ENABLE_EXPERIMENTAL_COREPACK=1` em Production e Preview.
-Não adicionar Neon/Upstash nem credenciais Google para essa prévia. O modo `connected`
-continua bloqueado na Vercel, tanto no build quanto na inicialização.
+Não adicionar Neon nem credenciais Google para essa prévia. O modo `connected` só roda
+na produção do projeto separado `duraverso-piloto`, com `DURAVERSO_CONNECTED_HOST=vercel-pilot`;
+build e inicialização recusam qualquer outra combinação. Veja `docs/operacao-local.md`.
 
 ## Estrutura
 

@@ -10,22 +10,14 @@ export const serverEnvSchema = z
     AUTH_GOOGLE_SECRET: optionalSecret,
     APP_ORIGIN: z.url().default('http://localhost:3107'),
     AUTH_URL: z.preprocess((value) => (value === '' ? undefined : value), z.url().optional()),
-    UPSTASH_REDIS_REST_URL: optionalSecret,
-    UPSTASH_REDIS_REST_TOKEN: optionalSecret,
+    // Somente Vercel: libera o modo conectado na produção do projeto do piloto (lib/deployment.ts).
+    DURAVERSO_CONNECTED_HOST: z.enum(['vercel-pilot']).optional(),
   })
   .superRefine((value, context) => {
     if (Boolean(value.AUTH_GOOGLE_ID) !== Boolean(value.AUTH_GOOGLE_SECRET))
       context.addIssue({ code: 'custom', message: 'Configuração Google incompleta.' });
     if (value.DURAVERSO_MODE === 'connected') {
-      for (const key of [
-        'DATABASE_URL',
-        'AUTH_SECRET',
-        'AUTH_GOOGLE_ID',
-        'AUTH_GOOGLE_SECRET',
-        'AUTH_URL',
-        'UPSTASH_REDIS_REST_URL',
-        'UPSTASH_REDIS_REST_TOKEN',
-      ] as const) {
+      for (const key of ['DATABASE_URL', 'AUTH_SECRET', 'AUTH_GOOGLE_ID', 'AUTH_GOOGLE_SECRET', 'AUTH_URL'] as const) {
         if (!value[key])
           context.addIssue({ code: 'custom', path: [key], message: 'Configuração obrigatória no modo conectado.' });
       }
@@ -42,8 +34,6 @@ export const serverEnvSchema = z
         context.addIssue({ code: 'custom', message: 'HTTP permitido somente em loopback.' });
       if (value.DATABASE_URL && !/^postgres(?:ql)?:\/\//.test(value.DATABASE_URL))
         context.addIssue({ code: 'custom', message: 'Conexão PostgreSQL inválida.' });
-      if (value.UPSTASH_REDIS_REST_URL && !/^https:\/\//.test(value.UPSTASH_REDIS_REST_URL))
-        context.addIssue({ code: 'custom', message: 'O limitador exige HTTPS.' });
     }
   });
 export function readServerEnv() {

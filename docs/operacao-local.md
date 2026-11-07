@@ -6,7 +6,8 @@ Esta é a base local, não o piloto público completo. Em preview, catálogo e A
 259 modelos candidatos embutidos em 13 categorias e 19 marcas. Os 40 GTINs
 documentados continuam associados somente às 20 lavadoras.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
-Nenhum banco permanente, limitador externo, domínio próprio ou administrador foi criado.
+O piloto fechado roda no projeto Vercel `duraverso-piloto` (seção “Piloto fechado na Vercel”).
+O domínio próprio continua adiado.
 
 O padrão `DURAVERSO_MODE=preview` funciona sem credenciais e recusa login e todas as
 escritas com HTTP 503. Não há login simulado ou atalho de administrador para testes.
@@ -225,11 +226,12 @@ de GTIN atendem ambos os modos. Nenhum dado de conta ou rascunho participa da co
 Falhas de consulta ou dados fora do contrato retornam HTTP 503 e mensagem genérica na
 API; páginas usam o estado de erro. Nunca usar o catálogo local como fallback conectado,
 nem tratar falha como ausência de produto. Banco vazio resulta em catálogo vazio legítimo.
-O fluxo Google/Neon/Upstash real continua pendente; esta leitura foi testada com banco
-descartável e a prévia renderizada foi conferida por HTTP.
+Esta leitura é testada com banco descartável; o fluxo real com Google e Neon é validado
+no projeto do piloto.
 
 Migrations não rodam automaticamente no build. A prévia funciona sem segredos tanto
-localmente quanto na Vercel. Build e inicialização recusam connected na Vercel. A futura
+localmente quanto na Vercel. Na Vercel, build e inicialização só aceitam connected na
+produção do projeto do piloto (`DURAVERSO_CONNECTED_HOST=vercel-pilot`). A futura
 abertura de contas exige autorização, preservar expand/contract e conectar o migrador
 ao ambiente correto. Preview hospedado
 jamais compartilha banco ou segredos de produção. As funções são SECURITY INVOKER;
@@ -243,7 +245,7 @@ install `pnpm install --frozen-lockfile` e saída padrão. Manter os arquivos co
 do monorepo acessíveis ao build. `engines.node` também está no pacote web.
 
 Em Production e Preview: `DURAVERSO_MODE=preview` e `ENABLE_EXPERIMENTAL_COREPACK=1`.
-O segundo usa o `packageManager` fixado na raiz. Não adicionar integrações Neon/Upstash
+O segundo usa o `packageManager` fixado na raiz. Não adicionar integração Neon
 ou credenciais Google para essa etapa. Não é preciso APP_ORIGIN para a consulta pública;
 o valor local padrão não é usado por login ou escritas, pois estão desativados.
 
@@ -253,28 +255,36 @@ Os textos identificam uma prévia do catálogo; não há avaliações, cadastro 
 As páginas pedem aos buscadores que não indexem essa fase. Publicar a prévia não abre
 o piloto participativo e não dispensa conferir consumo e limites da hospedagem.
 
-## Preparação do acesso conectado
+## Piloto fechado na Vercel
 
-Estes passos são pendências documentadas; não foram executados em serviços externos.
+Projeto `duraverso-piloto`, separado da prévia pública: mesmo repositório, Root Directory
+`apps/web` e os mesmos comandos e versões. Somente o ambiente Production recebe banco e
+segredos; Preview e Development ficam em `DURAVERSO_MODE=preview`, sem credenciais.
 
-1. Reservar projeto Neon e store Upstash com limites compatíveis com o piloto. Conferir
-   os planos vigentes e impedir upgrades automáticos antes de qualquer contratação.
-2. Criar cliente Google OAuth para aplicação web. Para teste local, o retorno esperado
-   é `http://localhost:3107/api/auth/callback/google`. Usar o navegador nessa mesma origem.
-   A tela de consentimento e os usuários de teste precisam estar configurados no Google.
-3. Colocar os valores reais somente em `apps/web/.env.local`, com base em `.env.example`:
-   DATABASE_URL (Neon HTTP), DATABASE_URL_DIRECT (migrador), AUTH_SECRET aleatório de pelo
-   menos 32 caracteres, AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, UPSTASH_REDIS_REST_URL e TOKEN.
-   APP_ORIGIN e AUTH_URL devem ser idênticos, sem caminho ou barra final. HTTP somente
-   para localhost/127.0.0.1; fora disso, HTTPS. Não enviar segredos pelo chat.
-4. Aplicar migrations apenas ao banco autorizado. Registrar produtos e variantes com
-   evidência verificável e slugs iguais aos candidatos do catálogo. Nenhuma variante é
-   criada automaticamente e nenhuma avaliação é aceita para modelo/variante não conferido.
-5. Ativar `DURAVERSO_MODE=connected`, iniciar localmente e validar o login real. Depois,
-   conceder o papel inicial ao identificador interno da conta correta por operação
-   administrativa autorizada no banco. O navegador/e-mail nunca atribui esse papel.
-6. Validar o ciclo real com contas de teste distintas: enviar, revisar, editar, pedir
-   ajustes, retirar e revogar sessões. Só depois considerar abertura pública.
+Variáveis de Production: `DURAVERSO_MODE=connected`, `DURAVERSO_CONNECTED_HOST=vercel-pilot`,
+`ENABLE_EXPERIMENTAL_COREPACK=1`, `APP_ORIGIN` e `AUTH_URL` iguais à URL de produção do
+piloto (sem barra final), `AUTH_SECRET` próprio com pelo menos 32 caracteres e
+`AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` como variáveis sensíveis, e `DATABASE_URL` da
+integração Neon ligada só a Production. Neon no plano gratuito, região iad1, sem Neon Auth.
+Não enviar segredos pelo chat nem gravá-los no repositório.
+
+1. Migrations: aplicar com `db:migrate` a partir da máquina local, com a URL direta (sem
+   `-pooler`) do banco do piloto em `DATABASE_URL_DIRECT`. O build não aplica migrations.
+2. Catálogo: `catalog:import --apply --expect-target=host:porta/banco` grava as 20 lavadoras
+   não verificadas; o administrador confere as fontes e libera em `/admin/catalogo`.
+   Nenhuma variante é criada automaticamente e nenhuma avaliação é aceita sem conferência.
+3. Google OAuth: cliente do tipo aplicação web, com origem autorizada igual à URL do piloto
+   e retorno `<URL do piloto>/api/auth/callback/google`. A tela de consentimento fica em
+   modo de teste, com os convidados cadastrados como usuários de teste (até 100). Publicar
+   o app no Google abriria o login a qualquer conta: só com decisão explícita.
+4. Primeiro administrador: depois do primeiro login, promover o identificador interno da
+   conta correta por SQL autorizado no banco do piloto. O navegador/e-mail nunca atribui papel.
+5. Validar o ciclo real com contas distintas: enviar, revisar, editar, pedir ajustes,
+   registrar reparo, retirar e revogar sessões. Só então convidar participantes.
+
+Para testar localmente em connected, os mesmos nomes vão em `apps/web/.env.local`
+(base em `.env.example`), com retorno Google `http://localhost:3107/api/auth/callback/google`.
+APP_ORIGIN e AUTH_URL devem ser idênticos; HTTP somente em localhost/127.0.0.1.
 
 Auth.js está fixado em `next-auth@5.0.0-beta.32` para integração com o App Router.
 É uma versão beta: a validação real com Google permanece obrigatória antes do piloto.
@@ -321,12 +331,27 @@ As rotas de escrita exigem sessão atual, origem exata, JSON limitado a 16 KiB e
 compartilhada. O limite inicial é 30 escritas/minuto por conta, 60 requisições/minuto
 globais nas rotas de autenticação e 60/minuto por identificador Google no login. Não se
 confia em IP de cabeçalho. A cota global é conservadora e pode limitar usuários legítimos
-num pico; reavaliar com evidência antes de ampliar o piloto. Falha/timeout do limitador
-recusa a ação. Cada inicialização conectada também verifica o store, consumindo uma operação.
+num pico; reavaliar com evidência antes de ampliar o piloto. O limitador fica no próprio
+Postgres (tabela `rate_limits` e função `duraverso_rate_limit`, migration 0011): contador
+atômico por janela de um minuto, chave em hash e limpeza ocasional das janelas antigas.
+Falha ou timeout do banco recusa a ação. Cada inicialização conectada também consulta o
+limitador, consumindo uma contagem.
 
 Conta, admin, envio e detalhes usam CSP com nonce e respostas dinâmicas sem cache público.
 Os formulários conservam o texto quando o envio falha. As páginas públicas estáticas
 conservam a CSP anterior; não há analytics, anúncios, uploads, IA paga ou e-mail transacional.
+
+## Pedidos de titulares (privacidade)
+
+O contato é o e-mail do responsável publicado em `/privacidade`. Para confirmar a
+titularidade sem pedir documentos, enviar um código e pedir que a pessoa troque o apelido
+público por ele; localizar no banco a conta com esse apelido. Responder em até 15 dias.
+Exclusão, numa única transação no banco do piloto: reparos, revisões, avaliações, posses e
+o usuário. As retiradas feitas pela própria conta ficam em `moderation_actions` com ela
+como responsável; apagá-las junto, porque a chave estrangeira impede excluir o usuário.
+Decisões de moderadores sobre os relatos da conta ficam por até 1 ano e depois são
+apagadas. Conta com papel de moderador ou administrador exige rebaixar e tratar o
+histórico antes. Registrar o atendimento no ai-memory sem dados pessoais.
 
 ## Verificação local
 
@@ -343,7 +368,7 @@ variante somente nesse banco descartável: o teste correspondente deve falhar, a
 Foram verificados persistência, posse, permissões, revogação, edição sem apagar a versão
 publicada, retirada, duplicidade de envio, concorrência e limiar de 20 proprietários.
 Testes locais das rotas/callbacks cobrem origem, limites, sessão e redirecionamento.
-A navegação no navegador foi conferida em preview. OAuth, Upstash/Neon reais, formulários
+A navegação no navegador foi conferida em preview. OAuth e Neon reais, formulários
 autenticados no navegador continuam sem validação ponta a ponta. O usuário confirmou leitura
 de um código de produto fora do catálogo no Samsung A52s, seguida de busca sem resultado.
 Isso valida esse caso de leitura, sem garantir todos os aparelhos, navegadores ou formatos.
@@ -354,7 +379,7 @@ Isso valida esse caso de leitura, sem garantir todos os aparelhos, navegadores o
 2. Login Google e ciclo de contribuição validados de ponta a ponta com os serviços reais.
 3. Catálogo persistente completo, variantes e códigos conferidos sem dados inventados.
 4. Denúncias/reconsideração implementadas (reparos detalhados já estão); reparos e administração de catálogo validados com login real.
-5. Store compartilhado e preflight verificados com as credenciais reais, inclusive indisponibilidade.
+5. Limitador e preflight verificados no banco real, inclusive indisponibilidade.
 6. Privacidade, canal do responsável, retenção e exclusão definidos.
 7. Integração com Postgres descartável e verificação de navegador/câmera em dispositivos reais.
 8. Consumo disponível e controles de gastos conferidos, sem upgrades automáticos.
