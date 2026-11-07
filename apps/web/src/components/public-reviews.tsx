@@ -4,7 +4,7 @@ import { isConnected } from '@/lib/env';
 import { database } from '@/server/database';
 import { ReviewService } from '@/server/reviews';
 import { RepairService, type RepairRow } from '@/server/repairs';
-import { fill, getDictionary, localeMeta, localizePath, type Locale } from '@/lib/i18n';
+import { fill, getDictionary, localeMeta, localizePath, plural, type Locale } from '@/lib/i18n';
 import { extraCopy } from '@/lib/copy';
 import { DurabilityPanel } from './durability-panel';
 export async function PublicReviews({
@@ -90,7 +90,7 @@ export async function PublicReviews({
             : `${summary.average.toLocaleString(localeMeta[locale].tag)} ${c.preliminary}`}
         </h3>
         <p>
-          {summary.count} {c.published}
+          {summary.count} {plural(summary.count, c.publishedOne, c.published)}
         </p>
         <p className="small">{fill(c.averageNote, { n: MIN_COMMUNITY_REVIEWS })}</p>
       </div>

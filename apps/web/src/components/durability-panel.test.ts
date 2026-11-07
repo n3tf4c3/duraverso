@@ -21,7 +21,7 @@ describe('painel de durabilidade declarada', () => {
     const html = render('pt');
     expect(html).toContain('Contagem dos 5 relatos publicados');
     expect(html).toContain('<strong>4</strong> Funciona normalmente');
-    expect(html).toContain('<strong>1</strong> já precisaram de reparo');
+    expect(html).toContain('<strong>1</strong> já precisou de reparo');
     expect(html).toContain('Menos de 1 ano');
     expect(html).toContain('5 anos ou mais');
     expect(html).not.toContain('1 a 2 anos');
@@ -30,5 +30,18 @@ describe('painel de durabilidade declarada', () => {
     const html = render(locale);
     expect(html).not.toMatch(/%|\/5|★/);
     expect(html).toContain('<table');
+  });
+  it.each([
+    ['pt', 'Contagem do único relato publicado', 'já precisou de reparo'],
+    ['en', 'Count of the only published report', 'has needed a repair'],
+    ['es', 'Recuento de la única experiencia publicada', 'ha necesitado reparación'],
+  ] as const)('em %s, um único relato usa o singular', (locale, lead, repair) => {
+    const one = durabilitySummary([
+      { startedUsing: '2026-11', confirmedMonth: '2026-11', functioning: 'with_problem', hadRepair: true },
+    ]);
+    const html = render(locale, one);
+    expect(html).toContain(lead);
+    expect(html).toContain(`<strong>1</strong> ${repair}`);
+    expect(html).not.toMatch(/1 (relatos|reports|experiencias)/);
   });
 });

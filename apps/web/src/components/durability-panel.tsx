@@ -1,5 +1,5 @@
 import { functioningStatuses, type DurabilitySummary } from '@duraverso/core';
-import { fill } from '@/lib/i18n';
+import { fill, plural } from '@/lib/i18n';
 import type { extraCopy } from '@/lib/copy';
 
 type Copy = ReturnType<typeof extraCopy>;
@@ -12,7 +12,7 @@ export function DurabilityPanel({ summary, copy }: { summary: DurabilitySummary;
   return (
     <div className="info-panel durability-panel">
       <h3>{copy.durabilityTitle}</h3>
-      <p>{fill(copy.durabilityLead, { n: summary.total })}</p>
+      <p>{fill(plural(summary.total, copy.durabilityLeadOne, copy.durabilityLead), { n: summary.total })}</p>
       <ul className="durability-counts">
         {functioningStatuses.map((status) => (
           <li key={status}>
@@ -20,7 +20,8 @@ export function DurabilityPanel({ summary, copy }: { summary: DurabilitySummary;
           </li>
         ))}
         <li>
-          <strong>{summary.hadRepair}</strong> {copy.durabilityRepairs}
+          <strong>{summary.hadRepair}</strong>{' '}
+          {plural(summary.hadRepair, copy.durabilityRepairsOne, copy.durabilityRepairs)}
         </li>
       </ul>
       <table className="data-table">

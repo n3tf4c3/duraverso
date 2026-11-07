@@ -17,6 +17,10 @@ export function localizePath(path: string, locale: Locale) {
   const base = stripLocale(path);
   return locale === 'pt' ? base : `/${locale}${base === '/' ? '' : base}`;
 }
+/** Singular só para exatamente 1; zero e demais quantidades usam o plural nos três idiomas. */
+export function plural(count: number, one: string, other: string) {
+  return count === 1 ? one : other;
+}
 export function fill(template: string, values: Record<string, string | number>) {
   return template.replace(/\{(\w+)\}/g, (match, key: string) => String(values[key] ?? match));
 }
