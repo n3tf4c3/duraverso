@@ -10,3 +10,4 @@ test-results/
 relatorios/
 backups/
 .vercel/
+.ai-memory.toml
