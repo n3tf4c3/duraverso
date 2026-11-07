@@ -217,4 +217,36 @@ describe.sequential('avaliação persistente e revisão', () => {
     await service.withdraw(owners[0]!, mine[0]!.id);
     expect(await service.summary(f.slug, f.variantId)).toEqual({ count: 19, average: null });
   });
+  it('durabilidade conta só relatos publicados, com a versão aprovada', async () => {
+    const f = await fixture();
+    const thisMonth = new Date().toISOString().slice(0, 7);
+    const publish = async (review: ReviewInput) => {
+      const owner = await accountForGoogle(db, { sub: `test-${randomUUID()}`, email_verified: true });
+      const sent = await service.submit(owner, { submissionId: randomUUID(), review });
+      await service.moderate(f.moderator, { revisionId: sent.id, decision: 'published', reason: 'Teste.' });
+      return owner;
+    };
+    await publish(f.review);
+    await publish({ ...f.review, startedUsing: thisMonth, functioning: 'with_problem', hadRepair: true });
+    // Edição pendente não muda a situação publicada.
+    const edited = await publish(f.review);
+    await service.submit(edited, { submissionId: randomUUID(), review: { ...f.review, functioning: 'not_working' } });
+    // Pendente, retirado e conta desativada ficam fora.
+    const pending = await accountForGoogle(db, { sub: `test-${randomUUID()}`, email_verified: true });
+    await service.submit(pending, { submissionId: randomUUID(), review: { ...f.review, functioning: 'not_working' } });
+    const withdrawn = await publish({ ...f.review, functioning: 'not_working' });
+    await service.withdraw(withdrawn, (await service.mine(withdrawn))[0]!.id);
+    const disabled = await publish({ ...f.review, functioning: 'not_working' });
+    await pool.query('UPDATE users SET disabled_at=now() WHERE id=$1', [disabled.id]);
+
+    const durability = await service.durability(f.slug, f.variantId);
+    expect(durability.total).toBe((await service.summary(f.slug, f.variantId)).count);
+    expect(durability).toMatchObject({
+      total: 3,
+      functioning: { working: 2, with_problem: 1, not_working: 0 },
+      hadRepair: 1,
+    });
+    const bands = Object.fromEntries(durability.byUsage.map((band) => [band.band, band.total]));
+    expect(bands).toMatchObject({ under_1: 1, '5_plus': 2 });
+  });
 });

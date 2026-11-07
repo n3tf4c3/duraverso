@@ -2084,3 +2084,31 @@ code,
   font-size: 12px;
   color: var(--muted);
 }
+
+/* Durabilidade declarada: contagens reais dos relatos aprovados. */
+.durability-counts {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+.durability-counts li {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.durability-counts strong {
+  display: block;
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 24px;
+  color: var(--ink);
+}
+.durability-panel caption {
+  text-align: left;
+  font-size: 13px;
+  color: var(--muted);
+  padding-bottom: 8px;
+}

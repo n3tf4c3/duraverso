@@ -5,6 +5,7 @@ import { database } from '@/server/database';
 import { ReviewService } from '@/server/reviews';
 import { fill, getDictionary, localeMeta, localizePath, type Locale } from '@/lib/i18n';
 import { extraCopy } from '@/lib/copy';
+import { DurabilityPanel } from './durability-panel';
 export async function PublicReviews({
   slug,
   selected,
@@ -51,8 +52,9 @@ export async function PublicReviews({
       </section>
     );
   const variant = variants.find((v) => v.id === selected) ?? variants[0]!;
-  const [summary, reviews] = await Promise.all([
+  const [summary, durability, reviews] = await Promise.all([
     service.summary(slug, variant.id),
+    service.durability(slug, variant.id),
     service.published(slug, variant.id),
   ]);
   return (
@@ -71,6 +73,7 @@ export async function PublicReviews({
           </Link>
         ))}
       </nav>
+      <DurabilityPanel summary={durability} copy={c} />
       <div className="info-panel">
         <h3>
           {summary.average === null

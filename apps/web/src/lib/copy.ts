@@ -48,6 +48,20 @@ const copy = {
     averageNote:
       'A média aparece com {n} proprietários distintos por variante. Ela reflete satisfação declarada, não durabilidade.',
     moreReports: 'Exibindo os {n} relatos mais recentes. A média considera todos os relatos elegíveis.',
+    durabilityTitle: 'Situação declarada pelos donos',
+    durabilityLead: 'Contagem dos {n} relatos publicados desta versão.',
+    durabilityRepairs: 'já precisaram de reparo',
+    durabilityByUsage: 'Situação por tempo de uso declarado',
+    durabilityUsage: 'Tempo de uso',
+    usageBands: {
+      under_1: 'Menos de 1 ano',
+      '1_2': '1 a 2 anos',
+      '2_3': '2 a 3 anos',
+      '3_5': '3 a 5 anos',
+      '5_plus': '5 anos ou mais',
+    },
+    durabilityNote:
+      'São contagens de relatos aprovados, não uma amostra representativa nem uma estimativa de vida útil. O tempo de uso vai do início declarado até a última confirmação do dono; um aparelho comprado usado pode ser mais antigo.',
   },
   en: {
     loading: 'Loading…',
@@ -96,6 +110,20 @@ const copy = {
     averageNote:
       'An average appears after {n} different owners per variant. It reflects reported satisfaction, not durability.',
     moreReports: 'Showing the {n} most recent reports. The average includes all eligible reports.',
+    durabilityTitle: 'Condition reported by owners',
+    durabilityLead: 'Count of the {n} published reports for this version.',
+    durabilityRepairs: 'have needed a repair',
+    durabilityByUsage: 'Condition by reported time in use',
+    durabilityUsage: 'Time in use',
+    usageBands: {
+      under_1: 'Under 1 year',
+      '1_2': '1 to 2 years',
+      '2_3': '2 to 3 years',
+      '3_5': '3 to 5 years',
+      '5_plus': '5 years or more',
+    },
+    durabilityNote:
+      'These are counts of approved reports, not a representative sample or a lifespan estimate. Time in use runs from the reported start to the owner’s latest confirmation; an appliance bought used may be older.',
   },
   es: {
     loading: 'Cargando…',
@@ -145,6 +173,20 @@ const copy = {
     averageNote:
       'La media aparece con {n} propietarios distintos por variante. Refleja satisfacción declarada, no durabilidad.',
     moreReports: 'Se muestran las {n} experiencias más recientes. La media incluye todas las valoraciones elegibles.',
+    durabilityTitle: 'Estado declarado por los propietarios',
+    durabilityLead: 'Recuento de las {n} experiencias publicadas de esta versión.',
+    durabilityRepairs: 'han necesitado reparación',
+    durabilityByUsage: 'Estado según el tiempo de uso declarado',
+    durabilityUsage: 'Tiempo de uso',
+    usageBands: {
+      under_1: 'Menos de 1 año',
+      '1_2': '1 a 2 años',
+      '2_3': '2 a 3 años',
+      '3_5': '3 a 5 años',
+      '5_plus': '5 años o más',
+    },
+    durabilityNote:
+      'Son recuentos de experiencias aprobadas, no una muestra representativa ni una estimación de vida útil. El tiempo de uso va desde el inicio declarado hasta la última confirmación del propietario; un aparato comprado usado puede ser más antiguo.',
   },
 };
 export function extraCopy(locale: Locale) {

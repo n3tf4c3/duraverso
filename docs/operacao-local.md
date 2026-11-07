@@ -302,6 +302,13 @@ A página de produto mostra até 50 relatos aprovados por variante. A média con
 todos os relatos elegíveis, aparece a partir de 20 e é sempre preliminar. Google não
 comprova posse nem garante uma única pessoa física por conta. Não há inferência de durabilidade.
 
+A situação declarada aparece desde o primeiro relato aprovado, com os mesmos critérios da média:
+contagens de “funciona normalmente”, “funciona com problema”, “não funciona” e de quem já
+precisou de reparo, também por faixa de tempo de uso (menos de 1 ano, 1–2, 2–3, 3–5, 5 ou mais).
+O tempo vai do início declarado até a aprovação da última versão do relato. São contagens, sem
+percentual, nota ou estimativa de vida útil; a regra fica em `durabilitySummary` no core.
+Edição pendente não altera a situação publicada.
+
 As rotas de escrita exigem sessão atual, origem exata, JSON limitado a 16 KiB e proteção
 compartilhada. O limite inicial é 30 escritas/minuto por conta, 60 requisições/minuto
 globais nas rotas de autenticação e 60/minuto por identificador Google no login. Não se

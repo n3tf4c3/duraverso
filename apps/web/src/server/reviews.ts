@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  durabilitySummary,
   MIN_COMMUNITY_REVIEWS,
   moderationInputSchema,
   reviewSubmissionSchema,
@@ -131,5 +132,23 @@ export class ReviewService {
       [slug, variantId, MIN_COMMUNITY_REVIEWS],
     );
     return rows[0] ?? { count: 0, average: null };
+  }
+  /** Mesma elegibilidade da média; o banco só agrupa linhas iguais e a regra fica no core. */
+  async durability(slug: string, variantId: string) {
+    const rows = await this.db.query<{
+      startedUsing: string;
+      confirmedMonth: string;
+      functioning: ReviewInput['functioning'];
+      hadRepair: boolean;
+      count: number;
+    }>(
+      `SELECT o.started_using AS "startedUsing",to_char(o.last_confirmed_at AT TIME ZONE 'UTC','YYYY-MM') AS "confirmedMonth",
+        o.functioning,r.had_repair AS "hadRepair",count(*)::integer AS count
+      FROM reviews r JOIN ownerships o ON o.id=r.ownership_id JOIN users u ON u.id=o.owner_id JOIN products p ON p.id=o.product_id JOIN variants v ON v.id=o.variant_id
+      WHERE p.slug=$1 AND v.id=$2::uuid AND p.verified AND v.verified AND r.status='published' AND u.disabled_at IS NULL
+      GROUP BY 1,2,3,4`,
+      [slug, variantId],
+    );
+    return durabilitySummary(rows);
   }
 }

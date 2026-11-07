@@ -1,6 +1,15 @@
 import { z } from 'zod';
 
 export { reconcileCatalog, type StoredCatalog, type CatalogImportConflict } from './catalog-import';
+export {
+  durabilitySummary,
+  usageBand,
+  usageBands,
+  usageMonths,
+  type DurabilityReport,
+  type DurabilitySummary,
+  type UsageBand,
+} from './durability';
 
 export const MIN_COMMUNITY_REVIEWS = 20;
 export const MAX_REVIEW_LENGTH = 2000;
@@ -73,6 +82,7 @@ export function productMeasurementField(product: { category?: ProductCategory })
 }
 export const reviewStatuses = ['pending', 'changes_requested', 'published', 'rejected', 'withdrawn'] as const;
 export const functioningStatuses = ['working', 'with_problem', 'not_working'] as const;
+export type FunctioningStatus = (typeof functioningStatuses)[number];
 
 const productBaseSchema = z
   .object({
