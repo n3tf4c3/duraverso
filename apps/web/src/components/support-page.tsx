@@ -3,6 +3,7 @@ import { pageLocale, type LocaleParams } from '@/lib/locale-page';
 import { localizePath } from '@/lib/i18n';
 import { extraCopy } from '@/lib/copy';
 import { readCatalog } from '@/server/catalog-runtime';
+import { isConnected } from '@/lib/env';
 export type SupportKind = 'como' | 'regras' | 'privacidade' | 'conta';
 export async function SupportPage({ params, kind }: { params: Promise<LocaleParams>; kind: SupportKind }) {
   const { locale, t } = await pageLocale(params);
@@ -41,7 +42,7 @@ export async function SupportPage({ params, kind }: { params: Promise<LocalePara
             <h1>{page.title}</h1>
             <p className="lead">{page.intro}</p>
           </header>
-          {'previewFlag' in page && <p className="inline-notice">{t.support.ui.notOpen}</p>}
+          {'previewFlag' in page && !isConnected() && <p className="inline-notice">{t.support.ui.notOpen}</p>}
           {sections.map((s, i) => (
             <section className="support-section" id={`section-${i + 1}`} key={s.title}>
               <span className="mono section-number">0{i + 1}</span>

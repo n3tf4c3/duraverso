@@ -313,7 +313,7 @@
           },
           {
             "title": "Transparency about the pilot",
-            "text": "This preview lets you explore candidate home appliance models and try the search. Login, publishing experiences and administrative review are not active yet. There are no fictitious reviews and no collection of receipts."
+            "text": "Duraverso is in a closed pilot: anyone can browse the released models, but signing in with Google and submitting reports is by invitation only. Every report and repair is reviewed manually before it appears. There are no fictitious ratings and no proof of purchase is collected."
           }
         ]
       },
@@ -352,9 +352,9 @@
       },
       "privacidade": {
         "crumb": "Privacy",
-        "eyebrow": "Preview and pilot",
+        "eyebrow": "Closed pilot",
         "title": "Clarity about your data.",
-        "intro": "In effect since 11/07/2026. The public preview only lets you browse the catalog, with no accounts. The closed, invitation-only pilot has Google sign-in and report submission. Controller: Paulo Gomes. Contact: netface@gmail.com.",
+        "intro": "In effect since 11/07/2026. Browsing the released models is open and needs no account. Signing in with Google and submitting reports is available only to people invited to the closed pilot. Controller: Paulo Gomes. Contact: netface@gmail.com.",
         "sections": [
           {
             "title": "Who looks after your data",

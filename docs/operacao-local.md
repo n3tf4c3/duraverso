@@ -6,7 +6,7 @@ Esta é a base local, não o piloto público completo. Em preview, catálogo e A
 259 modelos candidatos embutidos em 13 categorias e 19 marcas. Os 40 GTINs
 documentados continuam associados somente às 20 lavadoras.
 No modo conectado, avaliações, contas e revisão manual usam persistência real.
-O piloto fechado roda no projeto Vercel `duraverso-piloto` (seção “Piloto fechado na Vercel”).
+O piloto fechado roda na produção do projeto Vercel `duraverso` (seção “Piloto fechado na Vercel”).
 O domínio próprio continua adiado.
 
 O padrão `DURAVERSO_MODE=preview` funciona sem credenciais e recusa login e todas as
@@ -237,33 +237,23 @@ ao ambiente correto. Preview hospedado
 jamais compartilha banco ou segredos de produção. As funções são SECURITY INVOKER;
 o banco não deve ser exposto diretamente ao navegador.
 
-## Publicar somente a prévia do catálogo
+## Projeto na Vercel
 
-Importar `n3tf4c3/duraverso`, branch `main`, na equipe escolhida pelo usuário, com nome
-`duraverso`, Root Directory `apps/web`, Next.js, Node 24.x, build `pnpm run build`,
-install `pnpm install --frozen-lockfile` e saída padrão. Manter os arquivos compartilhados
-do monorepo acessíveis ao build. `engines.node` também está no pacote web.
-
-Em Production e Preview: `DURAVERSO_MODE=preview` e `ENABLE_EXPERIMENTAL_COREPACK=1`.
-O segundo usa o `packageManager` fixado na raiz. Não adicionar integração Neon
-ou credenciais Google para essa etapa. Não é preciso APP_ORIGIN para a consulta pública;
-o valor local padrão não é usado por login ou escritas, pois estão desativados.
-
-Na primeira publicação conferir página inicial, busca, produto, conta desativada e
-respostas 503 das rotas de login/escrita. A câmera usa HTTPS e depende de permissão.
-Os textos identificam uma prévia do catálogo; não há avaliações, cadastro nem analytics.
-As páginas pedem aos buscadores que não indexem essa fase. Publicar a prévia não abre
-o piloto participativo e não dispensa conferir consumo e limites da hospedagem.
+Um único projeto, `duraverso` (repositório `n3tf4c3/duraverso`, branch `main`): Root
+Directory `apps/web`, Next.js, Node 24.x, build `pnpm run build`, install
+`pnpm install --frozen-lockfile` e saída padrão. `engines.node` também está no pacote web.
+`ENABLE_EXPERIMENTAL_COREPACK=1` em todos os ambientes usa o `packageManager` fixado na raiz.
+Preview e Development ficam em `DURAVERSO_MODE=preview`, sem banco nem segredos: deploys de
+branch nunca acessam o banco de produção. As páginas pedem aos buscadores que não indexem.
 
 ## Piloto fechado na Vercel
 
-Projeto `duraverso-piloto`, separado da prévia pública: mesmo repositório, Root Directory
-`apps/web` e os mesmos comandos e versões. Somente o ambiente Production recebe banco e
-segredos; Preview e Development ficam em `DURAVERSO_MODE=preview`, sem credenciais.
+A produção do projeto `duraverso` roda o piloto. Somente o ambiente Production recebe banco e
+segredos. Sem as credenciais Google, a produção volta a `DURAVERSO_MODE=preview` até elas existirem.
 
 Variáveis de Production: `DURAVERSO_MODE=connected`, `DURAVERSO_CONNECTED_HOST=vercel-pilot`,
-`ENABLE_EXPERIMENTAL_COREPACK=1`, `APP_ORIGIN` e `AUTH_URL` iguais à URL de produção do
-piloto (sem barra final), `AUTH_SECRET` próprio com pelo menos 32 caracteres e
+`ENABLE_EXPERIMENTAL_COREPACK=1`, `APP_ORIGIN` e `AUTH_URL` iguais a
+`https://duraverso.vercel.app` (sem barra final), `AUTH_SECRET` próprio com pelo menos 32 caracteres e
 `AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` como variáveis sensíveis, e `DATABASE_URL` da
 integração Neon ligada só a Production. Neon no plano gratuito, região iad1, sem Neon Auth.
 Não enviar segredos pelo chat nem gravá-los no repositório.

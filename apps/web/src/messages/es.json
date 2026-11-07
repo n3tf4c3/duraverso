@@ -313,7 +313,7 @@
           },
           {
             "title": "Transparencia sobre el piloto",
-            "text": "Esta vista previa permite explorar modelos candidatos de electrodomésticos y probar la búsqueda. El acceso a cuentas, la publicación de experiencias y la revisión administrativa aún no están activos. No hay valoraciones ficticias ni recogida de comprobantes."
+            "text": "Duraverso está en un piloto cerrado: cualquiera puede consultar los modelos liberados, pero entrar con Google y enviar experiencias es solo por invitación. Cada experiencia y cada reparación pasan por revisión manual antes de aparecer. No hay valoraciones ficticias ni se recogen comprobantes."
           }
         ]
       },
@@ -352,9 +352,9 @@
       },
       "privacidade": {
         "crumb": "Privacidad",
-        "eyebrow": "Vista previa y piloto",
+        "eyebrow": "Piloto cerrado",
         "title": "Claridad sobre tus datos.",
-        "intro": "Vigente desde el 07/11/2026. La vista previa pública solo permite consultar el catálogo, sin cuentas. El piloto cerrado, por invitación, tiene acceso con Google y envío de experiencias. Responsable: Paulo Gomes. Contacto: netface@gmail.com.",
+        "intro": "Vigente desde el 07/11/2026. Consultar los modelos liberados es libre y no requiere cuenta. Entrar con Google y enviar experiencias solo está disponible para las personas invitadas al piloto cerrado. Responsable: Paulo Gomes. Contacto: netface@gmail.com.",
         "sections": [
           {
             "title": "Quién cuida tus datos",

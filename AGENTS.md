@@ -37,10 +37,10 @@ No modo connected, a consulta pública usa produtos verificados do banco e somen
 de variantes verificadas. Importar não publica: novos registros entram não verificados.
 Falha do banco não pode ser substituída por candidatos locais nem confundida com catálogo vazio.
 O modo preview mantém contas e escritas desativadas e funciona sem serviços externos.
-Na Vercel, o projeto `duraverso` (prévia pública) e todo deploy de preview ficam em preview.
-O modo connected só roda na produção do projeto separado `duraverso-piloto`, marcada com
-DURAVERSO_CONNECTED_HOST=vercel-pilot; guardas no build e na inicialização recusam o resto.
-A prévia hospedada não aplica migrations nem exige banco ou Google. O modo connected integra
+Um único projeto Vercel, `duraverso`: a produção roda connected, marcada com
+DURAVERSO_CONNECTED_HOST=vercel-pilot; todo deploy de preview fica em preview, sem banco nem
+segredos. Guardas no build e na inicialização recusam qualquer outra combinação.
+O modo preview não aplica migrations nem exige banco ou Google. O modo connected integra
 Google, sessões, avaliações, reparos e revisão manual; depende de Neon e credenciais Google
 verificados no preflight. O limitador de abuso usa o próprio Postgres (duraverso_rate_limit).
 Não habilitar gravação nem publicar o modo conectado apenas removendo as guardas.

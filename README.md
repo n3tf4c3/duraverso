@@ -2,8 +2,9 @@
 
 Experiências de uso de produtos, por versão.
 
-Base web do catálogo comunitário de eletrodomésticos de cozinha, lavanderia, limpeza e climatização. A prévia pode ser hospedada
-na Vercel, com contas e contribuições desativadas. Nenhum banco é necessário nessa fase.
+Base web do catálogo comunitário de eletrodomésticos de cozinha, lavanderia, limpeza e climatização.
+Em https://duraverso.vercel.app roda o piloto fechado, com login Google por convite e catálogo
+vindo do banco. Localmente e nos deploys de preview, o modo prévia funciona sem banco nem contas.
 
 ## Executar localmente
 
@@ -24,7 +25,7 @@ O visual segue a direção “Arquivo de uso”: busca, índice por marca, filtr
 fichas com fontes e estados explícitos de conferência. Fotos só entram quando houver
 uma imagem licenciada do modelo. As contagens da interface vêm do catálogo.
 
-A prévia pública está disponível em português (URLs originais), inglês (`/en`) e
+O site está disponível em português (URLs originais), inglês (`/en`) e
 espanhol (`/es`). O seletor com bandeiras preserva caminho, busca, filtros e seção;
 guarda a preferência no cookie `duraverso_locale` por até um ano. Idioma não altera
 o mercado brasileiro nem traduz referências de produtos ou relatos de usuários.
@@ -37,14 +38,13 @@ nonce por requisição. APIs permanecem em `/api`, sem prefixo de idioma.
 Após mover rotas, iniciar `pnpm web` uma vez regenera também os tipos de desenvolvimento
 do Next, evitando referências antigas em `.next/dev/types` durante o build.
 
-## Prévia na Vercel
+## Vercel
 
-Projeto `duraverso`, Root Directory `apps/web`, preset Next.js, Node 24.x.
-Build `pnpm run build`, instalação `pnpm install --frozen-lockfile`, saída padrão.
-Defina `DURAVERSO_MODE=preview` e `ENABLE_EXPERIMENTAL_COREPACK=1` em Production e Preview.
-Não adicionar Neon nem credenciais Google para essa prévia. O modo `connected` só roda
-na produção do projeto separado `duraverso-piloto`, com `DURAVERSO_CONNECTED_HOST=vercel-pilot`;
-build e inicialização recusam qualquer outra combinação. Veja `docs/operacao-local.md`.
+Um único projeto, `duraverso`: Root Directory `apps/web`, preset Next.js, Node 24.x, build
+`pnpm run build`, instalação `pnpm install --frozen-lockfile`, saída padrão.
+Production roda `connected` com `DURAVERSO_CONNECTED_HOST=vercel-pilot`, banco Neon e
+credenciais Google. Preview e Development ficam em `DURAVERSO_MODE=preview`, sem banco nem
+segredos. Build e inicialização recusam qualquer outra combinação. Veja `docs/operacao-local.md`.
 
 ## Estrutura
 
