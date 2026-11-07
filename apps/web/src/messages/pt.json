@@ -352,32 +352,45 @@
       },
       "privacidade": {
         "crumb": "Privacidade",
-        "eyebrow": "Prévia do catálogo",
+        "eyebrow": "Prévia e piloto",
         "title": "Clareza sobre seus dados.",
-        "intro": "Nesta prévia é possível consultar o catálogo. Contas, avaliações e envio de arquivos ainda não estão abertos.",
+        "intro": "Vale desde 07/11/2026. A prévia pública permite só consultar o catálogo, sem contas. O piloto fechado, aberto por convite, tem login com Google e envio de relatos. Responsável: Paulo Gomes. Contato: netface@gmail.com.",
         "sections": [
           {
-            "title": "Pesquisa e acesso ao site",
-            "text": "A pesquisa cobre os modelos do projeto. O texto pesquisado aparece no endereço da página e pode ficar no histórico do navegador, então evite informações pessoais na busca. Na versão hospedada na Vercel, as requisições passam pela infraestrutura de hospedagem, que pode gerar registros técnicos de acesso (endereço IP, horário, página solicitada). Não há ferramenta de publicidade nem de análise de visitantes embutida."
+            "title": "Quem cuida dos seus dados",
+            "text": "O Duraverso é um projeto pessoal mantido por Paulo Gomes, responsável pelos dados tratados aqui. Dúvidas, pedidos e reclamações sobre dados pessoais: netface@gmail.com."
           },
           {
-            "title": "Câmera sob seu controle",
-            "text": "A câmera só é solicitada quando você toca em “Abrir câmera”. A leitura do código acontece no aparelho e as imagens não são enviadas ao Duraverso. Você pode interromper a leitura pelo botão na tela."
+            "title": "O que guardamos no piloto",
+            "text": "Ao entrar com Google, guardamos só o identificador que o Google atribui à sua conta e um apelido público, que começa como “Proprietário” e pode ser trocado. Não guardamos seu e-mail, sua foto nem os acessos da sua conta Google. Nos relatos e reparos, guardamos o que você informar: modelo e versão, início de uso, forma de aquisição, situação do aparelho, reparos, custos, notas e comentários."
           },
           {
-            "title": "Contas e contribuições desativadas",
-            "text": "A prévia não inicia login com Google, não cria contas e não aceita relatos. Nesta fase não há banco de proprietários nem avaliações em uso."
+            "title": "Para que usamos",
+            "text": "Para revisar e publicar seus relatos, mostrar seu histórico na sua conta, calcular as contagens e médias públicas e proteger o site contra abuso. Não vendemos nem compartilhamos dados para publicidade, e o site não tem anúncios nem ferramentas de análise de visitantes."
           },
           {
-            "title": "Antes de abrir a participação",
-            "text": "Este aviso será ampliado antes da abertura das contas, que depende desta preparação:",
-            "items": [
-              "Operador do serviço",
-              "Canal de contato",
-              "Fornecedores",
-              "Prazos de retenção",
-              "Procedimento de exclusão"
-            ]
+            "title": "O que fica público",
+            "text": "Somente o apelido, os relatos aprovados e os reparos aprovados. O identificador Google e os dados da conta nunca aparecem. Antes de publicar, cada contribuição passa por revisão manual."
+          },
+          {
+            "title": "Fornecedores",
+            "text": "Vercel (hospedagem), Neon (banco de dados) e Google (login). Esses serviços processam os dados em servidores fora do Brasil, principalmente nos Estados Unidos. Na hospedagem, as requisições podem gerar registros técnicos de acesso (endereço IP, horário e página)."
+          },
+          {
+            "title": "Pesquisa e câmera",
+            "text": "O texto pesquisado aparece no endereço da página e pode ficar no histórico do navegador; evite informações pessoais na busca. A câmera só abre quando você toca em “Abrir câmera”, a leitura do código acontece no seu aparelho e nenhuma imagem é enviada ao Duraverso."
+          },
+          {
+            "title": "Cookie de sessão",
+            "text": "No piloto, entrar com Google cria um cookie de sessão que dura até 24 horas. Sair de todos os dispositivos invalida as sessões abertas. Não há cookies de publicidade nem de rastreamento."
+          },
+          {
+            "title": "Por quanto tempo",
+            "text": "A conta, os relatos e os reparos ficam guardados até você pedir a exclusão; relatos e reparos retirados deixam de aparecer, mas continuam ligados à conta até esse pedido. Pedidos de exclusão são atendidos em até 15 dias. O registro das decisões de moderação (motivo, responsável e data) é mantido por até 1 ano após a exclusão, para responder a contestações. Registros técnicos de acesso seguem os prazos da Vercel."
+          },
+          {
+            "title": "Seus direitos e a exclusão",
+            "text": "Na sua conta você pode trocar o apelido, atualizar ou retirar relatos e reparos e encerrar as sessões. Para acessar seus dados, corrigir algo que não esteja na conta ou excluir a conta e tudo o que está ligado a ela, escreva para netface@gmail.com. Para confirmar que a conta é sua sem pedir documentos, vamos pedir que você troque temporariamente o apelido público por um código que enviaremos."
           }
         ]
       },

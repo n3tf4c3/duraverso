@@ -352,32 +352,45 @@
       },
       "privacidade": {
         "crumb": "Privacidad",
-        "eyebrow": "Vista previa del catálogo",
+        "eyebrow": "Vista previa y piloto",
         "title": "Claridad sobre tus datos.",
-        "intro": "En esta vista previa puedes consultar el catálogo. Las cuentas, las valoraciones y el envío de archivos aún no están abiertos.",
+        "intro": "Vigente desde el 07/11/2026. La vista previa pública solo permite consultar el catálogo, sin cuentas. El piloto cerrado, por invitación, tiene acceso con Google y envío de experiencias. Responsable: Paulo Gomes. Contacto: netface@gmail.com.",
         "sections": [
           {
-            "title": "Búsqueda y acceso al sitio",
-            "text": "La búsqueda abarca los modelos del proyecto. El texto buscado aparece en la dirección de la página y puede quedar en el historial del navegador, así que evita incluir información personal. En la versión alojada en Vercel, las solicitudes pasan por la infraestructura de alojamiento, que puede generar registros técnicos de acceso (dirección IP, hora, página solicitada). No hay ninguna herramienta de publicidad ni de análisis de visitantes integrada."
+            "title": "Quién cuida tus datos",
+            "text": "Duraverso es un proyecto personal mantenido por Paulo Gomes, responsable de los datos tratados aquí. Dudas, solicitudes y reclamos sobre datos personales: netface@gmail.com."
           },
           {
-            "title": "La cámara, bajo tu control",
-            "text": "La cámara solo se solicita cuando tocas «Abrir cámara». La lectura del código se hace en el dispositivo y las imágenes no se envían a Duraverso. Puedes detener la lectura con el botón en pantalla."
+            "title": "Qué guardamos en el piloto",
+            "text": "Al entrar con Google, guardamos solo el identificador que Google asigna a tu cuenta y un apodo público, que empieza como “Proprietário” (Propietario) y se puede cambiar. No guardamos tu correo, tu foto ni el acceso a tu cuenta de Google. En las experiencias y reparaciones, guardamos lo que informes: modelo y versión, inicio de uso, forma de adquisición, estado del aparato, reparaciones, costos, valoraciones y comentarios."
           },
           {
-            "title": "Cuentas y contribuciones desactivadas",
-            "text": "La vista previa no inicia sesión con Google, no crea cuentas ni acepta experiencias. En esta fase no hay base de propietarios ni valoraciones en uso."
+            "title": "Para qué los usamos",
+            "text": "Para revisar y publicar tus experiencias, mostrar tu historial en tu cuenta, calcular los recuentos y medias públicos y proteger el sitio contra abusos. No vendemos ni compartimos datos para publicidad, y el sitio no tiene anuncios ni herramientas de análisis de visitantes."
           },
           {
-            "title": "Antes de abrir la participación",
-            "text": "Este aviso se ampliará antes de abrir las cuentas, que dependen de esta preparación:",
-            "items": [
-              "Responsable del servicio",
-              "Canal de contacto",
-              "Proveedores",
-              "Plazos de conservación",
-              "Procedimiento de eliminación"
-            ]
+            "title": "Qué se hace público",
+            "text": "Solo el apodo y las experiencias y reparaciones aprobadas. El identificador de Google y los datos de la cuenta nunca aparecen. Cada contribución pasa por revisión manual antes de publicarse."
+          },
+          {
+            "title": "Proveedores",
+            "text": "Vercel (alojamiento), Neon (base de datos) y Google (acceso). Estos servicios procesan los datos en servidores fuera de Brasil, principalmente en Estados Unidos. El alojamiento puede generar registros técnicos de acceso (dirección IP, hora y página)."
+          },
+          {
+            "title": "Búsqueda y cámara",
+            "text": "El texto buscado aparece en la dirección de la página y puede quedar en el historial del navegador; evita información personal en la búsqueda. La cámara solo se abre cuando tocas “Abrir cámara”, la lectura del código ocurre en tu dispositivo y no se envía ninguna imagen a Duraverso."
+          },
+          {
+            "title": "Cookie de sesión",
+            "text": "En el piloto, entrar con Google crea una cookie de sesión que dura hasta 24 horas. Cerrar sesión en todos los dispositivos invalida las sesiones abiertas. No hay cookies de publicidad ni de rastreo."
+          },
+          {
+            "title": "Por cuánto tiempo",
+            "text": "La cuenta, las experiencias y las reparaciones se guardan hasta que pidas su eliminación; las experiencias y reparaciones retiradas dejan de aparecer, pero siguen vinculadas a la cuenta hasta esa solicitud. Las solicitudes de eliminación se atienden en hasta 15 días. El registro de las decisiones de moderación (motivo, responsable y fecha) se conserva hasta 1 año después de la eliminación, para responder a impugnaciones. Los registros técnicos de acceso siguen los plazos de Vercel."
+          },
+          {
+            "title": "Tus derechos y la eliminación",
+            "text": "En tu cuenta puedes cambiar el apodo, actualizar o retirar experiencias y reparaciones y cerrar las sesiones. Para acceder a tus datos, corregir algo que no esté en la cuenta o eliminar la cuenta y todo lo vinculado a ella, escribe a netface@gmail.com. Para confirmar que la cuenta es tuya sin pedir documentos, te pediremos que cambies temporalmente tu apodo público por un código que te enviaremos."
           }
         ]
       },

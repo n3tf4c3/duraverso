@@ -352,26 +352,45 @@
       },
       "privacidade": {
         "crumb": "Privacy",
-        "eyebrow": "Catalog preview",
+        "eyebrow": "Preview and pilot",
         "title": "Clarity about your data.",
-        "intro": "In this preview you can browse the catalog. Accounts, reviews and file uploads aren’t open yet.",
+        "intro": "In effect since 11/07/2026. The public preview only lets you browse the catalog, with no accounts. The closed, invitation-only pilot has Google sign-in and report submission. Controller: Paulo Gomes. Contact: netface@gmail.com.",
         "sections": [
           {
-            "title": "Search and site access",
-            "text": "Search covers the project’s models. What you search for appears in the page address and may stay in your browser history, so avoid personal information in searches. On the Vercel-hosted version, requests go through the hosting infrastructure, which may create technical access logs (IP address, time, requested page). No advertising or visitor-analytics tool is built in."
+            "title": "Who looks after your data",
+            "text": "Duraverso is a personal project maintained by Paulo Gomes, who is responsible for the data processed here. Questions, requests and complaints about personal data: netface@gmail.com."
           },
           {
-            "title": "Camera under your control",
-            "text": "The camera is only requested when you tap “Open camera”. Barcode reading happens on your device and images aren’t sent to Duraverso. You can stop reading with the on-screen button."
+            "title": "What we keep in the pilot",
+            "text": "When you sign in with Google, we keep only the identifier Google assigns to your account and a public nickname, which starts as “Proprietário” (Owner) and can be changed. We don’t keep your email, your photo or access to your Google account. In reports and repairs, we keep what you enter: model and version, start of use, how you acquired it, the appliance’s condition, repairs, costs, ratings and comments."
           },
           {
-            "title": "Accounts and contributions disabled",
-            "text": "The preview doesn’t start Google sign-in, doesn’t create accounts and doesn’t accept reports. There is no owner database or reviews in use at this stage."
+            "title": "What we use it for",
+            "text": "To review and publish your reports, show your history in your account, compute the public counts and averages, and protect the site against abuse. We don’t sell or share data for advertising, and the site has no ads or visitor analytics tools."
           },
           {
-            "title": "Before participation opens",
-            "text": "This notice will be expanded before accounts open, which depends on this preparation:",
-            "items": ["Service operator", "Contact channel", "Suppliers", "Retention periods", "Deletion procedure"]
+            "title": "What becomes public",
+            "text": "Only your nickname and approved reports and repairs. Your Google identifier and account data never appear. Every contribution is reviewed manually before publication."
+          },
+          {
+            "title": "Service providers",
+            "text": "Vercel (hosting), Neon (database) and Google (sign-in). These services process data on servers outside Brazil, mainly in the United States. Hosting may create technical access logs (IP address, time and page)."
+          },
+          {
+            "title": "Search and camera",
+            "text": "What you search for appears in the page address and may stay in your browser history; avoid personal information in searches. The camera only opens when you tap “Open camera”; the code is read on your device and no image is sent to Duraverso."
+          },
+          {
+            "title": "Session cookie",
+            "text": "In the pilot, signing in with Google creates a session cookie that lasts up to 24 hours. Signing out of all devices invalidates open sessions. There are no advertising or tracking cookies."
+          },
+          {
+            "title": "How long we keep it",
+            "text": "Your account, reports and repairs are kept until you ask for deletion; withdrawn reports and repairs stop appearing but stay linked to the account until that request. Deletion requests are handled within 15 days. The record of moderation decisions (reason, moderator and date) is kept for up to 1 year after deletion, to answer disputes. Technical access logs follow Vercel’s retention periods."
+          },
+          {
+            "title": "Your rights and deletion",
+            "text": "In your account you can change your nickname, update or withdraw reports and repairs, and end sessions. To access your data, correct something not available in the account, or delete the account and everything linked to it, write to netface@gmail.com. To confirm the account is yours without asking for documents, we’ll ask you to temporarily change your public nickname to a code we send you."
           }
         ]
       },
