@@ -38,6 +38,9 @@ it('exige a versão atual da migration, colunas e constraints antes de abrir mod
   expect(connectedSchemaReadinessSql).toContain('duraverso_catalog_categories_version() >= 5');
   expect(connectedSchemaReadinessSql).toContain('pg_attribute');
   expect(connectedSchemaReadinessSql).toContain('product_category_measures');
+  // Reparos (migration 0010): sem as funções, o modo conectado não inicia.
+  for (const fn of ['duraverso_submit_repair', 'duraverso_moderate_repair', 'duraverso_withdraw_repair'])
+    expect(connectedSchemaReadinessSql).toContain(`to_regprocedure('${fn}(`);
   mocks.query.mockResolvedValueOnce([{ ready: false }]);
   await expect(preflight()).rejects.toThrow('Modo conectado indisponível');
 });

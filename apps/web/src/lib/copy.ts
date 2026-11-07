@@ -62,6 +62,11 @@ const copy = {
     },
     durabilityNote:
       'São contagens de relatos aprovados, não uma amostra representativa nem uma estimativa de vida útil. O tempo de uso vai do início declarado até a última confirmação do dono; um aparelho comprado usado pode ser mais antigo.',
+    repairsTitle: 'Reparos relatados',
+    repairFixed: 'consertado',
+    repairNotFixed: 'sem conserto',
+    repairAfter: 'depois: {status}',
+    repairCost: 'custo declarado: {value}',
   },
   en: {
     loading: 'Loading…',
@@ -124,6 +129,11 @@ const copy = {
     },
     durabilityNote:
       'These are counts of approved reports, not a representative sample or a lifespan estimate. Time in use runs from the reported start to the owner’s latest confirmation; an appliance bought used may be older.',
+    repairsTitle: 'Reported repairs',
+    repairFixed: 'repaired',
+    repairNotFixed: 'not repaired',
+    repairAfter: 'afterwards: {status}',
+    repairCost: 'reported cost: {value}',
   },
   es: {
     loading: 'Cargando…',
@@ -187,6 +197,11 @@ const copy = {
     },
     durabilityNote:
       'Son recuentos de experiencias aprobadas, no una muestra representativa ni una estimación de vida útil. El tiempo de uso va desde el inicio declarado hasta la última confirmación del propietario; un aparato comprado usado puede ser más antiguo.',
+    repairsTitle: 'Reparaciones declaradas',
+    repairFixed: 'reparado',
+    repairNotFixed: 'sin reparar',
+    repairAfter: 'después: {status}',
+    repairCost: 'costo declarado: {value}',
   },
 };
 export function extraCopy(locale: Locale) {

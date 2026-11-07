@@ -1,4 +1,18 @@
 import { z } from 'zod';
+import { functioningStatuses, MAX_REVIEW_LENGTH } from './constants';
+
+export { functioningStatuses, MAX_REVIEW_LENGTH, type FunctioningStatus } from './constants';
+export {
+  MAX_REPAIR_COST_CENTS,
+  MAX_REPAIR_SYMPTOM_LENGTH,
+  MAX_REPAIRS_PER_OWNERSHIP,
+  parseRepairCost,
+  repairInputSchema,
+  repairModerationSchema,
+  repairSubmissionSchema,
+  validateRepair,
+  type RepairInput,
+} from './repairs';
 
 export { reconcileCatalog, type StoredCatalog, type CatalogImportConflict } from './catalog-import';
 export {
@@ -12,7 +26,6 @@ export {
 } from './durability';
 
 export const MIN_COMMUNITY_REVIEWS = 20;
-export const MAX_REVIEW_LENGTH = 2000;
 export const brands = [
   'Brastemp',
   'Consul',
@@ -81,8 +94,6 @@ export function productMeasurementField(product: { category?: ProductCategory })
   return measurementByCategory[productCategory(product)];
 }
 export const reviewStatuses = ['pending', 'changes_requested', 'published', 'rejected', 'withdrawn'] as const;
-export const functioningStatuses = ['working', 'with_problem', 'not_working'] as const;
-export type FunctioningStatus = (typeof functioningStatuses)[number];
 
 const productBaseSchema = z
   .object({

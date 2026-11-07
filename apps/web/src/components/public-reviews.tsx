@@ -3,6 +3,7 @@ import { MIN_COMMUNITY_REVIEWS } from '@duraverso/core';
 import { isConnected } from '@/lib/env';
 import { database } from '@/server/database';
 import { ReviewService } from '@/server/reviews';
+import { RepairService, type RepairRow } from '@/server/repairs';
 import { fill, getDictionary, localeMeta, localizePath, type Locale } from '@/lib/i18n';
 import { extraCopy } from '@/lib/copy';
 import { DurabilityPanel } from './durability-panel';
@@ -52,11 +53,19 @@ export async function PublicReviews({
       </section>
     );
   const variant = variants.find((v) => v.id === selected) ?? variants[0]!;
-  const [summary, durability, reviews] = await Promise.all([
+  const [summary, durability, reviews, repairs] = await Promise.all([
     service.summary(slug, variant.id),
     service.durability(slug, variant.id),
     service.published(slug, variant.id),
+    new RepairService(database()).published(slug, variant.id),
   ]);
+  const repairsByReview = new Map<string, RepairRow[]>();
+  for (const repair of repairs)
+    repairsByReview.set(repair.reviewId, [...(repairsByReview.get(repair.reviewId) ?? []), repair]);
+  const status = (value: string) =>
+    value === 'working' ? c.working : value === 'with_problem' ? c.problem : c.stopped;
+  const money = (cents: number) =>
+    (cents / 100).toLocaleString(localeMeta[locale].tag, { style: 'currency', currency: 'BRL' });
   return (
     <section id="experiencias" className="review-list record-section">
       <h2>{t.product.experienceTitle}</h2>
@@ -98,6 +107,25 @@ export async function PublicReviews({
           </p>
           <p className="small">{c.original}</p>
           <p className="review-text">{r.comment || c.noComment}</p>
+          {repairsByReview.has(r.id) && (
+            <div className="repair-list">
+              <h4>{c.repairsTitle}</h4>
+              <ul>
+                {repairsByReview.get(r.id)!.map((repair) => (
+                  <li key={repair.id}>
+                    <strong>{repair.occurredMonth}</strong> · {repair.symptom}
+                    <span className="small">
+                      {' '}
+                      · {repair.repaired ? c.repairFixed : c.repairNotFixed} ·{' '}
+                      {fill(c.repairAfter, { status: status(repair.resultingStatus) })}
+                      {repair.costCents !== null && <> · {fill(c.repairCost, { value: money(repair.costCents) })}</>}
+                    </span>
+                    {repair.comment && <p className="small">{repair.comment}</p>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </article>
       ))}
       {summary.count > reviews.length && <p className="small">{fill(c.moreReports, { n: reviews.length })}</p>}

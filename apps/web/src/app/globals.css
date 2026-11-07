@@ -2112,3 +2112,29 @@ code,
   color: var(--muted);
   padding-bottom: 8px;
 }
+
+/* Reparos: lista compacta dentro do relato e da conta. */
+.repair-list {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.repair-list h3,
+.repair-list h4 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.repair-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.repair-list li,
+.repair-item {
+  padding-block: 8px;
+  font-size: 14px;
+}
+.repair-list li + li,
+.repair-item + .repair-item {
+  border-top: 1px dashed var(--line);
+}

@@ -6,6 +6,7 @@ import { currentActor } from '@/auth';
 import { isConnected } from '@/lib/env';
 import { database } from '@/server/database';
 import { ReviewService } from '@/server/reviews';
+import { RepairService } from '@/server/repairs';
 import { ModerationForm } from '@/components/moderation-form';
 export const metadata: Metadata = { title: 'Administração' };
 export const dynamic = 'force-dynamic';
@@ -26,7 +27,11 @@ export default async function AdminPage() {
           </section>
         </div>
       );
-    const queue = await new ReviewService(database()).queue(actor);
+    const db = database();
+    const [queue, repairQueue] = await Promise.all([
+      new ReviewService(db).queue(actor),
+      new RepairService(db).queue(actor),
+    ]);
     return (
       <div className="container page-space narrow">
         {actor.role === 'admin' && (
@@ -92,6 +97,66 @@ export default async function AdminPage() {
               </dl>
               <p className="review-text">{r.comment || 'Sem comentário.'}</p>
               <ModerationForm revisionId={r.revisionId!} />
+            </article>
+          ))}
+        </div>
+        <div className="page-heading">
+          <h2>Reparos em revisão.</h2>
+          <p>
+            Confira se o reparo é coerente com o relato e se não expõe dados pessoais. Reparos não têm edição: publique
+            ou recuse com motivo.
+          </p>
+        </div>
+        <div className="review-list">
+          {repairQueue.length === 0 && (
+            <div className="empty-state">
+              <ClipboardCheck size={30} />
+              <h3>Nenhum reparo pendente.</h3>
+            </div>
+          )}
+          {repairQueue.map((repair) => (
+            <article className="info-panel" key={repair.id}>
+              <span className="eyebrow muted">REPARO AGUARDANDO PUBLICAÇÃO</span>
+              <h2>
+                {repair.brand} {repair.model} · {repair.voltage} V
+              </h2>
+              <p>
+                Por {repair.displayName} · em uso desde {repair.startedUsing}
+              </p>
+              <dl>
+                <div>
+                  <dt>Quando</dt>
+                  <dd>{repair.occurredMonth}</dd>
+                </div>
+                <div>
+                  <dt>Problema</dt>
+                  <dd>{repair.symptom}</dd>
+                </div>
+                <div>
+                  <dt>Consertado</dt>
+                  <dd>{repair.repaired ? 'Sim' : 'Não'}</dd>
+                </div>
+                <div>
+                  <dt>Depois do reparo</dt>
+                  <dd>
+                    {repair.resultingStatus === 'working'
+                      ? 'Normal'
+                      : repair.resultingStatus === 'with_problem'
+                        ? 'Com problema'
+                        : 'Não funciona'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Custo</dt>
+                  <dd>
+                    {repair.costCents === null
+                      ? 'Não informado'
+                      : (repair.costCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </dd>
+                </div>
+              </dl>
+              <p className="review-text">{repair.comment || 'Sem detalhes.'}</p>
+              <ModerationForm repairId={repair.id} />
             </article>
           ))}
         </div>

@@ -7,6 +7,8 @@ import { isConnected } from '@/lib/env';
 import { AccountActions, LoginButton, WithdrawButton } from '@/components/account-actions';
 import { database } from '@/server/database';
 import { ReviewService } from '@/server/reviews';
+import { RepairService } from '@/server/repairs';
+import { RepairForm, WithdrawRepairButton } from '@/components/repair-form';
 import { statusLabels, type reviewStatuses } from '@duraverso/core';
 export const metadata: Metadata = { title: 'Minha conta' };
 export const dynamic = 'force-dynamic';
@@ -58,7 +60,12 @@ export default async function AccountPage({
           </section>
         </div>
       );
-    const reviews = await new ReviewService(database()).mine(actor);
+    const db = database();
+    const [reviews, repairs] = await Promise.all([
+      new ReviewService(db).mine(actor),
+      new RepairService(db).mine(actor),
+    ]);
+    const thisMonth = new Date().toISOString().slice(0, 7);
     return (
       <div className="container page-space">
         <Breadcrumb current="Minha conta" />
@@ -106,6 +113,26 @@ export default async function AccountPage({
                     </Link>
                     <WithdrawButton id={r.id} />
                   </div>
+                )}
+                {r.status !== 'withdrawn' && (
+                  <section className="repair-list" aria-label={`Reparos de ${r.brand} ${r.model}`}>
+                    <h3>Reparos</h3>
+                    {repairs
+                      .filter((repair) => repair.reviewId === r.id)
+                      .map((repair) => (
+                        <div className="repair-item" key={repair.id}>
+                          <p>
+                            <strong>{repair.occurredMonth}</strong> · {repair.symptom}
+                          </p>
+                          <p className="small">
+                            {statusLabel(repair.status)}
+                            {repair.reason && ` · Motivo: ${repair.reason}`}
+                          </p>
+                          <WithdrawRepairButton id={repair.id} />
+                        </div>
+                      ))}
+                    <RepairForm reviewId={r.id} minMonth={r.startedUsing} maxMonth={thisMonth} />
+                  </section>
                 )}
               </article>
             ))}

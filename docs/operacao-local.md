@@ -309,6 +309,14 @@ O tempo vai do início declarado até a aprovação da última versão do relato
 percentual, nota ou estimativa de vida útil; a regra fica em `durabilitySummary` no core.
 Edição pendente não altera a situação publicada.
 
+Reparos detalhados (migration 0010) pertencem ao relato do próprio dono: mês, problema,
+se foi consertado, como ficou depois, custo opcional em reais e detalhes. O mês não pode ser
+anterior ao início de uso nem futuro; cada dono tem até 20 reparos ativos por produto e repetir
+o envio não duplica. Todo reparo passa pela fila `/admin`, onde o moderador publica ou
+recusa com motivo (sem edição; o dono retira e registra de novo) e não revisa o próprio.
+Publicados aparecem junto do relato aprovado, sem identificador de conta. Retirar o relato
+esconde os reparos e bloqueia novos envios e decisões. O preflight exige as três funções.
+
 As rotas de escrita exigem sessão atual, origem exata, JSON limitado a 16 KiB e proteção
 compartilhada. O limite inicial é 30 escritas/minuto por conta, 60 requisições/minuto
 globais nas rotas de autenticação e 60/minuto por identificador Google no login. Não se
@@ -345,7 +353,7 @@ Isso valida esse caso de leitura, sem garantir todos os aparelhos, navegadores o
 1. Banco, limitador e credenciais Google configurados em ambientes separados, com autorização.
 2. Login Google e ciclo de contribuição validados de ponta a ponta com os serviços reais.
 3. Catálogo persistente completo, variantes e códigos conferidos sem dados inventados.
-4. Reparos detalhados e denúncias/reconsideração implementados; administração de catálogo validada com login real.
+4. Denúncias/reconsideração implementadas (reparos detalhados já estão); reparos e administração de catálogo validados com login real.
 5. Store compartilhado e preflight verificados com as credenciais reais, inclusive indisponibilidade.
 6. Privacidade, canal do responsável, retenção e exclusão definidos.
 7. Integração com Postgres descartável e verificação de navegador/câmera em dispositivos reais.

@@ -4,7 +4,9 @@ import { useRouter } from 'next/navigation';
 import { MAX_REVIEW_LENGTH } from '@duraverso/core';
 import { needsLogin, postJson } from '@/lib/api-client';
 import { SessionExpired } from './account-actions';
-export function ModerationForm({ revisionId }: { revisionId: string }) {
+/** Avaliações usam revisionId; reparos usam repairId e só podem ser publicados ou recusados. */
+export function ModerationForm({ revisionId, repairId }: { revisionId?: string; repairId?: string }) {
+  const targetId = (repairId ?? revisionId)!;
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -18,11 +20,12 @@ export function ModerationForm({ revisionId }: { revisionId: string }) {
     setExpired(false);
     try {
       setMessage(
-        await postJson('/api/v1/moderation', {
-          revisionId,
-          decision: form.get('decision'),
-          reason: form.get('reason'),
-        }),
+        await postJson(
+          repairId ? '/api/v1/repairs/moderation' : '/api/v1/moderation',
+          repairId
+            ? { repairId, decision: form.get('decision'), reason: form.get('reason') }
+            : { revisionId, decision: form.get('decision'), reason: form.get('reason') },
+        ),
       );
       setDone(true);
       router.refresh();
@@ -37,18 +40,18 @@ export function ModerationForm({ revisionId }: { revisionId: string }) {
     <form className="review-form" onSubmit={submit}>
       <fieldset disabled={busy || done}>
         <legend>Decisão de revisão</legend>
-        <label htmlFor={`decision-${revisionId}`}>Resultado</label>
-        <select id={`decision-${revisionId}`} name="decision" required defaultValue="">
+        <label htmlFor={`decision-${targetId}`}>Resultado</label>
+        <select id={`decision-${targetId}`} name="decision" required defaultValue="">
           <option value="" disabled>
             Escolha uma decisão
           </option>
           <option value="published">Publicar</option>
-          <option value="changes_requested">Pedir ajustes</option>
+          {!repairId && <option value="changes_requested">Pedir ajustes</option>}
           <option value="rejected">Não publicar</option>
         </select>
-        <label htmlFor={`reason-${revisionId}`}>Motivo para o proprietário</label>
+        <label htmlFor={`reason-${targetId}`}>Motivo para o proprietário</label>
         <textarea
-          id={`reason-${revisionId}`}
+          id={`reason-${targetId}`}
           name="reason"
           rows={3}
           required

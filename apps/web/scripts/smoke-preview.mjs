@@ -249,6 +249,26 @@ for (const route of ['/admin', '/admin/catalogo', `/avaliar/${product.slug}`]) {
   assert.ok(!html.includes('<form'), 'Preview operations must not expose forms.');
   checked += 1;
 }
+// Escritas continuam recusadas na prévia, antes de sessão, limite ou banco.
+for (const route of [
+  '/api/v1/reviews',
+  '/api/v1/reviews/withdraw',
+  '/api/v1/moderation',
+  '/api/v1/repairs',
+  '/api/v1/repairs/withdraw',
+  '/api/v1/repairs/moderation',
+  '/api/v1/account/profile',
+  '/api/v1/account/sessions',
+  '/api/v1/admin/catalog',
+]) {
+  const response = await fetch(`${origin}${route}`, {
+    method: 'POST',
+    headers: { Origin: origin, 'Content-Type': 'application/json' },
+    body: '{}',
+  });
+  assert.equal(response.status, 503, `${route} must stay disabled in preview.`);
+  checked += 1;
+}
 console.log(
   `Preview smoke passed: ${checked + 2} checks; ${categories.length} appliance categories, ${brands.length} brands, three languages, disabled accounts, API, combined filters, all documented codes and nonce CSP.`,
 );

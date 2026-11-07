@@ -4,6 +4,9 @@ import { enforceLimit } from './limits';
 export const connectedSchemaReadinessSql = `SELECT to_regprocedure('duraverso_submit_review(uuid,integer,uuid,jsonb)') IS NOT NULL
   AND to_regprocedure('duraverso_moderate_review(uuid,integer,uuid,review_status,text)') IS NOT NULL
   AND to_regprocedure('duraverso_withdraw_review(uuid,integer,uuid)') IS NOT NULL
+  AND to_regprocedure('duraverso_submit_repair(uuid,integer,uuid,jsonb)') IS NOT NULL
+  AND to_regprocedure('duraverso_moderate_repair(uuid,integer,uuid,review_status,text)') IS NOT NULL
+  AND to_regprocedure('duraverso_withdraw_repair(uuid,integer,uuid)') IS NOT NULL
   AND to_regprocedure('duraverso_catalog_admin_read(uuid,integer)') IS NOT NULL
   AND to_regprocedure('duraverso_decide_catalog(uuid,integer,jsonb)') IS NOT NULL
   AND to_regprocedure('duraverso_catalog_categories_version()') IS NOT NULL

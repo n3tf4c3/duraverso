@@ -225,6 +225,8 @@ export const repairs = pgTable(
     ownershipId: uuid('ownership_id')
       .notNull()
       .references(() => ownerships.id),
+    // Idempotência do envio: repetir a mesma submissão não duplica o reparo.
+    submissionId: uuid('submission_id').unique(),
     occurredMonth: varchar('occurred_month', { length: 7 }).notNull(),
     symptom: varchar('symptom', { length: 500 }).notNull(),
     repaired: boolean('repaired').notNull(),

@@ -1,4 +1,4 @@
-import type { FunctioningStatus } from './index';
+import type { FunctioningStatus } from './constants';
 
 // Durabilidade declarada: só contagens de relatos aprovados, sem percentual,
 // nota ou estimativa de vida útil. O tempo de uso vai do mês de início declarado

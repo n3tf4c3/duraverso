@@ -71,6 +71,13 @@
       "when": 1794004514786,
       "tag": "0009_additional-ac-brands",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794030097975,
+      "tag": "0010_repair-operations",
+      "breakpoints": true
     }
   ]
 }
