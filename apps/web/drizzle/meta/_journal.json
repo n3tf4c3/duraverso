@@ -78,6 +78,13 @@
       "when": 1794030097975,
       "tag": "0010_repair-operations",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794031686134,
+      "tag": "0011_postgres-rate-limit",
+      "breakpoints": true
     }
   ]
 }

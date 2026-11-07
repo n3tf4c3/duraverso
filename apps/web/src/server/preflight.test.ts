@@ -39,6 +39,7 @@ it('exige a versão atual da migration, colunas e constraints antes de abrir mod
   expect(connectedSchemaReadinessSql).toContain('pg_attribute');
   expect(connectedSchemaReadinessSql).toContain('product_category_measures');
   // Reparos (migration 0010): sem as funções, o modo conectado não inicia.
+  expect(connectedSchemaReadinessSql).toContain("to_regprocedure('duraverso_rate_limit(text,text,integer)')");
   for (const fn of ['duraverso_submit_repair', 'duraverso_moderate_repair', 'duraverso_withdraw_repair'])
     expect(connectedSchemaReadinessSql).toContain(`to_regprocedure('${fn}(`);
   mocks.query.mockResolvedValueOnce([{ ready: false }]);

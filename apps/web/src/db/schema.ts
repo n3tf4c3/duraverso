@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
   check,
+  primaryKey,
   foreignKey,
   integer,
   jsonb,
@@ -255,4 +256,20 @@ export const moderationActions = pgTable(
     createdAt: createdAt(),
   },
   (t) => [check('moderation_reason_required', sql`length(trim(${t.reason})) > 0`)],
+);
+
+// Limitador de acessos do modo conectado: contador por janela de um minuto.
+// A chave é um hash; nenhum identificador pessoal ou de conta fica legível.
+export const rateLimits = pgTable(
+  'rate_limits',
+  {
+    bucket: varchar('bucket', { length: 20 }).notNull(),
+    keyHash: varchar('key_hash', { length: 64 }).notNull(),
+    windowStart: timestamp('window_start', { withTimezone: true }).notNull(),
+    hits: integer('hits').notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.bucket, t.keyHash, t.windowStart] }),
+    check('rate_limit_hits_positive', sql`${t.hits} > 0`),
+  ],
 );
