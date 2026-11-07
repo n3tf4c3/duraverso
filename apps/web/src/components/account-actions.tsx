@@ -1,18 +1,21 @@
 'use client';
 import { useState, type FormEvent } from 'react';
 import { signIn, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { needsLogin, postJson } from '@/lib/api-client';
 
-export async function postJson(path: string, body: unknown): Promise<string> {
-  const response = await fetch(path, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  const data = await response.json();
-  if (!response.ok)
-    throw new Error(typeof data.error === 'string' ? data.error : 'Não foi possível concluir. Tente novamente.');
-  return typeof data.message === 'string' ? data.message : 'Alteração salva.';
+/** Sessão encerrada durante o uso: oferece novo login sem limpar o formulário. */
+export function SessionExpired() {
+  const pathname = usePathname();
+  return (
+    <div className="inline-notice" role="alert">
+      <p>
+        Sua sessão terminou. Entre novamente para continuar. O que você preencheu continua nesta tela até você sair
+        dela; copie o texto antes de entrar se quiser reaproveitá-lo.
+      </p>
+      <LoginButton returnTo={pathname || '/conta'} />
+    </div>
+  );
 }
 export function LoginButton({ returnTo = '/conta' }: { returnTo?: string }) {
   const [busy, setBusy] = useState(false);
@@ -45,16 +48,19 @@ export function AccountActions({ displayName }: { displayName: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [expired, setExpired] = useState(false);
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     setBusy(true);
     setMessage('');
+    setExpired(false);
     try {
       setMessage(await postJson('/api/v1/account/profile', { displayName: form.get('displayName') }));
       router.refresh();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Não foi possível salvar.');
+      setExpired(needsLogin(error));
     } finally {
       setBusy(false);
     }
@@ -62,11 +68,15 @@ export function AccountActions({ displayName }: { displayName: string }) {
   async function leave(everywhere: boolean) {
     setBusy(true);
     setMessage('');
+    setExpired(false);
     try {
       if (everywhere) await postJson('/api/v1/account/sessions', {});
       await signOut({ redirectTo: '/conta' });
-    } catch {
-      setMessage('Não foi possível encerrar a sessão. Tente novamente.');
+    } catch (error) {
+      setMessage(
+        needsLogin(error) ? 'Esta sessão já tinha terminado.' : 'Não foi possível encerrar a sessão. Tente novamente.',
+      );
+      setExpired(needsLogin(error));
       setBusy(false);
     }
   }
@@ -103,6 +113,7 @@ export function AccountActions({ displayName }: { displayName: string }) {
       <p role="status" className="form-message">
         {message}
       </p>
+      {expired && <SessionExpired />}
     </section>
   );
 }
@@ -111,6 +122,7 @@ export function WithdrawButton({ id }: { id: string }) {
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [expired, setExpired] = useState(false);
   return (
     <div>
       {!confirm ? (
@@ -129,11 +141,13 @@ export function WithdrawButton({ id }: { id: string }) {
               disabled={busy}
               onClick={async () => {
                 setBusy(true);
+                setExpired(false);
                 try {
                   setMessage(await postJson('/api/v1/reviews/withdraw', { id }));
                   router.refresh();
                 } catch (error) {
                   setMessage(error instanceof Error ? error.message : 'Não foi possível retirar.');
+                  setExpired(needsLogin(error));
                 } finally {
                   setBusy(false);
                 }
@@ -150,6 +164,7 @@ export function WithdrawButton({ id }: { id: string }) {
       <p role="status" className="form-message">
         {message}
       </p>
+      {expired && <SessionExpired />}
     </div>
   );
 }

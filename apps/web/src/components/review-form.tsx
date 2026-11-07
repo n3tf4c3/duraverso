@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MAX_REVIEW_LENGTH, validateReview } from '@duraverso/core';
 import type { ReviewRow, Variant } from '@/server/reviews';
-import { postJson } from './account-actions';
+import { needsLogin, postJson } from '@/lib/api-client';
+import { SessionExpired } from './account-actions';
 
 export function ReviewForm({
   variants,
@@ -20,6 +21,7 @@ export function ReviewForm({
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const [message, setMessage] = useState('');
+  const [expired, setExpired] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -41,12 +43,14 @@ export function ReviewForm({
     submissionId.current ??= crypto.randomUUID();
     setBusy(true);
     setMessage('');
+    setExpired(false);
     try {
       setMessage(await postJson('/api/v1/reviews', { submissionId: submissionId.current, review: checked.data }));
       setSent(true);
       router.refresh();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Não foi possível enviar. Seu texto foi preservado.');
+      setExpired(needsLogin(error));
     } finally {
       setBusy(false);
     }
@@ -202,6 +206,7 @@ export function ReviewForm({
       <p className="form-message" role="status">
         {message}
       </p>
+      {expired && <SessionExpired />}
     </form>
   );
 }

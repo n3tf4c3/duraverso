@@ -14,8 +14,11 @@ export default function Page({
   params: Promise<LocaleParams>;
   searchParams: Promise<{ returnTo?: string; error?: string }>;
 }) {
+  // A conta operacional do piloto é só em português; /en e /es precisam marcar o idioma do trecho.
   return isConnected() ? (
-    <ConnectedAccount searchParams={searchParams} />
+    <div lang="pt-BR">
+      <ConnectedAccount searchParams={searchParams} />
+    </div>
   ) : (
     <SupportPage params={params} kind="conta" />
   );

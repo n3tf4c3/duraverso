@@ -2,7 +2,8 @@
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { MAX_REVIEW_LENGTH } from '@duraverso/core';
-import { postJson } from './account-actions';
+import { needsLogin, postJson } from '@/lib/api-client';
+import { SessionExpired } from './account-actions';
 
 export function CatalogDecisionForm({
   productId,
@@ -21,12 +22,14 @@ export function CatalogDecisionForm({
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState('');
+  const [expired, setExpired] = useState(false);
   const id = variantId ?? productId;
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     setBusy(true);
     setMessage('');
+    setExpired(false);
     try {
       setMessage(
         await postJson('/api/v1/admin/catalog', {
@@ -42,6 +45,7 @@ export function CatalogDecisionForm({
       router.refresh();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Não foi possível registrar a decisão.');
+      setExpired(needsLogin(error));
     } finally {
       setBusy(false);
     }
@@ -76,6 +80,7 @@ export function CatalogDecisionForm({
       <p role="status" className="form-message">
         {message}
       </p>
+      {expired && <SessionExpired />}
       {message && !done && (
         <button className="text-link" type="button" onClick={() => router.refresh()}>
           Atualizar dados para conferir novamente

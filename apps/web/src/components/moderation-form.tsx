@@ -2,17 +2,20 @@
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { MAX_REVIEW_LENGTH } from '@duraverso/core';
-import { postJson } from './account-actions';
+import { needsLogin, postJson } from '@/lib/api-client';
+import { SessionExpired } from './account-actions';
 export function ModerationForm({ revisionId }: { revisionId: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState('');
+  const [expired, setExpired] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     setBusy(true);
     setMessage('');
+    setExpired(false);
     try {
       setMessage(
         await postJson('/api/v1/moderation', {
@@ -25,6 +28,7 @@ export function ModerationForm({ revisionId }: { revisionId: string }) {
       router.refresh();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Não foi possível registrar a decisão.');
+      setExpired(needsLogin(error));
     } finally {
       setBusy(false);
     }
@@ -61,6 +65,7 @@ export function ModerationForm({ revisionId }: { revisionId: string }) {
       <p role="status" className="form-message">
         {message}
       </p>
+      {expired && <SessionExpired />}
     </form>
   );
 }
